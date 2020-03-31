@@ -308,7 +308,7 @@ const createRoutePointTemplate = () => {
 };
 
 const render = (container, component, place) => {
-  container.insertAdjacentHTML(place, component)
+  container.insertAdjacentHTML(place, component);
 };
 
 const tripMain = document.querySelector(`.trip-main`);
@@ -327,7 +327,17 @@ render(tripEvents, createSortTemplate(), `beforeend`);
 render(tripEvents, createEditingFormTemplate(), `beforeend`);
 
 const listTrips = () => {
-  return `<ul class="trip-events__list">`
+  return (
+    `<ul class="trip-days">
+      <li class="trip-days__item  day">
+        <div class="day__info">
+          <span class="day__counter">1</span>
+          <time class="day__date" datetime="2019-03-18">MAR 18</time>
+        </div>
+        <ul class="trip-events__list"></ul>
+      </li>
+    </ul> `
+  );
 };
 
 render(tripEvents, listTrips(), `beforeend`);
@@ -337,4 +347,3 @@ const list = tripEvents.querySelector(`.trip-events__list`);
 for (let i = 0; i < NUMBER_OF_STOPS; i++) {
   render(list, createRoutePointTemplate(), `beforeend`);
 }
-//console.log(tripControls.children[0]);
