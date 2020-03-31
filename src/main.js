@@ -10,17 +10,15 @@ const createAboutRouteTemplate = () => {
 
         <p class="trip-info__dates">Mar 18&nbsp;&mdash;&nbsp;20</p>
       </div>
-
-      <p class="trip-info__cost">
-        Total: &euro;&nbsp;<span class="trip-info__cost-value">1230</span>
-      </p>
     </section>`
   );
 };
 
 const createCostOfTripTemplate = () => {
   return (
-    ``
+    `<p class="trip-info__cost">
+      Total: &euro;&nbsp;<span class="trip-info__cost-value">1230</span>
+    </p>`
   );
 };
 
@@ -272,38 +270,40 @@ const createEditingFormTemplate = () => {
 
 const createRoutePointTemplate = () => {
   return (
-    `<div class="event">
-      <div class="event__type">
-        <img class="event__type-icon" width="42" height="42" src="img/icons/taxi.png" alt="Event type icon">
-      </div>
-      <h3 class="event__title">Taxi to Amsterdam</h3>
+    `<li class="trip-events__item">
+      <div class="event">
+        <div class="event__type">
+          <img class="event__type-icon" width="42" height="42" src="img/icons/taxi.png" alt="Event type icon">
+        </div>
+        <h3 class="event__title">Taxi to Amsterdam</h3>
 
-      <div class="event__schedule">
-        <p class="event__time">
-          <time class="event__start-time" datetime="2019-03-18T10:30">10:30</time>
-          &mdash;
-          <time class="event__end-time" datetime="2019-03-18T11:00">11:00</time>
+        <div class="event__schedule">
+          <p class="event__time">
+            <time class="event__start-time" datetime="2019-03-18T10:30">10:30</time>
+            &mdash;
+            <time class="event__end-time" datetime="2019-03-18T11:00">11:00</time>
+          </p>
+          <p class="event__duration">30M</p>
+        </div>
+
+        <p class="event__price">
+          &euro;&nbsp;<span class="event__price-value">20</span>
         </p>
-        <p class="event__duration">30M</p>
+
+        <h4 class="visually-hidden">Offers:</h4>
+        <ul class="event__selected-offers">
+          <li class="event__offer">
+            <span class="event__offer-title">Order Uber</span>
+            &plus;
+            &euro;&nbsp;<span class="event__offer-price">20</span>
+           </li>
+        </ul>
+
+        <button class="event__rollup-btn" type="button">
+          <span class="visually-hidden">Open event</span>
+        </button>
       </div>
-
-      <p class="event__price">
-        &euro;&nbsp;<span class="event__price-value">20</span>
-      </p>
-
-      <h4 class="visually-hidden">Offers:</h4>
-      <ul class="event__selected-offers">
-        <li class="event__offer">
-          <span class="event__offer-title">Order Uber</span>
-          &plus;
-          &euro;&nbsp;<span class="event__offer-price">20</span>
-         </li>
-      </ul>
-
-      <button class="event__rollup-btn" type="button">
-        <span class="visually-hidden">Open event</span>
-      </button>
-    </div>`
+    </li>`
   );
 };
 
@@ -317,12 +317,24 @@ const pageMain = document.querySelector(`.page-main`);
 const tripEvents = pageMain.querySelector(`.trip-events`);
 
 render(tripMain, createAboutRouteTemplate(), `afterbegin`);
+
+const tripInfo = tripMain.querySelector(`.trip-info`);
+
+render(tripInfo, createCostOfTripTemplate(), `beforeend`);
 render(tripControls, createFiltersTemplate(), `beforeend`);
 render(tripControls.children[0], createMenuTemplate(), `afterend`);
 render(tripEvents, createSortTemplate(), `beforeend`);
 render(tripEvents, createEditingFormTemplate(), `beforeend`);
 
+const listTrips = () => {
+  return `<ul class="trip-events__list">`
+};
+
+render(tripEvents, listTrips(), `beforeend`);
+
+const list = tripEvents.querySelector(`.trip-events__list`);
+
 for (let i = 0; i < NUMBER_OF_STOPS; i++) {
-  render(tripEvents, createRoutePointTemplate(), `beforeend`);
+  render(list, createRoutePointTemplate(), `beforeend`);
 }
 //console.log(tripControls.children[0]);
