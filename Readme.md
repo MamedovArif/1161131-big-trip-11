@@ -1,8 +1,7 @@
 # Личный проект «Большое путешествие» [![Build status][travis-image]][travis-url]
 
 * Студент: [Ариф Мамедов](https://up.htmlacademy.ru/ecmascript/11/user/1161131).
-* Наставник: `Неизвестно`.
-
+* Наставник: [Дмитрий Гуляев](https://htmlacademy.ru/profile/dima).
 ---
 
 _Не удаляйте и не изменяйте папки и файлы:_
