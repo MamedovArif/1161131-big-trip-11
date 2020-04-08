@@ -7,6 +7,8 @@ import {createEditingFormTemplate} from './components/editing-form.js';
 import {createRoutePointTemplate} from './components/route-point.js';
 import {listTrips} from './components/list-trips.js';
 
+import {generatePoints} from './mock/route-point.js';
+
 const NUMBER_OF_STOPS = 3;
 
 const render = (container, component, place) => {
@@ -32,6 +34,10 @@ render(tripEvents, listTrips(), `beforeend`);
 
 const list = tripEvents.querySelector(`.trip-events__list`);
 
-for (let i = 0; i < NUMBER_OF_STOPS; i++) {
-  render(list, createRoutePointTemplate(), `beforeend`);
+const points = generatePoints(NUMBER_OF_STOPS);
+console.log(points);
+
+for (let i = 0; i < points.length; i++) {
+  render(list, createRoutePointTemplate(points[i]), `beforeend`);
 }
+
