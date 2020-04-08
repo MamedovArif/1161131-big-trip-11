@@ -35,7 +35,6 @@ render(tripEvents, listTrips(), `beforeend`);
 const list = tripEvents.querySelector(`.trip-events__list`);
 
 const points = generatePoints(NUMBER_OF_STOPS);
-console.log(points);
 
 for (let i = 0; i < points.length; i++) {
   render(list, createRoutePointTemplate(points[i]), `beforeend`);

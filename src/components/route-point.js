@@ -1,4 +1,5 @@
 import {formatTime} from "../utils.js";
+import {getRandomArrayItem, getRandomIntegerNumber} from "../mock/route-point.js";
 
 const generateOptions = (offer, cost) => {
   return (
@@ -15,6 +16,14 @@ const createRoutePointTemplate = (object) => {
   const {type, city, timeBegin, timeEnd, price, options} = object;
 
   const diffTime = timeEnd - timeBegin;
+
+  const offers = [];
+  let randomNumber = getRandomIntegerNumber(0, 3);
+
+  for (let i = 0; i <= randomNumber; i++) {
+    offers.push(generateOptions(getRandomArrayItem(options.offer),
+      getRandomArrayItem(options.cost)));
+  };
 
   return (
     `<li class="trip-events__item">
@@ -39,8 +48,7 @@ const createRoutePointTemplate = (object) => {
 
         <h4 class="visually-hidden">Offers:</h4>
         <ul class="event__selected-offers">
-          ${generateOptions(options.offer, options.cost)}
-          ${generateOptions(options.offer, options.cost)}
+          ${offers.join('\n')}
         </ul>
 
         <button class="event__rollup-btn" type="button">

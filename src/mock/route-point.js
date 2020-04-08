@@ -1,48 +1,48 @@
 const types = [`Taxi`, `Bus`, `Train`, `Ship`,
-  `Transport`, `Drive`, `Flight`, `Check-in`, `Sightseeng`, `Restaurant`];
+  `Transport`, `Drive`, `Flight`, `Check-in`, `Sightseeing`, `Restaurant`];
 
 const cities = [`Amsterdam`, `London`, `Brussel`];
 
 const option = {
   taxi: {
-    offer: `Order Uber`,
-    cost: 20,
+    offer: [`Order Uber`, `Order Yandex`],
+    cost: [20, 25],
   },
   bus: {
-    offer: `Choose seats`,
-    cost: 5,
+    offer: [`Choose seats`, `Add luggage`],
+    cost: [5, 10],
   },
   train: {
-    offer: `Travel by train`,
-    cost: 40,
+    offer: [`Travel by train`, `Order tea`],
+    cost: [40, 80],
   },
   ship: {
-    offer: `Travel by ship`,
-    cost: 287,
+    offer: [`Travel by ship`, `Travel by boat`],
+    cost: [287, ],
   },
   transport: {
-    offer: `Travel by transport`,
-    cost: 113,
+    offer: [`Travel by transport`, `Travel by walking`],
+    cost: [113, 20],
   },
   drive: {
-    offer: `Rent a car`,
-    cost: 200
+    offer: [`Rent a car`, `Rent a motorcycle`],
+    cost: [200, 350],
   },
   flight: {
     offer: [`Add luggage`, `Switch to comfort class`],
     cost: [30, 100],
   },
   'check-in': {
-    offer: `Add breakfast`,
-    cost: 50,
+    offer: [`Add breakfast`, `Add dinner`],
+    cost: [50, 80],
   },
-  sightseeng: {
+  sightseeing: {
     offer: [`Lucnch in city`, `Book tickets`],
     cost: [30, 40],
   },
   restaurant: {
-    offer: `Add meal`,
-    cost: 15,
+    offer: [`Add meal`, `Order coffee`],
+    cost: [15, 30],
   },
 }
 
@@ -85,9 +85,8 @@ const generatePoint = () => {
     destination: destination,
     photos: photos,
   };
-  console.log(obj.type);
+
   obj.options = option[(obj.type).toLowerCase()];
-  console.log(obj);
 
   return obj;
 }
@@ -96,7 +95,4 @@ const generatePoints = (count) => {
   return new Array(count).fill(``).map(generatePoint);
 }
 
-export {generatePoints};
-
-
-// let event = ;
+export {getRandomArrayItem, generatePoints, getRandomIntegerNumber};
