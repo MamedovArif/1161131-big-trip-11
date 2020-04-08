@@ -1,4 +1,4 @@
-import {formatTime} from "../utils.js";
+import {formatTime, diffTime} from "../utils.js";
 import {getRandomArrayItem, getRandomIntegerNumber} from "../mock/route-point.js";
 
 const generateOptions = (offer, cost) => {
@@ -15,25 +15,6 @@ const generateOptions = (offer, cost) => {
 const createRoutePointTemplate = (object) => {
   const {type, city, timeBegin, timeEnd, price, options} = object;
 
-  const diffTime = (begin, end) => {
-    let minutes = (end - begin)/(1000 * 60);
-    let days;
-    let hours;
-    let result = ``;
-    if (minutes >= 24 * 60) {
-      days = Math.floor(minutes / (60 * 24));
-      minutes = minutes % (60 * 24);
-      result += `${days}D `;
-    }
-    if (minutes >= 60) {
-      hours = Math.floor(minutes / 60);
-      minutes = minutes % 60;
-      result += `${hours}H `
-    }
-    result += `${minutes}M`
-    return result;
-  }
-
   const offers = [];
   let randomNumber = getRandomIntegerNumber(0, 3);
 
@@ -48,7 +29,7 @@ const createRoutePointTemplate = (object) => {
         <div class="event__type">
           <img class="event__type-icon" width="42" height="42" src="img/icons/${type.toLowerCase()}.png" alt="Event type icon">
         </div>
-        <h3 class="event__title">${type} to ${city}</h3>
+        <h3 class="event__title">${type} ${options.pretext} ${city}</h3>
 
         <div class="event__schedule">
           <p class="event__time">

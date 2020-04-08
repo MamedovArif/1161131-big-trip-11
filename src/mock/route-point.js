@@ -7,42 +7,52 @@ const option = {
   taxi: {
     offer: [`Order Uber`, `Order Yandex`],
     cost: [20, 25],
+    pretext: `to`,
   },
   bus: {
     offer: [`Choose seats`, `Add luggage`],
     cost: [5, 10],
+    pretext: `to`,
   },
   train: {
     offer: [`Travel by train`, `Order tea`],
     cost: [40, 80],
+    pretext: `to`,
   },
   ship: {
     offer: [`Travel by ship`, `Travel by boat`],
-    cost: [287, ],
+    cost: [287, 346],
+    pretext: `to`,
   },
   transport: {
     offer: [`Travel by transport`, `Travel by walking`],
     cost: [113, 20],
+    pretext: `to`,
   },
   drive: {
     offer: [`Rent a car`, `Rent a motorcycle`],
     cost: [200, 350],
+    pretext: `to`,
   },
   flight: {
     offer: [`Add luggage`, `Switch to comfort class`],
     cost: [30, 100],
+    pretext: `to`,
   },
   'check-in': {
     offer: [`Add breakfast`, `Add dinner`],
     cost: [50, 80],
+    pretext: `in`,
   },
   sightseeing: {
     offer: [`Lucnch in city`, `Book tickets`],
     cost: [30, 40],
+    pretext: `in`,
   },
   restaurant: {
     offer: [`Add meal`, `Order coffee`],
     cost: [15, 30],
+    pretext: `in`,
   },
 }
 
