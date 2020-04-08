@@ -15,7 +15,24 @@ const generateOptions = (offer, cost) => {
 const createRoutePointTemplate = (object) => {
   const {type, city, timeBegin, timeEnd, price, options} = object;
 
-  const diffTime = timeEnd - timeBegin;
+  const diffTime = (begin, end) => {
+    let minutes = (end - begin)/(1000 * 60);
+    let days;
+    let hours;
+    let result = ``;
+    if (minutes >= 24 * 60) {
+      days = Math.floor(minutes / (60 * 24));
+      minutes = minutes % (60 * 24);
+      result += `${days}D `;
+    }
+    if (minutes >= 60) {
+      hours = Math.floor(minutes / 60);
+      minutes = minutes % 60;
+      result += `${hours}H `
+    }
+    result += `${minutes}M`
+    return result;
+  }
 
   const offers = [];
   let randomNumber = getRandomIntegerNumber(0, 3);
@@ -39,7 +56,7 @@ const createRoutePointTemplate = (object) => {
             &mdash;
             <time class="event__end-time" datetime="${timeEnd}">${formatTime(timeEnd)}</time>
           </p>
-          <p class="event__duration">${diffTime}</p>
+          <p class="event__duration">${diffTime(timeBegin, timeEnd)}</p>
         </div>
 
         <p class="event__price">

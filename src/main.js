@@ -9,7 +9,7 @@ import {listTrips} from './components/list-trips.js';
 
 import {generatePoints} from './mock/route-point.js';
 
-const NUMBER_OF_STOPS = 3;
+const NUMBER_OF_STOPS = 15;
 
 const render = (container, component, place) => {
   container.insertAdjacentHTML(place, component);

@@ -67,6 +67,15 @@ const getRandomIntegerNumber = (min, max) => {
   return min + Math.floor(Math.random() * (max - min));
 };
 
+const getRandomDate = () => {
+  const targetDate = new Date();
+  const diffValue = getRandomIntegerNumber(0, 120);
+
+  targetDate.setMinutes(targetDate.getMinutes() + diffValue);
+
+  return targetDate;
+};
+
 const generatePoint = () => {
   let destination = ``;
   let photos = [];
@@ -80,13 +89,16 @@ const generatePoint = () => {
     type: getRandomArrayItem(types),
     city: getRandomArrayItem(cities),
     timeBegin: new Date(),
-    timeEnd: new Date(),
     price: getRandomIntegerNumber(20, 400),
     destination: destination,
     photos: photos,
   };
 
+  obj.timeEnd = getRandomDate(obj.timeBegin);
   obj.options = option[(obj.type).toLowerCase()];
+
+  console.log(obj.timeBegin);
+  console.log(obj.timeEnd);
 
   return obj;
 }
