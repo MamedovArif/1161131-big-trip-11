@@ -57,7 +57,15 @@ for (let j = 0; j < listDays.length; j++) {
   }
 };
 
-render(tripMain, createAboutRouteTemplate(routeOfCities), `afterbegin`); //a1
+const buttons = document.querySelectorAll('.event__rollup-btn');
+for (let item of buttons) {
+  item.addEventListener('click', function(evt) {
+    evt.preventDefault();
+    render(tripEvents, createEditingFormTemplate(defaultData), `beforeend`)
+  });
+}
+
+render(tripMain, createAboutRouteTemplate(routeOfCities, week), `afterbegin`); //a1
 const tripInfo = tripMain.querySelector(`.trip-info`);//a2
 render(tripInfo, createCostOfTripTemplate(totalCosts), `beforeend`);//a3
 
