@@ -11,7 +11,6 @@ const generateOptions = (offer, cost) => {
   );
 }
 
-
 const createRoutePointTemplate = (object) => {
   const {type, city, timeBegin, timeEnd, price, options} = object;
 

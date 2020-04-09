@@ -66,7 +66,18 @@ const destinations = [`Lorem ipsum dolor sit amet, consectetur adipiscing elit.`
 `Sed sed nisi sed augue convallis suscipit in sed felis.`,
 `Aliquam erat volutpat.`,
 `Nunc fermentum tortor ac porta dapibus.`,
-`In rutrum ac purus sit amet tempus.`]
+`In rutrum ac purus sit amet tempus.`];
+
+export const defaultData = {
+  type: `Flight`,
+  city: `Saint Petersburg`,
+  timeBegin: new Date(),
+  timeEnd: new Date(),
+  price: ``,
+  options: option.flight,
+  destination: ``,
+  photos: ``,
+}
 
 const getRandomArrayItem = (array) => {
   const randomIndex = getRandomIntegerNumber(0, array.length);
@@ -87,11 +98,11 @@ const getRandomDate = () => {
 };
 
 const generatePoint = () => {
-  let destination = ``;
+  let destination = new Set();
   let photos = [];
 
   for (let i = 0; i < getRandomIntegerNumber(1, 5); i++) {
-    destination += ` ${getRandomArrayItem(destinations)}`;
+    destination.add(getRandomArrayItem(destinations));
     photos.push(`http://picsum.photos/248/152?r=${Math.random()}`);
   }
 

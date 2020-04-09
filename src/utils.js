@@ -9,6 +9,14 @@ export const formatTime = (date) => {
   return `${hours}:${minutes}`;
 };
 
+export const formatTimeDate = (date) => {
+  const day = castTimeFormat(date.getDate());
+  const month = castTimeFormat(date.getMonth() + 1);
+  const year = String(date.getFullYear()).slice(-2);
+
+  return `${day}/${month}/${year}`;
+}
+
 export const diffTime = (begin, end) => {
   let minutes = (end - begin)/(1000 * 60);
   let days;

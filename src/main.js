@@ -7,7 +7,7 @@ import {createEditingFormTemplate} from './components/editing-form.js';
 import {createRoutePointTemplate} from './components/route-point.js';
 import {listTrips, generateDays} from './components/list-trips.js';
 
-import {generatePoints} from './mock/route-point.js';
+import {generatePoints, defaultData} from './mock/route-point.js';
 import {generateDate} from './mock/list-trips.js';
 
 const NUMBER_OF_STOPS = 4;
@@ -30,7 +30,7 @@ render(tripInfo, createCostOfTripTemplate(), `beforeend`);
 render(tripControls, createFiltersTemplate(), `beforeend`);
 render(tripControls.children[0], createMenuTemplate(), `afterend`);
 render(tripEvents, createSortTemplate(), `beforeend`);
-render(tripEvents, createEditingFormTemplate(), `beforeend`);
+render(tripEvents, createEditingFormTemplate(defaultData), `beforeend`);
 
 const week = [];
 for (let y = 0; y < QUANTITY_OF_DAYS; y++) {

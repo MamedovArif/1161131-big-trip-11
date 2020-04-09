@@ -12,10 +12,3 @@ export const generateDate = () => {
     date: getRandomDate(),
   }
 }
-
-// const scheduledDays = [];
-//   let randomNumber = getRandomIntegerNumber(0, 7);
-
-//   for (let i = 0; i <= randomNumber; i++) {
-//     scheduledDays.push(generateDays());
-//   };
