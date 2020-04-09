@@ -75,7 +75,7 @@ export const defaultData = {
   timeEnd: new Date(),
   price: ``,
   options: option.flight,
-  destination: ``,
+  destination: `The city was founded by Tsar Peter the Great on 27 `,
   photos: ``,
 }
 
