@@ -1,15 +1,18 @@
 export const createDestinationEditingForm = (object) => {
+  const {destination, photos} = object;
+
+  let combinationPhotos = [];
+  for (let i = 0; i < photos.length; i++) {
+    combinationPhotos.push(`<img class="event__photo" src="${photos[i]}" alt="Event photo">`);
+  }
+
   return (
     `<h3 class="event__section-title  event__section-title--destination">Destination</h3>
-    <p class="event__destination-description">Geneva is a city in Switzerland that lies at the southern tip of expansive Lac Léman (Lake Geneva). Surrounded by the Alps and Jura mountains, the city has views of dramatic Mont Blanc.</p>
+    <p class="event__destination-description">${destination}</p>
 
     <div class="event__photos-container">
       <div class="event__photos-tape">
-        <img class="event__photo" src="img/photos/1.jpg" alt="Event photo">
-        <img class="event__photo" src="img/photos/2.jpg" alt="Event photo">
-        <img class="event__photo" src="img/photos/3.jpg" alt="Event photo">
-        <img class="event__photo" src="img/photos/4.jpg" alt="Event photo">
-        <img class="event__photo" src="img/photos/5.jpg" alt="Event photo">
+        ${combinationPhotos.join(`\n`)}
       </div>
     </div>`
   );

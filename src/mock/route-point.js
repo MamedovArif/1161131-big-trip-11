@@ -77,7 +77,8 @@ export const defaultData = {
   price: ``,
   options: option.flight,
   destination: `The city was founded by Tsar Peter the Great on 27 `,
-  photos: ``,
+  photos: [`http://picsum.photos/248/152?r=${Math.random()}`,
+   `http://picsum.photos/248/152?r=${Math.random()}`]
 }
 
 const getRandomArrayItem = (array) => {

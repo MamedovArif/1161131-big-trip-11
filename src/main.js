@@ -26,7 +26,7 @@ render(tripMain, createAboutRouteTemplate(), `afterbegin`);
 
 const tripInfo = tripMain.querySelector(`.trip-info`);
 
-render(tripInfo, createCostOfTripTemplate(), `beforeend`);
+
 render(tripControls, createFiltersTemplate(), `beforeend`);
 render(tripControls.children[0], createMenuTemplate(), `afterend`);
 render(tripEvents, createSortTemplate(), `beforeend`);
@@ -36,10 +36,8 @@ const week = [];
 for (let y = 0; y < QUANTITY_OF_DAYS; y++) {
   week.push(generateDate());
 };
-console.log(week);
 
 week.sort((a, b) => a.date - b.date);
-console.log(week);
 
 const days = week.map((item, counter) => {
   return generateDays(item, counter);
@@ -47,12 +45,16 @@ const days = week.map((item, counter) => {
 
 render(tripEvents, listTrips(days), `beforeend`);
 
-const list = tripEvents.querySelectorAll(`.trip-events__list`);
 
-for (let j = 0; j < list.length; j++) {
+const listDays = tripEvents.querySelectorAll(`.trip-events__list`);
+let totalCosts = [];
+for (let j = 0; j < listDays.length; j++) {
   const points = generatePoints(NUMBER_OF_STOPS);
 
   for (let i = 0; i < points.length; i++) {
-    render(list[j], createRoutePointTemplate(points[i]), `beforeend`);
+    totalCosts.push(points[i].price);
+    render(listDays[j], createRoutePointTemplate(points[i]), `beforeend`);
   }
 }
+
+render(tripInfo, createCostOfTripTemplate(totalCosts), `beforeend`);

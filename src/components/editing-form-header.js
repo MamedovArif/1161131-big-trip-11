@@ -4,8 +4,6 @@ const createHeaderEditingForm = (object) => {
   const {type, city, timeBegin, timeEnd, price,
     options, destination, photos} = object;
 
-    console.log(timeBegin);
-
     const hours = formatTime(timeBegin);
     const date = formatTimeDate(timeBegin);
 
