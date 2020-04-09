@@ -107,9 +107,6 @@ const generatePoint = () => {
   obj.timeEnd = getRandomDate(obj.timeBegin);
   obj.options = option[(obj.type).toLowerCase()];
 
-  console.log(obj.timeBegin);
-  console.log(obj.timeEnd);
-
   return obj;
 }
 

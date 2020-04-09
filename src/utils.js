@@ -1,4 +1,4 @@
-const castTimeFormat = (value) => {
+export const castTimeFormat = (value) => {
   return value < 10 ? `0${value}` : String(value);
 };
 
@@ -15,15 +15,16 @@ export const diffTime = (begin, end) => {
   let hours;
   let result = ``;
   if (minutes >= 24 * 60) {
-    days = Math.floor(minutes / (60 * 24));
+    days = castTimeFormat(Math.floor(minutes / (60 * 24)));
     minutes = minutes % (60 * 24);
     result += `${days}D `;
   }
   if (minutes >= 60) {
-    hours = Math.floor(minutes / 60);
+    hours = castTimeFormat(Math.floor(minutes / 60));
     minutes = minutes % 60;
     result += `${hours}H `
   }
+  minutes = castTimeFormat(minutes);
   result += `${minutes}M`
   return result;
 }
