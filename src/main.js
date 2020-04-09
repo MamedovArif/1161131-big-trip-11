@@ -32,19 +32,17 @@ render(tripControls.children[0], createMenuTemplate(), `afterend`);
 render(tripEvents, createSortTemplate(), `beforeend`);
 render(tripEvents, createEditingFormTemplate(), `beforeend`);
 
-
-
 const week = [];
 for (let y = 0; y < QUANTITY_OF_DAYS; y++) {
-  week.push(generateDate(y));
+  week.push(generateDate());
 };
 console.log(week);
 
 week.sort((a, b) => a.date - b.date);
 console.log(week);
 
-const days = week.map((item) => {
-  return generateDays(item);
+const days = week.map((item, counter) => {
+  return generateDays(item, counter);
 });
 
 render(tripEvents, listTrips(days), `beforeend`);
