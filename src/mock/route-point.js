@@ -35,8 +35,9 @@ const option = {
     pretext: `to`,
   },
   flight: {
-    offer: [`Add luggage`, `Switch to comfort class`],
-    cost: [30, 100],
+    essence: [`luggage`, `comfort`, `dinner`, `parachute`],
+    offer: [`Add luggage`, `Switch to comfort class`, `Add dinner`, `Jump with a parachute`],
+    cost: [30, 100, 70, 150],
     pretext: `to`,
   },
   'check-in': {
