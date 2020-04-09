@@ -1,10 +1,11 @@
-const createAboutRouteTemplate = () => {
+const createAboutRouteTemplate = (array) => {
+  console.log(array);
   return (
     `<section class="trip-main__trip-info  trip-info">
       <div class="trip-info__main">
-        <h1 class="trip-info__title">Amsterdam &mdash; Chamonix &mdash; Geneva</h1>
+        <h1 class="trip-info__title">gfjg &mdash; fdjgf &mdash; dhsyhfd</h1>
 
-        <p class="trip-info__dates">Mar 18&nbsp;&mdash;&nbsp;20</p>
+        <p class="trip-info__dates"> 5 3 &nbsp;&mdash;&nbsp; y 68</p>
       </div>
     </section>`
   );

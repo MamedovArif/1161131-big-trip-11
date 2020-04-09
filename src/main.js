@@ -19,18 +19,14 @@ const render = (container, component, place) => {
 
 const tripMain = document.querySelector(`.trip-main`);
 const tripControls = tripMain.querySelector(`.trip-controls`);
-const pageMain = document.querySelector(`.page-main`);
-const tripEvents = pageMain.querySelector(`.trip-events`);
 
-render(tripMain, createAboutRouteTemplate(), `afterbegin`);
+const tripEvents = document.querySelector(`.trip-events`);
 
-const tripInfo = tripMain.querySelector(`.trip-info`);
-
-
-render(tripControls, createFiltersTemplate(), `beforeend`);
 render(tripControls.children[0], createMenuTemplate(), `afterend`);
-render(tripEvents, createSortTemplate(), `beforeend`);
-render(tripEvents, createEditingFormTemplate(defaultData), `beforeend`);
+render(tripControls, createFiltersTemplate(), `beforeend`);
+
+render(tripEvents, createSortTemplate(), `beforeend`); // b1
+render(tripEvents, createEditingFormTemplate(defaultData), `beforeend`); // b2
 
 const week = [];
 for (let y = 0; y < QUANTITY_OF_DAYS; y++) {
@@ -47,14 +43,21 @@ render(tripEvents, listTrips(days), `beforeend`);
 
 
 const listDays = tripEvents.querySelectorAll(`.trip-events__list`);
+
 let totalCosts = [];
+let routeOfCities = new Set();
+
 for (let j = 0; j < listDays.length; j++) {
   const points = generatePoints(NUMBER_OF_STOPS);
 
   for (let i = 0; i < points.length; i++) {
     totalCosts.push(points[i].price);
+    routeOfCities.add(points[i].city);
     render(listDays[j], createRoutePointTemplate(points[i]), `beforeend`);
   }
-}
+};
 
-render(tripInfo, createCostOfTripTemplate(totalCosts), `beforeend`);
+render(tripMain, createAboutRouteTemplate(routeOfCities), `afterbegin`); //a1
+const tripInfo = tripMain.querySelector(`.trip-info`);//a2
+render(tripInfo, createCostOfTripTemplate(totalCosts), `beforeend`);//a3
+
