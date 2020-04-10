@@ -100,11 +100,12 @@ const getRandomIntegerNumber = (min, max) => {
 };
 
 const getRandomDate = (targetDate, positiveNegative) => {
-  const diffValue = getRandomIntegerNumber(0, 12000) * positiveNegative;
-  console.log(diffValue);
-  targetDate.setMinutes(targetDate.getMinutes() + diffValue);
+  const totalDate = new Date(targetDate.getFullYear(), targetDate.getMonth(),
+      targetDate.getDate(), targetDate.getHours(), targetDate.getMinutes());
 
-  return targetDate;
+  const diffValue = getRandomIntegerNumber(0, 120) * positiveNegative;
+  totalDate.setMinutes(totalDate.getMinutes() + diffValue);
+  return totalDate;
 };
 
 const generatePoint = (timeDate) => {
@@ -132,7 +133,6 @@ const generatePoint = (timeDate) => {
 };
 
 const generatePoints = (count, dateDay) => {
-  console.log(dateDay);
   return new Array(count).fill(``).map(() => {
     return generatePoint(dateDay);
   });
