@@ -7,7 +7,7 @@ import {createEditingFormTemplate} from './components/editing-form.js';
 import {createRoutePointTemplate} from './components/route-point.js';
 import {listTrips, generateDays} from './components/list-trips.js';
 
-import {generatePoints, defaultData} from './mock/route-point.js';
+import {generatePoints} from './mock/route-point.js';
 import {generateDate} from './mock/list-trips.js';
 
 const NUMBER_OF_STOPS = 4;
@@ -26,7 +26,7 @@ render(tripControls.children[0], createMenuTemplate(), `afterend`);
 render(tripControls, createFiltersTemplate(), `beforeend`);
 
 render(tripEvents, createSortTemplate(), `beforeend`); // b1
-render(tripEvents, createEditingFormTemplate(defaultData), `beforeend`); // b2
+// render(tripEvents, createEditingFormTemplate(defaultData), `beforeend`); // b2
 
 const week = [];
 for (let y = 0; y < QUANTITY_OF_DAYS; y++) {
@@ -57,26 +57,20 @@ for (let j = 0; j < listDays.length; j++) {
     totalCosts.push(points[i].price);
     routeOfCities.add(points[i].city);
     render(listDays[j], createRoutePointTemplate(points[i]), `beforeend`);
-
-    //  console.log(points[i]);
-    //  const buttons = document.querySelectorAll('.event__rollup-btn');
-    //  buttons[(buttons.length) - 1].addEventListener('click', function(evt) {
-    //  evt.preventDefault();
-    //  let copy = Object.assign({}, points[i]);
-    //  render(tripEvents, createEditingFormTemplate(copy), `beforeend`)
-    //  });
   }
 }
 
-const funcAdd = (evt, index) => {
+const funcAdd = (evt, index, place) => {
   evt.preventDefault();
   const obj = globalArray[index];
-  render(tripEvents, createEditingFormTemplate(obj), `beforeend`);
+  render(place.parentElement.parentElement, createEditingFormTemplate(obj), `afterend`);
+
+  // place.parentElement.style.display = 'none';
 };
 
 const funcRemove = () => {
-  const rem = document.querySelector(`.event`);
-  rem.remove();
+  const arr = tripEvents.querySelector(`form[class = "trip-events__item  event  event--edit"]`);
+  arr.remove();
 };
 
 let counteri = 1;
@@ -88,9 +82,9 @@ for (let i = 0; i < buttons.length; i++) {
 
     counteri += 1;
     if (counteri % 2 === 0) {
-      funcAdd(evt, i);
+      funcAdd(evt, i, buttons[i]);
     } else {
-      funcRemove(i);
+      funcRemove();
     }
   });
 }
@@ -98,14 +92,3 @@ for (let i = 0; i < buttons.length; i++) {
 render(tripMain, createAboutRouteTemplate(routeOfCities, week), `afterbegin`); // a1
 const tripInfo = tripMain.querySelector(`.trip-info`); // a2
 render(tripInfo, createCostOfTripTemplate(totalCosts), `beforeend`); // a3
-
-// const button = document.querySelector('.event__rollup-btn');
-// let counteri = 1;
-// button.addEventListener('click', function() {
-//   counteri += 1;
-//   if (counteri % 2 === 0) {
-//     console.log('addi');
-//   } else {
-//     console.log('rem');
-//   }
-// })
