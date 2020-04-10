@@ -99,16 +99,15 @@ const getRandomIntegerNumber = (min, max) => {
   return min + Math.floor(Math.random() * (max - min));
 };
 
-const getRandomDate = () => {
-  const targetDate = new Date();
-  const diffValue = getRandomIntegerNumber(0, 120);
+const getRandomDate = (targetDate, positiveNegative) => {
+  const diffValue = getRandomIntegerNumber(0, 120 * positiveNegative);
 
   targetDate.setMinutes(targetDate.getMinutes() + diffValue);
 
   return targetDate;
 };
 
-const generatePoint = () => {
+const generatePoint = (dateDay) => {
   let destination = new Set();
   const photos = [];
 
@@ -120,20 +119,23 @@ const generatePoint = () => {
   const obj = {
     type: getRandomArrayItem(types),
     city: getRandomArrayItem(cities),
-    timeBegin: new Date(),
     price: getRandomIntegerNumber(20, 400),
     destination: [...destination],
     photos: [...photos],
   };
 
-  obj.timeEnd = getRandomDate(obj.timeBegin);
+  obj.timeBegin = getRandomDate(dateDay, -1);
+  obj.timeEnd = getRandomDate(dateDay, 1);
   obj.options = option[(obj.type).toLowerCase()];
 
   return obj;
 };
 
-const generatePoints = (count) => {
-  return new Array(count).fill(``).map(generatePoint);
+const generatePoints = (count, dateDay) => {
+  console.log(dateDay);
+  return new Array(count).fill(``).map((item) => {
+    return generatePoint(dateDay);
+  });
 };
 
 export {getRandomArrayItem, generatePoints, getRandomIntegerNumber};

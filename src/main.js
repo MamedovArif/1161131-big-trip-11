@@ -7,7 +7,7 @@ import {createEditingFormTemplate} from './components/editing-form.js';
 import {createRoutePointTemplate} from './components/route-point.js';
 import {listTrips, generateDays} from './components/list-trips.js';
 
-import {generatePoints} from './mock/route-point.js';
+import {generatePoints, defaultData} from './mock/route-point.js';
 import {generateDate} from './mock/list-trips.js';
 
 const NUMBER_OF_STOPS = 4;
@@ -48,8 +48,14 @@ let totalCosts = [];
 let routeOfCities = new Set();
 let globalArray = [];
 
+console.log(listDays.length);
+console.log(week);
+
 for (let j = 0; j < listDays.length; j++) {
-  const points = generatePoints(NUMBER_OF_STOPS);
+  const points = generatePoints(NUMBER_OF_STOPS, week[j].date);
+  points.sort((a, b) => {
+    return a.timeBegin - b.timeBegin;
+  })
 
   globalArray = globalArray.concat([...points]);
 
@@ -59,6 +65,8 @@ for (let j = 0; j < listDays.length; j++) {
     render(listDays[j], createRoutePointTemplate(points[i]), `beforeend`);
   }
 }
+
+//console.log(globalArray);
 
 const funcAdd = (evt, index, place) => {
   evt.preventDefault();
@@ -92,3 +100,5 @@ for (let i = 0; i < buttons.length; i++) {
 render(tripMain, createAboutRouteTemplate(routeOfCities, week), `afterbegin`); // a1
 const tripInfo = tripMain.querySelector(`.trip-info`); // a2
 render(tripInfo, createCostOfTripTemplate(totalCosts), `beforeend`); // a3
+
+export {week};
