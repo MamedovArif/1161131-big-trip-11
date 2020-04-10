@@ -51,7 +51,7 @@ let globalArray = [];
 for (let j = 0; j < listDays.length; j++) {
   const points = generatePoints(NUMBER_OF_STOPS);
 
-  globalArray = [].concat(points)
+  globalArray = globalArray.concat([...points])
 
   for (let i = 0; i < points.length; i++) {
     totalCosts.push(points[i].price);
@@ -68,16 +68,23 @@ for (let j = 0; j < listDays.length; j++) {
   }
 };
 
-// console.log(points);
+console.log(globalArray);
 
-// const buttons = document.querySelectorAll('.event__rollup-btn');
-// for (let item of buttons) {
-//   item.addEventListener('click', function(evt) {
-//     evt.preventDefault();
+const func = (evt, index) => {
+  evt.preventDefault();
+  const obj = globalArray[index];
+  console.log(obj);
+  render(tripEvents, createEditingFormTemplate(obj), `beforeend`)
+}
 
-//     render(tripEvents, createEditingFormTemplate(defaultData), `beforeend`)
-//   });
-// }
+const buttons = document.querySelectorAll('.event__rollup-btn');
+for (let i=0; i < buttons.length; i++) {
+  //console.log(i);
+  buttons[i].addEventListener('click', function(evt) {
+    //console.log(i);
+    func(evt, i);
+  });
+}
 
 render(tripMain, createAboutRouteTemplate(routeOfCities, week), `afterbegin`); //a1
 const tripInfo = tripMain.querySelector(`.trip-info`);//a2

@@ -17,3 +17,4 @@ const createEditingFormTemplate = (object) => {
 };
 
 export {createEditingFormTemplate};
+//${createOffersEditingForm(object)}
