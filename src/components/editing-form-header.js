@@ -1,11 +1,12 @@
 import {formatTime, formatTimeDate} from '../utils.js';
 
 const createHeaderEditingForm = (object) => {
-  const {type, city, timeBegin, timeEnd, price,
-    options, destination, photos} = object;
+  const {type, city, timeBegin, timeEnd, price} = object;
 
-    const hours = formatTime(timeBegin);
-    const date = formatTimeDate(timeBegin);
+  const hoursBegin = formatTime(timeBegin);
+  const dateBegin = formatTimeDate(timeBegin);
+  const hoursFinish = formatTime(timeEnd);
+  const dateFinish = formatTimeDate(timeEnd);
 
   return (
     `<header class="event__header">
@@ -97,13 +98,13 @@ const createHeaderEditingForm = (object) => {
           From
         </label>
         <input class="event__input  event__input--time" id="event-start-time-1" type="text"
-         name="event-start-time" value="${date} ${hours}">
+         name="event-start-time" value="${dateBegin} ${hoursBegin}">
         &mdash;
         <label class="visually-hidden" for="event-end-time-1">
           To
         </label>
         <input class="event__input  event__input--time" id="event-end-time-1"
-        type="text" name="event-end-time" value="18/03/19 00:00">
+        type="text" name="event-end-time" value="${dateFinish} ${hoursFinish}">
       </div>
 
       <div class="event__field-group  event__field-group--price">

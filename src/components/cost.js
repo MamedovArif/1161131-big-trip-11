@@ -1,6 +1,7 @@
 const createCostOfTripTemplate = (array) => {
   let sum = array.reduce((acc, item) => {
-    return acc += item;
+    acc += item;
+    return acc;
   }, 0);
 
   return (

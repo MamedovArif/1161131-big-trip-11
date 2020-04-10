@@ -1,8 +1,6 @@
 export const createDestinationEditingForm = (object) => {
   const {destination, photos} = object;
 
-  const description = Array.from(destination);
-
   let combinationPhotos = [];
   for (let i = 0; i < photos.length; i++) {
     combinationPhotos.push(`<img class="event__photo" src="${photos[i]}" alt="Event photo">`);
@@ -10,7 +8,7 @@ export const createDestinationEditingForm = (object) => {
 
   return (
     `<h3 class="event__section-title  event__section-title--destination">Destination</h3>
-    <p class="event__destination-description">${description.join('\n')}</p>
+    <p class="event__destination-description">${destination.join(`\n`)}</p>
 
     <div class="event__photos-container">
       <div class="event__photos-tape">
@@ -18,4 +16,4 @@ export const createDestinationEditingForm = (object) => {
       </div>
     </div>`
   );
-}
+};

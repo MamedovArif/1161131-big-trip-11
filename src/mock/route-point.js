@@ -4,43 +4,43 @@ const types = [`Taxi`, `Bus`, `Train`, `Ship`,
 const cities = [`Amsterdam`, `London`, `Brussel`];
 
 const option = {
-  taxi: {
+  'taxi': {
     essence: [`uber`, `yandex`],
     offer: [`Order Uber`, `Order Yandex`],
     cost: [20, 25],
     pretext: `to`,
   },
-  bus: {
+  'bus': {
     essence: [`seats`, `luggage`],
     offer: [`Choose seats`, `Add luggage`],
     cost: [5, 10],
     pretext: `to`,
   },
-  train: {
+  'train': {
     essence: [`train`, `tea`],
     offer: [`Travel by train`, `Order tea`],
     cost: [40, 80],
     pretext: `to`,
   },
-  ship: {
+  'ship': {
     essence: [`ship`, `boat`],
     offer: [`Travel by ship`, `Travel by boat`],
     cost: [287, 346],
     pretext: `to`,
   },
-  transport: {
+  'transport': {
     essence: [`tansport`, `walking`],
     offer: [`Travel by transport`, `Travel by walking`],
     cost: [113, 20],
     pretext: `to`,
   },
-  drive: {
+  'drive': {
     essence: [`car`, `motorcycle`],
     offer: [`Rent a car`, `Rent a motorcycle`],
     cost: [200, 350],
     pretext: `to`,
   },
-  flight: {
+  'flight': {
     essence: [`luggage`, `comfort`, `dinner`, `parachute`],
     offer: [`Add luggage`, `Switch to comfort class`, `Add dinner`, `Jump with a parachute`],
     cost: [30, 100, 70, 150],
@@ -52,31 +52,31 @@ const option = {
     cost: [50, 80],
     pretext: `in`,
   },
-  sightseeing: {
+  'sightseeing': {
     essence: [`lucnh`, `tickets`],
     offer: [`Lucnch in city`, `Book tickets`],
     cost: [30, 40],
     pretext: `in`,
   },
-  restaurant: {
+  'restaurant': {
     essence: [`meal`, `coffee`],
     offer: [`Add meal`, `Order coffee`],
     cost: [15, 30],
     pretext: `in`,
   },
-}
+};
 
 const destinations = [`Lorem ipsum dolor sit amet, consectetur adipiscing elit.`,
-`Cras aliquet varius magna, non porta ligula feugiat eget.`,
-`Fusce tristique felis at fermentum pharetra.`,
-`Aliquam id orci ut lectus varius viverra.`,
-`Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante.`,
-`Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum.`,
-`Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui.`,
-`Sed sed nisi sed augue convallis suscipit in sed felis.`,
-`Aliquam erat volutpat.`,
-`Nunc fermentum tortor ac porta dapibus.`,
-`In rutrum ac purus sit amet tempus.`];
+  `Cras aliquet varius magna, non porta ligula feugiat eget.`,
+  `Fusce tristique felis at fermentum pharetra.`,
+  `Aliquam id orci ut lectus varius viverra.`,
+  `Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante.`,
+  `Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum.`,
+  `Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui.`,
+  `Sed sed nisi sed augue convallis suscipit in sed felis.`,
+  `Aliquam erat volutpat.`,
+  `Nunc fermentum tortor ac porta dapibus.`,
+  `In rutrum ac purus sit amet tempus.`];
 
 export const defaultData = {
   type: `Flight`,
@@ -87,8 +87,8 @@ export const defaultData = {
   options: option.flight,
   destination: [`The city was founded by Tsar Peter the Great on 27`],
   photos: [`http://picsum.photos/248/152?r=${Math.random()}`,
-   `http://picsum.photos/248/152?r=${Math.random()}`]
-}
+    `http://picsum.photos/248/152?r=${Math.random()}`]
+};
 
 const getRandomArrayItem = (array) => {
   const randomIndex = getRandomIntegerNumber(0, array.length);
@@ -110,7 +110,7 @@ const getRandomDate = () => {
 
 const generatePoint = () => {
   let destination = new Set();
-  let photos = [];
+  const photos = [];
 
   for (let i = 0; i < getRandomIntegerNumber(1, 5); i++) {
     destination.add(getRandomArrayItem(destinations));
@@ -122,18 +122,18 @@ const generatePoint = () => {
     city: getRandomArrayItem(cities),
     timeBegin: new Date(),
     price: getRandomIntegerNumber(20, 400),
-    destination: destination,
-    photos: photos,
+    destination: [...destination],
+    photos: [...photos],
   };
 
   obj.timeEnd = getRandomDate(obj.timeBegin);
   obj.options = option[(obj.type).toLowerCase()];
 
   return obj;
-}
+};
 
 const generatePoints = (count) => {
   return new Array(count).fill(``).map(generatePoint);
-}
+};
 
 export {getRandomArrayItem, generatePoints, getRandomIntegerNumber};

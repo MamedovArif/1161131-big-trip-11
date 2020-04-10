@@ -15,13 +15,13 @@ const generateDays = (object, counter) => {
       </div>
       <ul class="trip-events__list"></ul>
     </li>`
-  )
-}
+  );
+};
 
 const listTrips = (array) => {
   return (
     `<ul class="trip-days">
-      ${array.join('\n')}
+      ${array.join(`\n`)}
     </ul> `
   );
 };

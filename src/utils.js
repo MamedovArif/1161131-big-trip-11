@@ -15,10 +15,10 @@ export const formatTimeDate = (date) => {
   const year = String(date.getFullYear()).slice(-2);
 
   return `${day}/${month}/${year}`;
-}
+};
 
 export const diffTime = (begin, end) => {
-  let minutes = (end - begin)/(1000 * 60);
+  let minutes = (end - begin) / (1000 * 60);
   let days;
   let hours;
   let result = ``;
@@ -30,9 +30,9 @@ export const diffTime = (begin, end) => {
   if (minutes >= 60) {
     hours = castTimeFormat(Math.floor(minutes / 60));
     minutes = minutes % 60;
-    result += `${hours}H `
+    result += `${hours}H `;
   }
   minutes = castTimeFormat(minutes);
-  result += `${minutes}M`
+  result += `${minutes}M`;
   return result;
-}
+};

@@ -9,7 +9,7 @@ const generateOptions = (offer, cost) => {
       &euro;&nbsp;<span class="event__offer-price">${cost}</span>
     </li>`
   );
-}
+};
 
 const createRoutePointTemplate = (object) => {
   const {type, city, timeBegin, timeEnd, price, options} = object;
@@ -19,8 +19,8 @@ const createRoutePointTemplate = (object) => {
 
   for (let i = 0; i <= randomNumber; i++) {
     offers.push(generateOptions(getRandomArrayItem(options.offer),
-      getRandomArrayItem(options.cost)));
-  };
+        getRandomArrayItem(options.cost)));
+  }
 
   return (
     `<li class="trip-events__item">
@@ -45,7 +45,7 @@ const createRoutePointTemplate = (object) => {
 
         <h4 class="visually-hidden">Offers:</h4>
         <ul class="event__selected-offers">
-          ${offers.join('\n')}
+          ${offers.join(`\n`)}
         </ul>
 
         <button class="event__rollup-btn" type="button">

@@ -1,4 +1,4 @@
-import {createHeaderEditingForm, } from './editing-form-header.js';
+import {createHeaderEditingForm} from './editing-form-header.js';
 import {createOffersEditingForm} from './editing-form-offers.js';
 import {createDestinationEditingForm} from './editing-form-destination.js';
 
@@ -17,4 +17,3 @@ const createEditingFormTemplate = (object) => {
 };
 
 export {createEditingFormTemplate};
-//${createOffersEditingForm(object)}

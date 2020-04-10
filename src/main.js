@@ -31,7 +31,7 @@ render(tripEvents, createEditingFormTemplate(defaultData), `beforeend`); // b2
 const week = [];
 for (let y = 0; y < QUANTITY_OF_DAYS; y++) {
   week.push(generateDate());
-};
+}
 
 week.sort((a, b) => a.date - b.date);
 
@@ -51,42 +51,61 @@ let globalArray = [];
 for (let j = 0; j < listDays.length; j++) {
   const points = generatePoints(NUMBER_OF_STOPS);
 
-  globalArray = globalArray.concat([...points])
+  globalArray = globalArray.concat([...points]);
 
   for (let i = 0; i < points.length; i++) {
     totalCosts.push(points[i].price);
     routeOfCities.add(points[i].city);
     render(listDays[j], createRoutePointTemplate(points[i]), `beforeend`);
 
-    //console.log(points[i]);
-    // const buttons = document.querySelectorAll('.event__rollup-btn');
-    // buttons[(buttons.length) - 1].addEventListener('click', function(evt) {
-    // evt.preventDefault();
-    // let copy = Object.assign({}, points[i]);
-    // render(tripEvents, createEditingFormTemplate(copy), `beforeend`)
-    // });
+    //  console.log(points[i]);
+    //  const buttons = document.querySelectorAll('.event__rollup-btn');
+    //  buttons[(buttons.length) - 1].addEventListener('click', function(evt) {
+    //  evt.preventDefault();
+    //  let copy = Object.assign({}, points[i]);
+    //  render(tripEvents, createEditingFormTemplate(copy), `beforeend`)
+    //  });
   }
-};
-
-console.log(globalArray);
-
-const func = (evt, index) => {
-  evt.preventDefault();
-  const obj = globalArray[index];
-  console.log(obj);
-  render(tripEvents, createEditingFormTemplate(obj), `beforeend`)
 }
 
-const buttons = document.querySelectorAll('.event__rollup-btn');
-for (let i=0; i < buttons.length; i++) {
-  //console.log(i);
-  buttons[i].addEventListener('click', function(evt) {
-    //console.log(i);
-    func(evt, i);
+const funcAdd = (evt, index) => {
+  evt.preventDefault();
+  const obj = globalArray[index];
+  render(tripEvents, createEditingFormTemplate(obj), `beforeend`);
+};
+
+const funcRemove = () => {
+  const rem = document.querySelector(`.event`);
+  rem.remove();
+};
+
+let counteri = 1;
+
+const buttons = document.querySelectorAll(`.event__rollup-btn`);
+for (let i = 0; i < buttons.length; i++) {
+
+  buttons[i].addEventListener(`click`, function (evt) {
+
+    counteri += 1;
+    if (counteri % 2 === 0) {
+      funcAdd(evt, i);
+    } else {
+      funcRemove(i);
+    }
   });
 }
 
-render(tripMain, createAboutRouteTemplate(routeOfCities, week), `afterbegin`); //a1
-const tripInfo = tripMain.querySelector(`.trip-info`);//a2
-render(tripInfo, createCostOfTripTemplate(totalCosts), `beforeend`);//a3
+render(tripMain, createAboutRouteTemplate(routeOfCities, week), `afterbegin`); // a1
+const tripInfo = tripMain.querySelector(`.trip-info`); // a2
+render(tripInfo, createCostOfTripTemplate(totalCosts), `beforeend`); // a3
 
+// const button = document.querySelector('.event__rollup-btn');
+// let counteri = 1;
+// button.addEventListener('click', function() {
+//   counteri += 1;
+//   if (counteri % 2 === 0) {
+//     console.log('addi');
+//   } else {
+//     console.log('rem');
+//   }
+// })

@@ -1,5 +1,3 @@
-import {getRandomArrayItem} from '../mock/route-point.js'
-
 const generateOffers = (offer, price, essence) => {
   return (
     `<div class="event__offer-selector">
@@ -11,8 +9,8 @@ const generateOffers = (offer, price, essence) => {
         &euro;&nbsp;<span class="event__offer-price">${price}</span>
       </label>
     </div>`
-  )
-}
+  );
+};
 
 export const createOffersEditingForm = (object) => {
 
@@ -20,7 +18,6 @@ export const createOffersEditingForm = (object) => {
 
   let offersList = [];
   for (let i = 0; i < options.offer.length; i++) {
-    console.log(options.offer.length)
     offersList.push(generateOffers(options.offer[i], options.cost[i], options.essence[i]));
   }
 
@@ -32,6 +29,6 @@ export const createOffersEditingForm = (object) => {
         ${offersList.join(`\n`)}
       </div>
     </section>`
-  )
+  );
 };
 

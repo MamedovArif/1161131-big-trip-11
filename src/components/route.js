@@ -11,7 +11,7 @@ const createAboutRouteTemplate = (array, days) => {
   const monthBegin = MONTH_NAMES[days[0].date.getMonth()];
   const dayBegin = days[0].date.getDate();
   const monthEnd = (monthBegin ===
-    MONTH_NAMES[days[days.length - 1].date.getMonth()])? `` :
+    MONTH_NAMES[days[days.length - 1].date.getMonth()]) ? `` :
     MONTH_NAMES[days[days.length - 1].date.getMonth()];
   const dayEnd = days[days.length - 1].date.getDate();
 
