@@ -100,14 +100,14 @@ const getRandomIntegerNumber = (min, max) => {
 };
 
 const getRandomDate = (targetDate, positiveNegative) => {
-  const diffValue = getRandomIntegerNumber(0, 120 * positiveNegative);
-
+  const diffValue = getRandomIntegerNumber(0, 12000) * positiveNegative;
+  console.log(diffValue);
   targetDate.setMinutes(targetDate.getMinutes() + diffValue);
 
   return targetDate;
 };
 
-const generatePoint = (dateDay) => {
+const generatePoint = (timeDate) => {
   let destination = new Set();
   const photos = [];
 
@@ -124,8 +124,8 @@ const generatePoint = (dateDay) => {
     photos: [...photos],
   };
 
-  obj.timeBegin = getRandomDate(dateDay, -1);
-  obj.timeEnd = getRandomDate(dateDay, 1);
+  obj.timeBegin = getRandomDate(timeDate, -1);
+  obj.timeEnd = getRandomDate(timeDate, 1);
   obj.options = option[(obj.type).toLowerCase()];
 
   return obj;
@@ -133,7 +133,7 @@ const generatePoint = (dateDay) => {
 
 const generatePoints = (count, dateDay) => {
   console.log(dateDay);
-  return new Array(count).fill(``).map((item) => {
+  return new Array(count).fill(``).map(() => {
     return generatePoint(dateDay);
   });
 };

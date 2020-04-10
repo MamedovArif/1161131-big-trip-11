@@ -11,7 +11,7 @@ import {generatePoints, defaultData} from './mock/route-point.js';
 import {generateDate} from './mock/list-trips.js';
 
 const NUMBER_OF_STOPS = 4;
-const QUANTITY_OF_DAYS = 3;
+const QUANTITY_OF_DAYS = 1;
 
 export const render = (container, component, place) => {
   container.insertAdjacentHTML(place, component);
@@ -52,6 +52,7 @@ console.log(listDays.length);
 console.log(week);
 
 for (let j = 0; j < listDays.length; j++) {
+  console.log(week[j].date);
   const points = generatePoints(NUMBER_OF_STOPS, week[j].date);
   points.sort((a, b) => {
     return a.timeBegin - b.timeBegin;
