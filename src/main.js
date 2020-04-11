@@ -32,15 +32,15 @@ const sortForm = tripEvents.querySelector(`.trip-events__trip-sort`);
 const createForm = () => {
   render(sortForm, createEditingFormTemplate(defaultData), `afterend`); // b2
   buttonEvent.removeEventListener(`click`, createForm);
-  const buttonSave = tripEvents.querySelector('.event__save-btn');
-  buttonSave.addEventListener(`click`, function() {
+  const buttonSave = tripEvents.querySelector(`.event__save-btn`);
+  buttonSave.addEventListener(`click`, function () {
     tripEvents.querySelector(`form[class = "trip-events__item  event  event--edit"]`).remove();
-    buttonEvent.addEventListener('click', createForm);
+    buttonEvent.addEventListener(`click`, createForm);
   });
 };
 
-const buttonEvent = tripMain.querySelector('.btn');
-buttonEvent.addEventListener('click', createForm);
+const buttonEvent = tripMain.querySelector(`.btn`);
+buttonEvent.addEventListener(`click`, createForm);
 
 
 const week = [];

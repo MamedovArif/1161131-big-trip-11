@@ -3,7 +3,7 @@ export const castTimeFormat = (value) => {
 };
 
 export const formatTime = (date) => {
-  const hours = castTimeFormat(date.getHours() % 12);
+  const hours = castTimeFormat(date.getHours());
   const minutes = castTimeFormat(date.getMinutes());
 
   return `${hours}:${minutes}`;
