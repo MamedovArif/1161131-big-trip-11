@@ -7,7 +7,7 @@ import {createEditingFormTemplate} from './components/editing-form.js';
 import {createRoutePointTemplate} from './components/route-point.js';
 import {listTrips, generateDays} from './components/list-trips.js';
 
-import {generatePoints} from './mock/route-point.js';
+import {generatePoints, defaultData} from './mock/route-point.js';
 import {generateDate} from './mock/list-trips.js';
 
 const NUMBER_OF_STOPS = 3;
@@ -26,7 +26,22 @@ render(tripControls.children[0], createMenuTemplate(), `afterend`);
 render(tripControls, createFiltersTemplate(), `beforeend`);
 
 render(tripEvents, createSortTemplate(), `beforeend`); // b1
-// render(tripEvents, createEditingFormTemplate(defaultData), `beforeend`); // b2
+
+const sortForm = tripEvents.querySelector(`.trip-events__trip-sort`);
+
+const createForm = () => {
+  render(sortForm, createEditingFormTemplate(defaultData), `afterend`); // b2
+  buttonEvent.removeEventListener(`click`, createForm);
+  const buttonSave = tripEvents.querySelector('.event__save-btn');
+  buttonSave.addEventListener(`click`, function() {
+    tripEvents.querySelector(`form[class = "trip-events__item  event  event--edit"]`).remove();
+    buttonEvent.addEventListener('click', createForm);
+  });
+};
+
+const buttonEvent = tripMain.querySelector('.btn');
+buttonEvent.addEventListener('click', createForm);
+
 
 const week = [];
 for (let y = 0; y < QUANTITY_OF_DAYS; y++) {
