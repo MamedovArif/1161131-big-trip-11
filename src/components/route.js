@@ -1,4 +1,5 @@
 import {MONTH_NAMES} from '../const.js';
+import {createElement} from '../utils.js';
 
 const createAboutRouteTemplate = (array, days) => {
   let cities = Array.from(array);
@@ -26,4 +27,26 @@ const createAboutRouteTemplate = (array, days) => {
   );
 };
 
-export {createAboutRouteTemplate};
+export default class Route {
+  constructor(cities, days) {
+    this._cities = cities;
+    this._days = days;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createAboutRouteTemplate(this._cities, this._days);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

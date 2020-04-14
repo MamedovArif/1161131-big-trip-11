@@ -1,36 +1,34 @@
-import {createAboutRouteTemplate} from './components/route.js';
-import {createCostOfTripTemplate} from './components/cost.js';
-import {createMenuTemplate} from './components/menu.js';
-import {createFiltersTemplate} from './components/filters.js';
-import {createSortTemplate} from './components/sort.js';
-import {createEditingFormTemplate} from './components/editing-form.js';
-import {createRoutePointTemplate} from './components/route-point.js';
-import {listTrips, generateDays} from './components/list-trips.js';
+import RouteComponent from './components/route.js';
+import CostComponent from './components/cost.js';
+import MenuComponent from './components/menu.js';
+import FilterComponent from './components/filters.js';
+import SortComponent from './components/sort.js';
+import FormForEditComponent from './components/editing-form.js';
+import PointOfRouteComponent from './components/route-point.js';
+import {generateDays} from './components/list-trips.js';
+import ListOfDaysComponent from './components/list-trips.js';
 
 import {generatePoints, defaultData} from './mock/route-point.js';
 import {generateDate} from './mock/list-trips.js';
+import {render, RenderPosition} from './utils.js';
 
 const NUMBER_OF_STOPS = 3;
 const QUANTITY_OF_DAYS = 4;
-
-export const render = (container, component, place) => {
-  container.insertAdjacentHTML(place, component);
-};
 
 const tripMain = document.querySelector(`.trip-main`);
 const tripControls = tripMain.querySelector(`.trip-controls`);
 
 const tripEvents = document.querySelector(`.trip-events`);
 
-render(tripControls.children[0], createMenuTemplate(), `afterend`);
-render(tripControls, createFiltersTemplate(), `beforeend`);
+render(tripControls.children[0], new MenuComponent().getElement(), RenderPosition.AFTEREND);
+render(tripControls, new FilterComponent().getElement(), RenderPosition.BEFOREEND);
 
-render(tripEvents, createSortTemplate(), `beforeend`); // b1
+render(tripEvents, new SortComponent().getElement(), RenderPosition.BEFOREEND); // b1
 
 const sortForm = tripEvents.querySelector(`.trip-events__trip-sort`);
 
 const createForm = () => {
-  render(sortForm, createEditingFormTemplate(defaultData), `afterend`); // b2
+  render(sortForm, new FormForEditComponent(defaultData).getElement(), RenderPosition.AFTEREND); // b2
   buttonEvent.removeEventListener(`click`, createForm);
   const buttonSave = tripEvents.querySelector(`.event__save-btn`);
   buttonSave.addEventListener(`click`, function () {
@@ -54,7 +52,7 @@ const days = week.map((item, counter) => {
   return generateDays(item, counter);
 });
 
-render(tripEvents, listTrips(days), `beforeend`);
+render(tripEvents, new ListOfDaysComponent(days).getElement(), RenderPosition.BEFOREEND);
 
 
 const listDays = tripEvents.querySelectorAll(`.trip-events__list`);
@@ -74,14 +72,16 @@ for (let j = 0; j < listDays.length; j++) {
   for (let i = 0; i < points.length; i++) {
     totalCosts.push(points[i].price);
     routeOfCities.add(points[i].city);
-    render(listDays[j], createRoutePointTemplate(points[i]), `beforeend`);
+    render(listDays[j], new PointOfRouteComponent(points[i]).getElement(), RenderPosition.BEFOREEND);
+    render(listDays[j], new FormForEditComponent(points[i]).getElement(), RenderPosition.BEFOREEND);
   }
 }
 
 const funcAdd = (evt, index, place) => {
   evt.preventDefault();
   const obj = globalArray[index];
-  render(place.parentElement.parentElement, createEditingFormTemplate(obj), `afterend`);
+  render(place.parentElement.parentElement,
+      new FormForEditComponent(obj).getElement(), RenderPosition.AFTEREND);
 
   // place.parentElement.style.display = 'none';
 };
@@ -107,6 +107,6 @@ for (let i = 0; i < buttons.length; i++) {
   });
 }
 
-render(tripMain, createAboutRouteTemplate(routeOfCities, week), `afterbegin`); // a1
+render(tripMain, new RouteComponent(routeOfCities, week).getElement(), RenderPosition.AFTERBEGIN); // a1
 const tripInfo = tripMain.querySelector(`.trip-info`); // a2
-render(tripInfo, createCostOfTripTemplate(totalCosts), `beforeend`); // a3
+render(tripInfo, new CostComponent(totalCosts).getElement(), RenderPosition.BEFOREEND); // a3
