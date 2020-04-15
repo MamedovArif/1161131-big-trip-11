@@ -57,6 +57,45 @@ render(tripEvents, new ListOfDaysComponent(days).getElement(), RenderPosition.BE
 
 const listDays = tripEvents.querySelectorAll(`.trip-events__list`);
 
+const renderPoint = (place, dataOfRoute) => {
+
+  const replacePointToForm = () => {
+    place.replaceChild(formForEditComponent.getElement(),
+        pointOfRouteComponent.getElement());
+  };
+
+  const replaceFormToPoint = () => {
+    place.replaceChild(pointOfRouteComponent.getElement(),
+        formForEditComponent.getElement());
+  };
+
+  const onEscKeyDown = (evt) => {
+    const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
+
+    if (isEscKey) {
+      replaceFormToPoint();
+      document.removeEventListener(`keydown`, onEscKeyDown);
+    }
+  };
+
+  const pointOfRouteComponent = new PointOfRouteComponent(dataOfRoute);
+  const arrowButton = pointOfRouteComponent.getElement().querySelector(`.event__rollup-btn`);
+  arrowButton.addEventListener(`click`, () => {
+    replacePointToForm();
+    document.addEventListener(`keydown`, onEscKeyDown);
+  });
+
+  const formForEditComponent = new FormForEditComponent(dataOfRoute);
+  const editForm = formForEditComponent.getElement();
+  editForm.addEventListener(`submit`, (evt) => {
+    evt.preventDefault();
+    replaceFormToPoint();
+    document.removeEventListener(`keydown`, onEscKeyDown);
+  });
+
+  render(place, pointOfRouteComponent.getElement(), RenderPosition.BEFOREEND);
+};
+
 let totalCosts = [];
 let routeOfCities = new Set();
 let globalArray = [];
@@ -72,40 +111,10 @@ for (let j = 0; j < listDays.length; j++) {
   for (let i = 0; i < points.length; i++) {
     totalCosts.push(points[i].price);
     routeOfCities.add(points[i].city);
-    render(listDays[j], new PointOfRouteComponent(points[i]).getElement(), RenderPosition.BEFOREEND);
-    render(listDays[j], new FormForEditComponent(points[i]).getElement(), RenderPosition.BEFOREEND);
+    renderPoint(listDays[j], points[i]);
   }
 }
 
-const funcAdd = (evt, index, place) => {
-  evt.preventDefault();
-  const obj = globalArray[index];
-  render(place.parentElement.parentElement,
-      new FormForEditComponent(obj).getElement(), RenderPosition.AFTEREND);
-
-  // place.parentElement.style.display = 'none';
-};
-
-const funcRemove = () => {
-  const arr = tripEvents.querySelector(`form[class = "trip-events__item  event  event--edit"]`);
-  arr.remove();
-};
-
-let counteri = 1;
-
-const buttons = document.querySelectorAll(`.event__rollup-btn`);
-for (let i = 0; i < buttons.length; i++) {
-
-  buttons[i].addEventListener(`click`, function (evt) {
-
-    counteri += 1;
-    if (counteri % 2 === 0) {
-      funcAdd(evt, i, buttons[i]);
-    } else {
-      funcRemove();
-    }
-  });
-}
 
 render(tripMain, new RouteComponent(routeOfCities, week).getElement(), RenderPosition.AFTERBEGIN); // a1
 const tripInfo = tripMain.querySelector(`.trip-info`); // a2
