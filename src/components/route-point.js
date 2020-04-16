@@ -1,4 +1,4 @@
-import {formatTime, diffTime} from "../utils.js";
+import {formatTime, diffTime, createElement} from "../utils.js";
 import {getRandomArrayItem, getRandomIntegerNumber} from "../mock/route-point.js";
 
 const generateOptions = (offer, cost) => {
@@ -56,4 +56,25 @@ const createRoutePointTemplate = (object) => {
   );
 };
 
-export {createRoutePointTemplate};
+export default class PointOfRoute {
+  constructor(data) {
+    this._data = data;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createRoutePointTemplate(this._data);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

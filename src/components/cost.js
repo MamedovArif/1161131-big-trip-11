@@ -1,3 +1,5 @@
+import {createElement} from '../utils.js';
+
 const createCostOfTripTemplate = (array) => {
   let sum = array.reduce((acc, item) => {
     acc += item;
@@ -11,4 +13,25 @@ const createCostOfTripTemplate = (array) => {
   );
 };
 
-export {createCostOfTripTemplate};
+export default class Cost {
+  constructor(prices) {
+    this._prices = prices;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createCostOfTripTemplate(this._prices);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
