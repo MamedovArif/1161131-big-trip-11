@@ -1,5 +1,5 @@
 import {MONTH_NAMES} from '../const.js';
-import {createElement} from '../utils.js';
+import AbstractComponent from './abstract-component.js';
 
 const createAboutRouteTemplate = (array, days) => {
   let cities = Array.from(array);
@@ -27,26 +27,14 @@ const createAboutRouteTemplate = (array, days) => {
   );
 };
 
-export default class Route {
+export default class Route extends AbstractComponent {
   constructor(cities, days) {
+    super();
     this._cities = cities;
     this._days = days;
-    this._element = null;
   }
 
   getTemplate() {
     return createAboutRouteTemplate(this._cities, this._days);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

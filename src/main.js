@@ -9,10 +9,10 @@ import {generateDays} from './components/list-trips.js';
 import ListOfDaysComponent from './components/list-trips.js';
 import {generatePoints, defaultData} from './mock/route-point.js';
 import {generateDate} from './mock/list-trips.js';
-import {render, RenderPosition} from './utils.js';
+import {render, RenderPosition} from './utils/render.js';
 import {renderPoint} from './components/render-point.js';
 
-const NUMBER_OF_STOPS = 0;
+const NUMBER_OF_STOPS = 2;
 const QUANTITY_OF_DAYS = 4;
 
 const tripMain = document.querySelector(`.trip-main`);

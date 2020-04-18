@@ -1,4 +1,4 @@
-import {formatTime, formatTimeDate} from '../utils.js';
+import {formatTime, formatTimeDate} from '../utils/common.js';
 
 const createHeaderEditingForm = (object) => {
   const {type, city, timeBegin, timeEnd, price} = object;

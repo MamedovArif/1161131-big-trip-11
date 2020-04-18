@@ -1,6 +1,6 @@
 import FormForEditComponent from './editing-form.js';
 import PointOfRouteComponent from './route-point.js';
-import {render, RenderPosition} from '../utils.js';
+import {render, RenderPosition} from '../utils/render.js';
 
 export const renderPoint = (place, dataOfRoute) => {
 

@@ -1,7 +1,7 @@
 import {createHeaderEditingForm} from './editing-form-header.js';
 import {createOffersEditingForm} from './editing-form-offers.js';
 import {createDestinationEditingForm} from './editing-form-destination.js';
-import {createElement} from '../utils.js';
+import AbstractComponent from "./abstract-component.js";
 
 const createEditingFormTemplate = (object) => {
   return (
@@ -17,25 +17,13 @@ const createEditingFormTemplate = (object) => {
   );
 };
 
-export default class FormForEdit {
+export default class FormForEdit extends AbstractComponent {
   constructor(editForm) {
+    super();
     this._editForm = editForm;
-    this._element = null;
   }
 
   getTemplate() {
     return createEditingFormTemplate(this._editForm);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
