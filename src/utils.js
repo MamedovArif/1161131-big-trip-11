@@ -61,5 +61,7 @@ export const render = (container, element, place) => {
     case RenderPosition.AFTEREND:
       container.after(element);
       break;
+    default:
+      throw new Error(`функция render принимает неверные значения`);
   }
 };
