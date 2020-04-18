@@ -10,7 +10,11 @@ import ListOfDaysComponent from './components/list-trips.js';
 import {generatePoints, defaultData} from './mock/route-point.js';
 import {generateDate} from './mock/list-trips.js';
 import {render, RenderPosition} from './utils/render.js';
-import {renderPoint} from './components/render-point.js';
+//import {renderPoint} from './components/render-point.js';
+
+//import FormForEditComponent from './editing-form.js';
+import PointOfRouteComponent from './components/route-point.js';
+//import {render, RenderPosition} from '../utils/render.js';
 
 const NUMBER_OF_STOPS = 2;
 const QUANTITY_OF_DAYS = 4;
@@ -20,15 +24,15 @@ const tripControls = tripMain.querySelector(`.trip-controls`);
 
 export const tripEvents = document.querySelector(`.trip-events`);
 
-render(tripControls.children[0], new MenuComponent().getElement(), RenderPosition.AFTEREND);
-render(tripControls, new FilterComponent().getElement(), RenderPosition.BEFOREEND);
+render(tripControls.children[0], new MenuComponent(), RenderPosition.AFTEREND);
+render(tripControls, new FilterComponent(), RenderPosition.BEFOREEND);
 
 const createDefaultForm = () => {
   noPointsComponent.getElement().remove();
   noPointsComponent.removeElement();
 
   const defaultForm = new FormForEditComponent(defaultData);
-  render(tripEvents, defaultForm.getElement(), RenderPosition.AFTERBEGIN);
+  render(tripEvents, defaultForm, RenderPosition.AFTERBEGIN);
   buttonEvent.removeEventListener(`click`, createDefaultForm);
   defaultForm.getElement().addEventListener(`submit`, function () {
     defaultForm.getElement().remove();
@@ -42,16 +46,54 @@ buttonEvent.addEventListener(`click`, createDefaultForm);
 
 const noPointsComponent = new NoPointsComponent();
 
+const renderPoint = (place, dataOfRoute) => {
+
+  const replacePointToForm = () => {
+    place.replaceChild(editForm, elementOfPointOfRoute);
+  };
+
+  const replaceFormToPoint = () => {
+    place.replaceChild(elementOfPointOfRoute, editForm);
+  };
+
+  const onEscKeyDown = (evt) => {
+    const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
+
+    if (isEscKey) {
+      replaceFormToPoint();
+      document.removeEventListener(`keydown`, onEscKeyDown);
+    }
+  };
+
+  const pointOfRouteComponent = new PointOfRouteComponent(dataOfRoute);
+  const elementOfPointOfRoute = pointOfRouteComponent.getElement();
+  const arrowButton = elementOfPointOfRoute.querySelector(`.event__rollup-btn`);
+  arrowButton.addEventListener(`click`, () => {
+    replacePointToForm();
+    document.addEventListener(`keydown`, onEscKeyDown);
+  });
+
+  const formForEditComponent = new FormForEditComponent(dataOfRoute);
+  const editForm = formForEditComponent.getElement();
+  editForm.addEventListener(`submit`, (evt) => {
+    evt.preventDefault();
+    replaceFormToPoint();
+    document.removeEventListener(`keydown`, onEscKeyDown);
+  });
+
+  render(place, pointOfRouteComponent, RenderPosition.BEFOREEND);
+};
+
 const renderMain = () => {
   const isAllPointsAbsence = NUMBER_OF_STOPS === 0;
 
   if (isAllPointsAbsence) {
     render(tripEvents,
-        noPointsComponent.getElement(), RenderPosition.BEFOREEND);
+        noPointsComponent, RenderPosition.BEFOREEND);
     return;
   }
 
-  render(tripEvents, new SortComponent().getElement(), RenderPosition.BEFOREEND);
+  render(tripEvents, new SortComponent(), RenderPosition.BEFOREEND);
 
   const week = [];
   for (let y = 0; y < QUANTITY_OF_DAYS; y++) {
@@ -63,7 +105,7 @@ const renderMain = () => {
     return generateDays(item, counter);
   });
 
-  render(tripEvents, new ListOfDaysComponent(days).getElement(), RenderPosition.BEFOREEND);
+  render(tripEvents, new ListOfDaysComponent(days), RenderPosition.BEFOREEND);
 
   const listDays = tripEvents.querySelectorAll(`.trip-events__list`);
 
@@ -83,9 +125,9 @@ const renderMain = () => {
     }
   }
 
-  render(tripMain, new RouteComponent(routeOfCities, week).getElement(), RenderPosition.AFTERBEGIN); // a1
+  render(tripMain, new RouteComponent(routeOfCities, week), RenderPosition.AFTERBEGIN); // a1
   const tripInfo = tripMain.querySelector(`.trip-info`); // a2
-  render(tripInfo, new CostComponent(totalCosts).getElement(), RenderPosition.BEFOREEND); // a3
+  render(tripInfo, new CostComponent(totalCosts), RenderPosition.BEFOREEND); // a3
 };
 
 renderMain();
