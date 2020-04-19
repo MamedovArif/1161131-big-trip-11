@@ -8,6 +8,7 @@ import ListOfDaysComponent from '../components/list-trips.js';
 import PointOfRouteComponent from '../components/route-point.js';
 import {render, RenderPosition, replace} from '../utils/render.js'; // , remove
 import {generateDays} from '../components/list-trips.js';
+import FilterComponent, {filterType} from '../components/filters.js';
 
 /*
 const createDefaultForm = (button, container) => {
@@ -61,10 +62,34 @@ const renderPoint = (place, dataOfRoute) => {
   render(place, pointOfRouteComponent, RenderPosition.BEFOREEND);
 };
 
+const getFilteredPoints = (points, filterType) => {
+  let oints = [];
+  let filteredPoints = [];
+  for (let i = 0; i < points.length; i++) {
+    for (let j = 0; j < points[i].length; j++) {
+      filteredPoints.push(points[i][j]);
+    }
+  }
+
+  switch (filterType) {
+    case filterType.FUTURE:
+      oints = filteredPoints.sort((a, b) => a.timeBegin - b.timeEnd);
+      break;
+    case filterType.PAST:
+      oints = filteredPoints.sort((a, b) => b.timeBegin - a.timeEnd);
+      break;
+    case filterType.EVERYTHING:
+      oints = filteredPoints;
+      break;
+  }
+  return oints;
+};
+
 export default class TripController {
   constructor(container) {
     this._container = container;
     this._sortComponent = new SortComponent();
+    this._filterComponent = new FilterComponent();
   }
 
   render(week, allPoints, totalCosts, routeOfCities, header) {
@@ -92,5 +117,16 @@ export default class TripController {
     render(header, new RouteComponent(routeOfCities, week), RenderPosition.AFTERBEGIN); // a1
     const tripInfo = header.querySelector(`.trip-info`); // a2
     render(tripInfo, new CostComponent(totalCosts), RenderPosition.BEFOREEND); // a3
+
+//////////////
+    this._filterComponent.setFilterTypeChangeHandler((filterType) => {
+      const filteredPoints = getFilteredPoints(allPoints, filterType);
+      this._container.querySelector('trip-days').innerHTML = ``;
+      for (let x = 0; x < filteredPoints.length; x++) {
+        let point = filteredPoints[x];
+        renderPoint(this._container.querySelector('trip-days'), point);
+      }
+    })
   }
 }
+
