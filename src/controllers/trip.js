@@ -4,29 +4,27 @@ import SortComponent from '../components/sort.js';
 import NoPointsComponent from '../components/no-points.js';
 import FormForEditComponent from '../components/editing-form.js';
 import ListOfDaysComponent from '../components/list-trips.js';
-import {generatePoints, defaultData} from '../mock/route-point.js';
+// import {defaultData} from '../mock/route-point.js';
 import PointOfRouteComponent from '../components/route-point.js';
-import {render, RenderPosition, replace, remove} from '../utils/render.js';
+import {render, RenderPosition, replace} from '../utils/render.js'; // , remove
 import {generateDays} from '../components/list-trips.js';
 
-const tripEvents = document.querySelector(`.trip-events`);
-const tripMain = document.querySelector(`.trip-main`);
-
-const createDefaultForm = () => {
+/*
+const createDefaultForm = (button, container) => {
   remove(noPointsComponent);
 
   const defaultFormComponent = new FormForEditComponent(defaultData);
-  render(tripEvents, defaultFormComponent, RenderPosition.AFTERBEGIN);
-  buttonEvent.removeEventListener(`click`, createDefaultForm);
+  render(container, defaultFormComponent, RenderPosition.AFTERBEGIN);
+  button.removeEventListener(`click`, createDefaultForm.bind(null,
+      button, container));
   defaultFormComponent.setSubmitHandler(function () {
     remove(defaultFormComponent);
-    buttonEvent.addEventListener(`click`, createDefaultForm);
+    button.addEventListener(`click`, createDefaultForm.bind(null,
+        button, container));
   });
 };
-
+*/
 const noPointsComponent = new NoPointsComponent();
-const buttonEvent = tripMain.querySelector(`.btn`);
-buttonEvent.addEventListener(`click`, createDefaultForm);
 
 
 const renderPoint = (place, dataOfRoute) => {
@@ -63,41 +61,36 @@ const renderPoint = (place, dataOfRoute) => {
   render(place, pointOfRouteComponent, RenderPosition.BEFOREEND);
 };
 
-const renderMain = (week, allPoints, totalCosts, routeOfCities) => {
-  const isAllPointsAbsence = allPoints.length === 0;
-
-  if (isAllPointsAbsence) {
-    render(tripEvents,
-        noPointsComponent, RenderPosition.BEFOREEND);
-    return;
-  }
-
-  render(tripEvents, new SortComponent(), RenderPosition.BEFOREEND);
-
-
-  const days = week.map((item, counter) => {
-    return generateDays(item, counter);
-  });
-  render(tripEvents, new ListOfDaysComponent(days), RenderPosition.BEFOREEND);
-  const listDays = tripEvents.querySelectorAll(`.trip-events__list`);
-
-  for (let x = 0; x < allPoints.length; x++) {
-    let points = allPoints[x];
-    for (let y = 0; y < points.length; y++) {
-      renderPoint(listDays[x], points[y]);
-    }
-  }
-  render(tripMain, new RouteComponent(routeOfCities, week), RenderPosition.AFTERBEGIN); // a1
-  const tripInfo = tripMain.querySelector(`.trip-info`); // a2
-  render(tripInfo, new CostComponent(totalCosts), RenderPosition.BEFOREEND); // a3
-};
-
 export default class TripController {
-  constructor() {
-    this._container = 'container';
+  constructor(container) {
+    this._container = container;
+    this._sortComponent = new SortComponent();
   }
 
-  render(week, allDataPoints, totalCosts, routeOfCities) {
-    renderMain(week, allDataPoints, totalCosts, routeOfCities);
+  render(week, allPoints, totalCosts, routeOfCities, header) {
+    const isAllPointsAbsence = allPoints.length === 0;
+
+    if (isAllPointsAbsence) {
+      render(this._container, noPointsComponent, RenderPosition.BEFOREEND);
+      return;
+    }
+
+    render(this._container, this._sortComponent, RenderPosition.BEFOREEND);
+
+    const days = week.map((item, counter) => {
+      return generateDays(item, counter);
+    });
+    render(this._container, new ListOfDaysComponent(days), RenderPosition.BEFOREEND);
+    const listDays = this._container.querySelectorAll(`.trip-events__list`);
+
+    for (let x = 0; x < allPoints.length; x++) {
+      let points = allPoints[x];
+      for (let y = 0; y < points.length; y++) {
+        renderPoint(listDays[x], points[y]);
+      }
+    }
+    render(header, new RouteComponent(routeOfCities, week), RenderPosition.AFTERBEGIN); // a1
+    const tripInfo = header.querySelector(`.trip-info`); // a2
+    render(tripInfo, new CostComponent(totalCosts), RenderPosition.BEFOREEND); // a3
   }
 }
