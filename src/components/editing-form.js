@@ -26,4 +26,8 @@ export default class FormForEdit extends AbstractComponent {
   getTemplate() {
     return createEditingFormTemplate(this._editForm);
   }
+
+  setSubmitHandler(handler) {
+    this.getElement().addEventListener(`submit`, handler);
+  }
 }

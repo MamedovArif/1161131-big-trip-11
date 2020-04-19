@@ -9,7 +9,7 @@ import {generateDays} from './components/list-trips.js';
 import ListOfDaysComponent from './components/list-trips.js';
 import {generatePoints, defaultData} from './mock/route-point.js';
 import {generateDate} from './mock/list-trips.js';
-import {render, RenderPosition} from './utils/render.js';
+import {render, RenderPosition, replace, remove} from './utils/render.js';
 //import {renderPoint} from './components/render-point.js';
 
 //import FormForEditComponent from './editing-form.js';
@@ -28,15 +28,13 @@ render(tripControls.children[0], new MenuComponent(), RenderPosition.AFTEREND);
 render(tripControls, new FilterComponent(), RenderPosition.BEFOREEND);
 
 const createDefaultForm = () => {
-  noPointsComponent.getElement().remove();
-  noPointsComponent.removeElement();
+  remove(noPointsComponent);
 
-  const defaultForm = new FormForEditComponent(defaultData);
-  render(tripEvents, defaultForm, RenderPosition.AFTERBEGIN);
+  const defaultFormComponent = new FormForEditComponent(defaultData);
+  render(tripEvents, defaultFormComponent, RenderPosition.AFTERBEGIN);
   buttonEvent.removeEventListener(`click`, createDefaultForm);
-  defaultForm.getElement().addEventListener(`submit`, function () {
-    defaultForm.getElement().remove();
-    defaultForm.removeElement();
+  defaultFormComponent.setSubmitHandler(function () {
+    remove(defaultFormComponent);
     buttonEvent.addEventListener(`click`, createDefaultForm);
   });
 };
@@ -49,11 +47,11 @@ const noPointsComponent = new NoPointsComponent();
 const renderPoint = (place, dataOfRoute) => {
 
   const replacePointToForm = () => {
-    place.replaceChild(editForm, elementOfPointOfRoute);
+    replace(formForEditComponent, pointOfRouteComponent);
   };
 
   const replaceFormToPoint = () => {
-    place.replaceChild(elementOfPointOfRoute, editForm);
+    replace(pointOfRouteComponent, formForEditComponent);
   };
 
   const onEscKeyDown = (evt) => {
@@ -66,16 +64,13 @@ const renderPoint = (place, dataOfRoute) => {
   };
 
   const pointOfRouteComponent = new PointOfRouteComponent(dataOfRoute);
-  const elementOfPointOfRoute = pointOfRouteComponent.getElement();
-  const arrowButton = elementOfPointOfRoute.querySelector(`.event__rollup-btn`);
-  arrowButton.addEventListener(`click`, () => {
+  pointOfRouteComponent.setClickHandler(() => {
     replacePointToForm();
     document.addEventListener(`keydown`, onEscKeyDown);
   });
 
   const formForEditComponent = new FormForEditComponent(dataOfRoute);
-  const editForm = formForEditComponent.getElement();
-  editForm.addEventListener(`submit`, (evt) => {
+  formForEditComponent.setSubmitHandler((evt) => {
     evt.preventDefault();
     replaceFormToPoint();
     document.removeEventListener(`keydown`, onEscKeyDown);
