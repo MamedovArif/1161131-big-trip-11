@@ -3,7 +3,7 @@ import FilterComponent from './components/filters.js';
 import {render, RenderPosition} from './utils/render.js';
 import {generateDate} from './mock/list-trips.js';
 import {generatePoints} from './mock/route-point.js';
-import TripController, {createDefaultForm} from './controllers/trip.js';
+import TripController from './controllers/trip.js'; // , {createDefaultForm}
 
 const NUMBER_OF_STOPS = 2;
 const QUANTITY_OF_DAYS = 4;

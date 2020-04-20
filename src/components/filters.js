@@ -4,7 +4,7 @@ export const FilterType = {
   EVERYTHING: `everything`,
   FUTURE: `future`,
   PAST: `past`,
-}
+};
 
 const createFiltersTemplate = () => {
   return (
@@ -70,6 +70,6 @@ export default class Filter extends AbstractComponent {
       this._currenFilterType = filterType;
 
       handler(this._currenFilterType);
-    })
+    });
   }
 }
