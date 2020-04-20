@@ -117,13 +117,20 @@ export default class TripController {
     const tripInfo = header.querySelector(`.trip-info`); // a2
     render(tripInfo, new CostComponent(totalCosts), RenderPosition.BEFOREEND); // a3
 
-    filterComponent.setFilterTypeChangeHandler((filterType) => {
 
+    filterComponent.setFilterTypeChangeHandler((filterType) => {
       const filteredPoints = getFilteredPoints(allPoints, filterType);
-      this._container.querySelector(`.trip-days`).innerHTML = ``;
+      const parentList = this._container.querySelector(`.trip-days`);
+      parentList.innerHTML = ``;
+      //  выровниваем
+      parentList.insertAdjacentHTML(`beforeend`, generateDays({date: new Date()}, 0)); // *
+      parentList.querySelector(`.day__counter`).textContent = ``; // *
+      parentList.querySelector(`.day__date`).textContent = ``; // *
+
       for (let x = 0; x < filteredPoints.length; x++) {
         let point = filteredPoints[x];
-        renderPoint(this._container.querySelector(`.trip-days`), point);
+        // renderPoint(this._container.querySelector(`.trip-days`), point); предыдущий вариант
+        renderPoint(this._container.querySelector(`.trip-events__list`), point); // выровниваем
       }
     });
   }
