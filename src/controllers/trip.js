@@ -4,26 +4,24 @@ import SortComponent from '../components/sort.js';
 import NoPointsComponent from '../components/no-points.js';
 import FormForEditComponent from '../components/editing-form.js';
 import ListOfDaysComponent, {generateDays} from '../components/list-trips.js';
-// import {defaultData} from '../mock/route-point.js';
+import {defaultData} from '../mock/route-point.js';
 import PointOfRouteComponent from '../components/route-point.js';
-import {render, RenderPosition, replace} from '../utils/render.js'; // , remove
-import {filterComponent} from '../main.js'; // кустарно
+import {render, RenderPosition, replace, remove} from '../utils/render.js';
+import {filterComponent} from '../main.js';
 import {FilterType} from '../components/filters.js';
-/*
-const createDefaultForm = (button, container) => {
+
+export const createDefaultForm = (button, container) => {
   remove(noPointsComponent);
 
   const defaultFormComponent = new FormForEditComponent(defaultData);
   render(container, defaultFormComponent, RenderPosition.AFTERBEGIN);
-  button.removeEventListener(`click`, createDefaultForm.bind(null,
-      button, container));
+  button.removeEventListener(`click`, createDefaultForm);
   defaultFormComponent.setSubmitHandler(function () {
     remove(defaultFormComponent);
-    button.addEventListener(`click`, createDefaultForm.bind(null,
-        button, container));
+    button.addEventListener(`click`, createDefaultForm);
   });
 };
-*/
+
 const noPointsComponent = new NoPointsComponent();
 
 const renderPoint = (place, dataOfRoute) => {

@@ -3,7 +3,7 @@ import FilterComponent from './components/filters.js';
 import {render, RenderPosition} from './utils/render.js';
 import {generateDate} from './mock/list-trips.js';
 import {generatePoints} from './mock/route-point.js';
-import TripController from './controllers/trip.js'; // , {createDefaultForm}
+import TripController, {createDefaultForm} from './controllers/trip.js';
 
 const NUMBER_OF_STOPS = 2;
 const QUANTITY_OF_DAYS = 4;
@@ -17,9 +17,10 @@ render(tripControls.children[0], new MenuComponent(), RenderPosition.AFTEREND);
 export const filterComponent = new FilterComponent();
 render(tripControls, filterComponent, RenderPosition.BEFOREEND);
 
-// const buttonEvent = tripMain.querySelector(`.btn`);
-// buttonEvent.addEventListener(`click`, createDefaultForm.bind(null,
-//     buttonEvent, tripEvents));
+
+const buttonEvent = tripMain.querySelector(`.btn`);
+let double = createDefaultForm.bind(null, buttonEvent, tripEvents);
+buttonEvent.addEventListener(`click`, double);
 
 
 const week = [];
