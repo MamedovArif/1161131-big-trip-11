@@ -14,7 +14,8 @@ const tripEvents = document.querySelector(`.trip-events`);
 const tripMain = document.querySelector(`.trip-main`);
 
 render(tripControls.children[0], new MenuComponent(), RenderPosition.AFTEREND);
-render(tripControls, new FilterComponent(), RenderPosition.BEFOREEND);
+export const filterComponent = new FilterComponent();
+render(tripControls, filterComponent, RenderPosition.BEFOREEND);
 
 // const buttonEvent = tripMain.querySelector(`.btn`);
 // buttonEvent.addEventListener(`click`, createDefaultForm.bind(null,

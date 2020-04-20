@@ -18,14 +18,14 @@ const createFiltersTemplate = () => {
 
       <div class="trip-filters__filter">
         <input id="filter-future" class="trip-filters__filter-input
-        visually-hidden" type="radio" name="trip-filter" value="future">
+        visually-hidden" type="radio" name="trip-filter" value="future" >
         <label class="trip-filters__filter-label" data-filter-type="${FilterType.FUTURE}"
         for="filter-future">Future</label>
       </div>
 
       <div class="trip-filters__filter">
         <input id="filter-past" class="trip-filters__filter-input
-        visually-hidden" type="radio" name="trip-filter" value="past">
+        visually-hidden" type="radio" name="trip-filter" value="past" >
         <label class="trip-filters__filter-label" data-filter-type="${FilterType.PAST}"
         for="filter-past">Past</label>
       </div>
@@ -62,6 +62,10 @@ export default class Filter extends AbstractComponent {
       if (this._currenFilterType === filterType) {
         return;
       }
+      document.querySelector(`#filter-${this._currenFilterType}`).removeAttribute(`checked`);
+      const iden = evt.target.getAttribute(`for`);
+      const input = document.querySelector(`#${iden}`);
+      input.setAttribute(`checked`, true);
 
       this._currenFilterType = filterType;
 

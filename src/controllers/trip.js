@@ -8,8 +8,8 @@ import ListOfDaysComponent from '../components/list-trips.js';
 import PointOfRouteComponent from '../components/route-point.js';
 import {render, RenderPosition, replace} from '../utils/render.js'; // , remove
 import {generateDays} from '../components/list-trips.js';
-import FilterComponent, {filterType} from '../components/filters.js';
-
+import {filterComponent} from '../main.js';
+import {FilterType} from '../components/filters.js';
 /*
 const createDefaultForm = (button, container) => {
   remove(noPointsComponent);
@@ -63,24 +63,27 @@ const renderPoint = (place, dataOfRoute) => {
 };
 
 const getFilteredPoints = (points, filterType) => {
-  let oints = [];
+  let oints;
   let filteredPoints = [];
   for (let i = 0; i < points.length; i++) {
     for (let j = 0; j < points[i].length; j++) {
       filteredPoints.push(points[i][j]);
     }
   }
-
+  console.log(filteredPoints);
   switch (filterType) {
-    case filterType.FUTURE:
-      oints = filteredPoints.sort((a, b) => a.timeBegin - b.timeEnd);
+    case FilterType.FUTURE:
+      console.log(new Date());
+      oints = filteredPoints.filter((item) => item.timeBegin > new Date());
       break;
-    case filterType.PAST:
-      oints = filteredPoints.sort((a, b) => b.timeBegin - a.timeEnd);
+    case FilterType.PAST:
+      oints = filteredPoints.filter((item) => item.timeBegin < new Date());
       break;
-    case filterType.EVERYTHING:
+    case FilterType.EVERYTHING:
       oints = filteredPoints;
       break;
+    default:
+      throw new Error(`функция getFilteredPoints принимает неверные аргументы`);
   }
   return oints;
 };
@@ -89,7 +92,6 @@ export default class TripController {
   constructor(container) {
     this._container = container;
     this._sortComponent = new SortComponent();
-    this._filterComponent = new FilterComponent();
   }
 
   render(week, allPoints, totalCosts, routeOfCities, header) {
@@ -110,6 +112,7 @@ export default class TripController {
 
     for (let x = 0; x < allPoints.length; x++) {
       let points = allPoints[x];
+      console.log(points);
       for (let y = 0; y < points.length; y++) {
         renderPoint(listDays[x], points[y]);
       }
@@ -117,14 +120,14 @@ export default class TripController {
     render(header, new RouteComponent(routeOfCities, week), RenderPosition.AFTERBEGIN); // a1
     const tripInfo = header.querySelector(`.trip-info`); // a2
     render(tripInfo, new CostComponent(totalCosts), RenderPosition.BEFOREEND); // a3
-
 //////////////
-    this._filterComponent.setFilterTypeChangeHandler((filterType) => {
+    filterComponent.setFilterTypeChangeHandler((filterType) => {
+
       const filteredPoints = getFilteredPoints(allPoints, filterType);
-      this._container.querySelector('trip-days').innerHTML = ``;
+      this._container.querySelector('.trip-days').innerHTML = ``;
       for (let x = 0; x < filteredPoints.length; x++) {
         let point = filteredPoints[x];
-        renderPoint(this._container.querySelector('trip-days'), point);
+        renderPoint(this._container.querySelector('.trip-days'), point);
       }
     })
   }
