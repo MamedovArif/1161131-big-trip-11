@@ -19,22 +19,22 @@ render(tripControls, filterComponent, RenderPosition.BEFOREEND);
 
 
 const buttonEvent = tripMain.querySelector(`.btn`);
-let double = createDefaultForm.bind(null, buttonEvent, tripEvents);
-buttonEvent.addEventListener(`click`, double);
+let tiedСreateDefaultForm = createDefaultForm.bind(null, buttonEvent, tripEvents);
+buttonEvent.addEventListener(`click`, tiedСreateDefaultForm);
 
 
-const week = [];
+const datesOfTravel = [];
 for (let y = 0; y < QUANTITY_OF_DAYS; y++) {
-  week.push(generateDate());
+  datesOfTravel.push(generateDate());
 }
-week.sort((a, b) => a.date - b.date);
+datesOfTravel.sort((a, b) => a.date - b.date);
 
 let allDataPoints = [];
 let totalCosts = [];
 let routeOfCities = new Set();
 
-for (let j = 0; j < week.length; j++) {
-  const points = generatePoints(NUMBER_OF_STOPS, week[j].date);
+for (let j = 0; j < datesOfTravel.length; j++) {
+  const points = generatePoints(NUMBER_OF_STOPS, datesOfTravel[j].date);
   points.sort((a, b) => {
     return a.timeBegin - b.timeBegin;
   });
@@ -47,4 +47,4 @@ for (let j = 0; j < week.length; j++) {
 }
 
 const tripController = new TripController(tripEvents);
-tripController.render(week, allDataPoints, totalCosts, routeOfCities, tripMain);
+tripController.render(datesOfTravel, allDataPoints, totalCosts, routeOfCities, tripMain);
