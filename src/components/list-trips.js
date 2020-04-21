@@ -1,5 +1,6 @@
-import {castTimeFormat, createElement} from '../utils.js';
+import {castTimeFormat} from '../utils/common.js';
 import {MONTH_NAMES} from '../const.js';
+import AbstractComponent from "./abstract-component.js";
 
 const generateDays = (object, counter) => {
   const {date} = object;
@@ -26,26 +27,14 @@ const listTrips = (array) => {
   );
 };
 
-export default class ListOfDays {
+export default class ListOfDays extends AbstractComponent {
   constructor(days) {
+    super();
     this._days = days;
-    this._element = null;
   }
 
   getTemplate() {
     return listTrips(this._days);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
 

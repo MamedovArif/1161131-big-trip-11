@@ -1,5 +1,6 @@
-import {formatTime, diffTime, createElement} from "../utils.js";
+import {formatTime, diffTime} from "../utils/common.js";
 import {getRandomArrayItem, getRandomIntegerNumber} from "../mock/route-point.js";
+import AbstractComponent from "./abstract-component.js";
 
 const generateOptions = (offer, cost) => {
   return (
@@ -56,25 +57,17 @@ const createRoutePointTemplate = (object) => {
   );
 };
 
-export default class PointOfRoute {
+export default class PointOfRoute extends AbstractComponent {
   constructor(data) {
+    super();
     this._data = data;
-    this._element = null;
   }
 
   getTemplate() {
     return createRoutePointTemplate(this._data);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
+  setClickHandler(handler) {
+    this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, handler);
   }
 }
