@@ -59,7 +59,7 @@ const renderPoint = (place, dataOfRoute) => {
 };
 
 const getFilteredPoints = (points, filterType) => {
-  let oints;
+  let dataOfPoints;
   let filteredPoints = [];
   for (let i = 0; i < points.length; i++) {
     for (let j = 0; j < points[i].length; j++) {
@@ -69,18 +69,18 @@ const getFilteredPoints = (points, filterType) => {
 
   switch (filterType) {
     case FilterType.FUTURE:
-      oints = filteredPoints.filter((item) => item.timeBegin > new Date());
+      dataOfPoints = filteredPoints.filter((item) => item.timeBegin > new Date());
       break;
     case FilterType.PAST:
-      oints = filteredPoints.filter((item) => item.timeBegin < new Date());
+      dataOfPoints = filteredPoints.filter((item) => item.timeBegin < new Date());
       break;
     case FilterType.EVERYTHING:
-      oints = filteredPoints;
+      dataOfPoints = filteredPoints;
       break;
     default:
       throw new Error(`функция getFilteredPoints принимает неверные аргументы`);
   }
-  return oints;
+  return dataOfPoints;
 };
 
 export default class TripController {
@@ -89,7 +89,7 @@ export default class TripController {
     this._sortComponent = new SortComponent();
   }
 
-  render(week, allPoints, totalCosts, routeOfCities, header) {
+  render(datesOfTravel, allPoints, totalCosts, routeOfCities, header) {
     const isAllPointsAbsence = allPoints.length === 0;
 
     if (isAllPointsAbsence) {
@@ -99,7 +99,7 @@ export default class TripController {
 
     render(this._container, this._sortComponent, RenderPosition.BEFOREEND);
 
-    const days = week.map((item, counter) => {
+    const days = datesOfTravel.map((item, counter) => {
       return generateDays(item, counter);
     });
     render(this._container, new ListOfDaysComponent(days), RenderPosition.BEFOREEND);
@@ -111,7 +111,7 @@ export default class TripController {
         renderPoint(listDays[x], points[y]);
       }
     }
-    render(header, new RouteComponent(routeOfCities, week), RenderPosition.AFTERBEGIN); // a1
+    render(header, new RouteComponent(routeOfCities, datesOfTravel), RenderPosition.AFTERBEGIN); // a1
     const tripInfo = header.querySelector(`.trip-info`); // a2
     render(tripInfo, new CostComponent(totalCosts), RenderPosition.BEFOREEND); // a3
 

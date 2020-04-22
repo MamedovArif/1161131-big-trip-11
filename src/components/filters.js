@@ -63,8 +63,8 @@ export default class Filter extends AbstractComponent {
         return;
       }
       document.querySelector(`#filter-${this._currenFilterType}`).removeAttribute(`checked`);
-      const iden = evt.target.getAttribute(`for`);
-      const input = document.querySelector(`#${iden}`);
+      const id = evt.target.getAttribute(`for`);
+      const input = document.querySelector(`#${id}`);
       input.setAttribute(`checked`, true);
 
       this._currenFilterType = filterType;
