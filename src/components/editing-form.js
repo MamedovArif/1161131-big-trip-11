@@ -30,4 +30,9 @@ export default class FormForEdit extends AbstractComponent {
   setSubmitHandler(handler) {
     this.getElement().addEventListener(`submit`, handler);
   }
+
+  setFavoriteChangeHandler(handler) {
+    this.getElement().querySelector(`input[name = event-favorite]`)
+        .addEventListener(`change`, handler);
+  }
 }

@@ -119,7 +119,7 @@ const createHeaderEditingForm = (object) => {
       <button class="event__reset-btn" type="reset">Cancel</button>
 
       <input id="event-favorite-1" class="event__favorite-checkbox  visually-hidden"
-          type="checkbox" name="event-favorite" checked>
+          type="checkbox" name="event-favorite" checked=${bool}>
       <label class="event__favorite-btn" for="event-favorite-1">
         <span class="visually-hidden">Add to favorite</span>
         <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">

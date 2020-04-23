@@ -91,8 +91,10 @@ export default class TripController {
     const listDays = this._container.querySelectorAll(`.trip-events__list`);
 
     for (let x = 0; x < this._allPoints.length; x++) {
-      renderPoints(listDays[x], this._allPoints[x]);
+      const newPoints = renderPoints(listDays[x], this._allPoints[x]);
+      this._showedPointControllers = this._showedPointControllers.concat(newPoints);
     }
+
     render(header, new RouteComponent(routeOfCities, datesOfTravel), RenderPosition.AFTERBEGIN); // a1
     const tripInfo = header.querySelector(`.trip-info`); // a2
     render(tripInfo, new CostComponent(totalCosts), RenderPosition.BEFOREEND); // a3
@@ -108,12 +110,15 @@ export default class TripController {
       parentList.querySelector(`.day__counter`).textContent = ``; // *
       parentList.querySelector(`.day__date`).textContent = ``; // *
 
-      renderPoints(this._container.querySelector(`.trip-events__list`), filteredPoints);
+      const newPoints = renderPoints(this._container.querySelector(`.trip-events__list`), filteredPoints);
+      this._showedPointControllers = newPoints;
     } else {
       render(this._container, new ListOfDaysComponent(this._days), RenderPosition.BEFOREEND);
       let listOfDays = this._container.querySelectorAll(`.trip-events__list`); // *
+      this._showedPointControllers = [];
       for (let x = 0; x < this._allPoints.length; x++) {
-        renderPoints(listOfDays[x], this._allPoints[x]);
+        const newPoint = renderPoints(listOfDays[x], this._allPoints[x]);
+        this._showedPointControllers = this._showedPointControllers.concat(newPoint); ///!!!
       }
     }
   }

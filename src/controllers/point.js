@@ -26,6 +26,10 @@ export default class PointController {
       document.removeEventListener(`keydown`, this._onEscKeyDown);
     });
 
+    this._formForEditComponent.setFavoriteChangeHandler(() => {
+      this.setAttribute(`checked`, true);
+    })
+
     render(this._container, this._pointOfRouteComponent, RenderPosition.BEFOREEND);
   }
 
