@@ -50,12 +50,22 @@ const getFilteredPoints = (points, filterType) => {
   return dataOfPoints;
 };
 
+const renderPoints = (parent, points) => {
+  return points.map((point) => {
+    const pointController = new PointController(parent);
+    pointController.render(point);
+    return pointController;
+  })
+}
+
 export default class TripController {
   constructor(container) {
     this._container = container;
+    this._allPoints = [];
+    this._showedPointControllers = [];
+
     this._sortComponent = new SortComponent();
     this._handlerFilter = this._handlerFilter.bind(this);
-    this._allPoints = null;
     this._pointController = null;
     this._days = null;
     filterComponent.setFilterTypeChangeHandler(this._handlerFilter);
@@ -81,11 +91,7 @@ export default class TripController {
     const listDays = this._container.querySelectorAll(`.trip-events__list`);
 
     for (let x = 0; x < this._allPoints.length; x++) {
-      let points = this._allPoints[x];
-      for (let y = 0; y < points.length; y++) {
-        this._pointController = new PointController(listDays[x]);
-        this._pointController.render(points[y]);
-      }
+      renderPoints(listDays[x], this._allPoints[x]);
     }
     render(header, new RouteComponent(routeOfCities, datesOfTravel), RenderPosition.AFTERBEGIN); // a1
     const tripInfo = header.querySelector(`.trip-info`); // a2
@@ -102,22 +108,13 @@ export default class TripController {
       parentList.querySelector(`.day__counter`).textContent = ``; // *
       parentList.querySelector(`.day__date`).textContent = ``; // *
 
-      for (let x = 0; x < filteredPoints.length; x++) {
-        let point = filteredPoints[x];
-        this._pointController = new PointController(this._container.querySelector(`.trip-events__list`)); // !!!!!!!!!!!!!
-        this._pointController.render(point);
-      }
+      renderPoints(this._container.querySelector(`.trip-events__list`), filteredPoints);
     } else {
       render(this._container, new ListOfDaysComponent(this._days), RenderPosition.BEFOREEND);
       let listOfDays = this._container.querySelectorAll(`.trip-events__list`); // *
       for (let x = 0; x < this._allPoints.length; x++) {
-        let points = this._allPoints[x];
-        for (let y = 0; y < points.length; y++) {
-          this._pointController = new PointController(listOfDays[x]);
-          this._pointController.render(points[y]);
-        }
+        renderPoints(listOfDays[x], this._allPoints[x]);
       }
     }
   }
 }
-
