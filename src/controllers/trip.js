@@ -52,7 +52,7 @@ const getFilteredPoints = (points, filterType) => {
 
 const renderPoints = (parent, points) => {
   return points.map((point) => {
-    const pointController = new PointController(parent);
+    const pointController = new PointController(parent, onDataChange);
     pointController.render(point);
     return pointController;
   })
@@ -98,6 +98,20 @@ export default class TripController {
     render(header, new RouteComponent(routeOfCities, datesOfTravel), RenderPosition.AFTERBEGIN); // a1
     const tripInfo = header.querySelector(`.trip-info`); // a2
     render(tripInfo, new CostComponent(totalCosts), RenderPosition.BEFOREEND); // a3
+  }
+
+  _onDataChange(pointController, oldPoint, newPoint) {
+    let points = [];
+    this._allPoints.map((item) => {
+      points = points.concat(item);
+    });
+    const index = points.findIndex((point) => point === oldPoint);
+    if (index === -1) {
+      return;
+    }
+    points = [].concat(points.slice(0, index), newData, points.slice(index + 1));
+
+    pointController.render(points[index]);
   }
 
   _handlerFilter(filterType) {

@@ -4,10 +4,11 @@ import {render, RenderPosition, replace} from '../utils/render.js';
 
 
 export default class PointController {
-  constructor(container) {
+  constructor(container, onDataChange) {
     this._container = container;
     this._pointOfRouteComponent = null;
     this._formForEditComponent = null;
+    this._onDataChange = onDataChange;
 
     this._onEscKeyDown = this._onEscKeyDown.bind(this);
   }
@@ -26,9 +27,12 @@ export default class PointController {
       document.removeEventListener(`keydown`, this._onEscKeyDown);
     });
 
-    this._formForEditComponent.setFavoriteChangeHandler(() => {
-      this.setAttribute(`checked`, true);
-    })
+    this._formForEditComponent.setFavoriteChangeHandler(() => { //onDataChange
+      //this.setAttribute(`checked`, true);
+      this._onDataChange(this, dataOfRoute, Object.assign({}, dataOfRoute, {
+        isFavorite: !dataOfRoute.isFavorite,
+      }))
+    }); // !!!
 
     render(this._container, this._pointOfRouteComponent, RenderPosition.BEFOREEND);
   }
