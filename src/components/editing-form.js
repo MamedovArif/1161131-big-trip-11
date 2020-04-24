@@ -22,8 +22,6 @@ export default class FormForEdit extends AbstractSmartComponent {
   constructor(editForm) {
     super();
     this._editForm = editForm;
-    //this._city = editForm.city;
-    //this._destination = editForm.destination;
 
     this._submitHandler = null;
     this._subscribeOnEvents();
@@ -40,6 +38,16 @@ export default class FormForEdit extends AbstractSmartComponent {
 
   rerender() {
     super.rerender();
+  }
+
+  reset() {
+    const editForm = this._editForm;
+    this._editForm.city = editForm.city;
+    this._editForm.destination = editForm.destination;
+    this._editForm.type = editForm.type;
+    this._editForm.placeholder = editForm.placeholder;
+    this._editForm.options = option[(editForm.type).toLowerCase()];
+    this.rerender();
   }
 
   setSubmitHandler(handler) {

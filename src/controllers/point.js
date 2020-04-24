@@ -44,16 +44,16 @@ export default class PointController {
       }))
     });
 
-    if (oldTaskEditComponent && oldTaskComponent) { /// !!!
-      replace(this._taskComponent, oldTaskComponent);
-      replace(this._taskEditComponent, oldTaskEditComponent);
+    if (oldPointComponent && oldPointEditComponent) { /// !!!
+      replace(this._pointOfRouteComponent, oldPointComponent);
+      replace(this._formForEditComponent, oldPointEditComponent);
     } else {
       render(this._container, this._pointOfRouteComponent, RenderPosition.BEFOREEND);
     }
   }
 
   setDefaultView() {
-    if (this._mode !== MODE.DEFAULT) {
+    if (this._mode !== Mode.DEFAULT) {
       this._replaceFormToPoint();
     }
   }
@@ -61,11 +61,14 @@ export default class PointController {
   _replacePointToForm() {
     this._onViewChange();
     replace(this._formForEditComponent, this._pointOfRouteComponent);
+    this._mode = Mode.EDIT;
   };
 
   _replaceFormToPoint() {
-    //document.removeEventListener(`keydown`, this._onEscKeyDown);
+    document.removeEventListener(`keydown`, this._onEscKeyDown);
+    this._formForEditComponent.reset(); /// !!!перед закрытием откатываем изменения
     replace(this._pointOfRouteComponent, this._formForEditComponent);
+    this._mode = Mode.DEFAULT;
   };
 
   _onEscKeyDown(evt) {

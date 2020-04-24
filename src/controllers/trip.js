@@ -50,9 +50,9 @@ const getFilteredPoints = (points, filterType) => {
   return dataOfPoints;
 };
 
-const renderPoints = (parent, points, onDataChange) => {
+const renderPoints = (parent, points, onDataChange, onViewChange) => {
   return points.map((point) => {
-    const pointController = new PointController(parent, onDataChange);
+    const pointController = new PointController(parent, onDataChange, onViewChange);
     pointController.render(point);
     return pointController;
   })
@@ -67,6 +67,7 @@ export default class TripController {
     this._sortComponent = new SortComponent();
     this._handlerFilter = this._handlerFilter.bind(this);
     this._onDataChange = this._onDataChange.bind(this);
+    this._onViewChange = this._onViewChange.bind(this);
     this._pointController = null;
     this._days = null;
     filterComponent.setFilterTypeChangeHandler(this._handlerFilter);
@@ -92,7 +93,8 @@ export default class TripController {
     const listDays = this._container.querySelectorAll(`.trip-events__list`);
 
     for (let x = 0; x < this._allPoints.length; x++) {
-      const newPoints = renderPoints(listDays[x], this._allPoints[x], this._onDataChange);
+      const newPoints = renderPoints(listDays[x], this._allPoints[x],
+          this._onDataChange, this._onViewChange);
       this._showedPointControllers = this._showedPointControllers.concat(newPoints);
     }
 
@@ -113,6 +115,10 @@ export default class TripController {
     })
   }
 
+  _onViewChange() {
+    this._showedPointControllers.forEach((it) => it.setDefaultView());
+  }
+
   _handlerFilter(filterType) {
     const filteredPoints = getFilteredPoints(this._allPoints, filterType);
     const parentList = this._container.querySelector(`.trip-days`);
@@ -124,14 +130,15 @@ export default class TripController {
       parentList.querySelector(`.day__date`).textContent = ``; // *
 
       const newPoints = renderPoints(this._container.querySelector(`.trip-events__list`),
-        filteredPoints, this._onDataChange);
+        filteredPoints, this._onDataChange, this._onViewChange);
       this._showedPointControllers = newPoints;
     } else {
       render(this._container, new ListOfDaysComponent(this._days), RenderPosition.BEFOREEND);
       let listOfDays = this._container.querySelectorAll(`.trip-events__list`); // *
       this._showedPointControllers = [];
       for (let x = 0; x < this._allPoints.length; x++) {
-        const newPoint = renderPoints(listOfDays[x], this._allPoints[x], this._onDataChange);
+        const newPoint = renderPoints(listOfDays[x], this._allPoints[x],
+            this._onDataChange, this._onViewChange);
         this._showedPointControllers = this._showedPointControllers.concat(newPoint); ///!!!
       }
     }
