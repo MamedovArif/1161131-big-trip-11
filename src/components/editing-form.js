@@ -2,6 +2,7 @@ import {createHeaderEditingForm} from './editing-form-header.js';
 import {createOffersEditingForm} from './editing-form-offers.js';
 import {createDestinationEditingForm} from './editing-form-destination.js';
 import AbstractSmartComponent from "./abstract-smart-component.js";
+import {option} from "../mock/route-point.js";
 
 const createEditingFormTemplate = (object) => {
   return (
@@ -21,6 +22,8 @@ export default class FormForEdit extends AbstractSmartComponent {
   constructor(editForm) {
     super();
     this._editForm = editForm;
+    //this._city = editForm.city;
+    //this._destination = editForm.destination;
 
     this._submitHandler = null;
     this._subscribeOnEvents();
@@ -51,12 +54,23 @@ export default class FormForEdit extends AbstractSmartComponent {
 
   _subscribeOnEvents() {
     const element = this.getElement();
-    element.querySelector(`input[name = event-destination]`).addEventListener(`input`, (evt) => {
-      this.city = evt.target.value; //!!!
-      console.log(this);
+    element.querySelector(`input[name = event-destination]`)
+        .addEventListener(`input`, (evt) => {
+      this._editForm.city = evt.target.value; //!!! _isDateShowing
+      this._editForm.destination = [`condimentum sed nibh vitae, sodales`];
       this.rerender();
     });
-    // element.querySelector(``)
+    element.querySelector(`.event__type-group`).addEventListener(`click`, (evt) => {
+      if (evt.target.tagName !== `LABEL`) {
+        return;
+      }
+      this._editForm.type = evt.target.textContent;
+      this._editForm.city = ``;
+      this._editForm.placeholder = `Moscow`;
+
+      this._editForm.options = option[(this._editForm.type).toLowerCase()];
+      this.rerender();
+    })
 
   }
 }

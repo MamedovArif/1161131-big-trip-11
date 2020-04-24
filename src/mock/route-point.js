@@ -3,7 +3,7 @@ const types = [`Taxi`, `Bus`, `Train`, `Ship`,
 
 const cities = [`Amsterdam`, `London`, `Brussel`];
 
-const option = {
+export const option = {
   'taxi': {
     essence: [`uber`, `yandex`],
     offer: [`Order Uber`, `Order Yandex`],
@@ -87,7 +87,9 @@ export const defaultData = {
   options: option.flight,
   destination: [`The city was founded by Tsar Peter the Great on 27`],
   photos: [`http://picsum.photos/248/152?r=${Math.random()}`,
-    `http://picsum.photos/248/152?r=${Math.random()}`]
+    `http://picsum.photos/248/152?r=${Math.random()}`],
+  isFavorite: false,
+  placeholder: '',
 };
 
 const getRandomArrayItem = (array) => {
@@ -124,6 +126,7 @@ const generatePoint = (timeDate) => {
     destination: [...destination],
     photos: [...photos],
     isFavorite: (Math.random() < 0.4) ? true : false,
+    placeholder: '',
   };
 
   obj.timeBegin = getRandomDate(timeDate, -1);

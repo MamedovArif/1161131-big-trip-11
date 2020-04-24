@@ -1,7 +1,7 @@
 import {formatTime, formatTimeDate} from '../utils/common.js';
 
 const createHeaderEditingForm = (object) => {
-  const {type, city, timeBegin, timeEnd, price, isFavorite} = object;
+  const {type, city, timeBegin, timeEnd, price, isFavorite, placeholder} = object;
 
   const hoursBegin = formatTime(timeBegin);
   const dateBegin = formatTimeDate(timeBegin);
@@ -85,7 +85,7 @@ const createHeaderEditingForm = (object) => {
         </label>
         <input class="event__input  event__input--destination"
         id="event-destination-1" type="text" name="event-destination"
-        value="${city}" list="destination-list-1">
+        value="${city}" list="destination-list-1" placeholder=${placeholder}>
         <datalist id="destination-list-1">
           <option value="Amsterdam"></option>
           <option value="Geneva"></option>
