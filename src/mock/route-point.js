@@ -123,6 +123,7 @@ const generatePoint = (timeDate) => {
     price: getRandomIntegerNumber(20, 400),
     destination: [...destination],
     photos: [...photos],
+    isFavorite: (Math.random() < 0.4) ? `checked` : ``,
   };
 
   obj.timeBegin = getRandomDate(timeDate, -1);
