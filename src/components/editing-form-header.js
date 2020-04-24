@@ -7,6 +7,7 @@ const createHeaderEditingForm = (object) => {
   const dateBegin = formatTimeDate(timeBegin);
   const hoursFinish = formatTime(timeEnd);
   const dateFinish = formatTimeDate(timeEnd);
+  const isChecked = (isFavorite) ? `checked` : ``;
 
   return (
     `<header class="event__header">
@@ -119,7 +120,7 @@ const createHeaderEditingForm = (object) => {
       <button class="event__reset-btn" type="reset">Cancel</button>
 
       <input id="event-favorite-1" class="event__favorite-checkbox  visually-hidden"
-          type="checkbox" name="event-favorite" ${isFavorite}>
+          type="checkbox" name="event-favorite" ${isChecked}>
       <label class="event__favorite-btn" for="event-favorite-1">
         <span class="visually-hidden">Add to favorite</span>
         <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">

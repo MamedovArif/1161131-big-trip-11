@@ -111,18 +111,6 @@ export default class TripController {
           newPoint, littleArray.slice(index + 1));
       pointController.render(littleArray[index]);
     })
-
-    // let points = [];
-    // this._allPoints.map((item) => {
-    //   points = points.concat(item);
-    // });
-    // const index = points.findIndex((point) => point === oldPoint);
-    // if (index === -1) {
-    //   return;
-    // }
-    // points = [].concat(points.slice(0, index), newPoint, points.slice(index + 1));
-
-    // pointController.render(points[index]);
   }
 
   _handlerFilter(filterType) {
