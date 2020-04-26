@@ -3,6 +3,8 @@ import {createOffersEditingForm} from './editing-form-offers.js';
 import {createDestinationEditingForm} from './editing-form-destination.js';
 import AbstractSmartComponent from "./abstract-smart-component.js";
 import {option} from "../mock/route-point.js";
+import flatpickr from "flatpickr";
+import "flatpickr/dist/flatpickr.min.css";
 
 const createEditingFormTemplate = (object) => {
   return (
@@ -24,7 +26,10 @@ export default class FormForEdit extends AbstractSmartComponent {
     this._editForm = Object.assign({}, editForm);
     this._defaultEditForm = editForm;
 
+    this._flatpickr = null;
     this._submitHandler = null;
+
+    this._applyFlatpickr();
     this._subscribeOnEvents();
   }
 
@@ -39,6 +44,7 @@ export default class FormForEdit extends AbstractSmartComponent {
 
   rerender() {
     super.rerender();
+    this._applyFlatpickr();
   }
 
   reset() {
@@ -59,6 +65,28 @@ export default class FormForEdit extends AbstractSmartComponent {
   setFavoriteChangeHandler(handler) {
     this.getElement().querySelector(`input[name = event-favorite]`)
         .addEventListener(`change`, handler);
+  }
+
+  _applyFlatpickr() {
+    if (this._flatpickr) {
+      this._flatpickr.destroy();
+      this._flatpickr = null;
+    }
+
+    const dateBegin = this.getElement()
+        .querySelector(`input[name = event-start-time]`);
+    this._flatpickr = flatpickr(dateBegin, {
+      altInput: true,
+      allowInput: true,
+      defaultDate: this._editForm.timeBegin || `today`,
+    });
+    const dateEnd = this.getElement()
+        .querySelector(`input[name = event-end-time]`);
+    this._flatpickr = flatpickr(dateEnd, {
+      altInput: true,
+      allowInput: true,
+      defaultDate: this._editForm.timeEnd || `today`,
+    });
   }
 
   _subscribeOnEvents() {
