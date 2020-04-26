@@ -40,11 +40,12 @@ export const diffTime = (begin, end) => {
   const dateEnd = moment(end);
   const dateBegin = moment(begin);
 
-  const diffDay = (dateEnd.diff(dateBegin, `days`) > 0) ?
-    `${dateEnd.diff(dateBegin, `days`)}D` : ``;
-  const diffHours = (dateEnd.diff(dateBegin, `hours`) > 0) ?
-    `${dateEnd.diff(dateBegin, `hours`)}H` : ``;
-  const diffMinutes = (dateEnd.diff(dateBegin, `minutes`) > 0) ?
-    `${dateEnd.diff(dateBegin, `minutes`)}M` : ``;
-  return `${diffDay} ${diffHours} ${diffMinutes}`;
+  const diffDay = dateEnd.diff(dateBegin, `days`);
+  const diffHours = dateEnd.diff(dateBegin, `hours`);
+  const diffMinutes = dateEnd.diff(dateBegin, `minutes`);
+
+  const diffDayString = (diffDay > 0) ? `${diffDay}D` : ``;
+  const diffHoursString = (diffHours > 0) ? `${diffHours - diffDay * 24}H` : ``;
+  const diffMinutesString = (diffMinutes > 0) ? `${diffMinutes - diffHours * 60}M` : ``;
+  return `${diffDayString} ${diffHoursString} ${diffMinutesString}`;
 };

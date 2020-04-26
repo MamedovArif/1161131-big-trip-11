@@ -105,7 +105,7 @@ const getRandomDate = (targetDate, positiveNegative) => {
   const totalDate = new Date(targetDate.getFullYear(), targetDate.getMonth(),
       targetDate.getDate(), targetDate.getHours(), targetDate.getMinutes());
 
-  const diffValue = getRandomIntegerNumber(0, 120) * positiveNegative;
+  const diffValue = getRandomIntegerNumber(0, 1500) * positiveNegative;
   totalDate.setMinutes(totalDate.getMinutes() + diffValue);
   return totalDate;
 };
