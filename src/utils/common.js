@@ -16,7 +16,7 @@ export const formatTimeDate = (date) => {
   // const month = castTimeFormat(date.getMonth() + 1);
   // const year = String(date.getFullYear()).slice(-2);
   // return `${day}/${month}/${year}`;
-  return moment(date).format('DD.MM.YY')
+  return moment(date).format(`DD.MM.YY`);
 };
 
 export const diffTime = (begin, end) => {
@@ -40,19 +40,11 @@ export const diffTime = (begin, end) => {
   const dateEnd = moment(end);
   const dateBegin = moment(begin);
 
-  const diffDay = (dateEnd.diff(dateBegin, 'days') > 0) ?
-      `${dateEnd.diff(dateBegin, 'days')}D` : ``;
-  const diffHours = (dateEnd.diff(dateBegin, 'hours') > 0) ?
-      `${dateEnd.diff(dateBegin, 'hours')}H` : ``;
-  const diffMinutes = (dateEnd.diff(dateBegin, 'minutes') > 0) ?
-      `${dateEnd.diff(dateBegin, 'minutes')}M` : ``;
+  const diffDay = (dateEnd.diff(dateBegin, `days`) > 0) ?
+    `${dateEnd.diff(dateBegin, `days`)}D` : ``;
+  const diffHours = (dateEnd.diff(dateBegin, `hours`) > 0) ?
+    `${dateEnd.diff(dateBegin, `hours`)}H` : ``;
+  const diffMinutes = (dateEnd.diff(dateBegin, `minutes`) > 0) ?
+    `${dateEnd.diff(dateBegin, `minutes`)}M` : ``;
   return `${diffDay} ${diffHours} ${diffMinutes}`;
-
-
-// console.log('Разница в ', dateB.diff(dateC, 'days'), 'дней');
-
-// console.log('Разница в ', dateB.diff(dateC, 'months'), 'месяцев');
-
-  // const format = 'HH mm';
-  // return moment.utc(moment(end, format) - moment(begin, format)).format(format);
 };
