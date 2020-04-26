@@ -89,7 +89,7 @@ export const defaultData = {
   photos: [`http://picsum.photos/248/152?r=${Math.random()}`,
     `http://picsum.photos/248/152?r=${Math.random()}`],
   isFavorite: false,
-  placeholder: '',
+  placeholder: ``,
 };
 
 const getRandomArrayItem = (array) => {
@@ -126,7 +126,7 @@ const generatePoint = (timeDate) => {
     destination: [...destination],
     photos: [...photos],
     isFavorite: (Math.random() < 0.4) ? true : false,
-    placeholder: '',
+    placeholder: ``,
   };
 
   obj.timeBegin = getRandomDate(timeDate, -1);

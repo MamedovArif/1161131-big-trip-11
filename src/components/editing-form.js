@@ -21,7 +21,8 @@ const createEditingFormTemplate = (object) => {
 export default class FormForEdit extends AbstractSmartComponent {
   constructor(editForm) {
     super();
-    this._editForm = editForm;
+    this._editForm = Object.assign({}, editForm);
+    this._defaultEditForm = editForm;
 
     this._submitHandler = null;
     this._subscribeOnEvents();
@@ -41,12 +42,12 @@ export default class FormForEdit extends AbstractSmartComponent {
   }
 
   reset() {
-    const editForm = this._editForm;
-    this._editForm.city = editForm.city;
-    this._editForm.destination = editForm.destination;
-    this._editForm.type = editForm.type;
-    this._editForm.placeholder = editForm.placeholder;
-    this._editForm.options = option[(editForm.type).toLowerCase()];
+    this._editForm.city = this._defaultEditForm.city;
+
+    this._editForm.destination = this._defaultEditForm.destination;
+    this._editForm.type = this._defaultEditForm.type;
+    this._editForm.placeholder = this._defaultEditForm.placeholder;
+    this._editForm.options = option[(this._defaultEditForm.type).toLowerCase()];
     this.rerender();
   }
 
@@ -64,10 +65,10 @@ export default class FormForEdit extends AbstractSmartComponent {
     const element = this.getElement();
     element.querySelector(`input[name = event-destination]`)
         .addEventListener(`input`, (evt) => {
-      this._editForm.city = evt.target.value; //!!! _isDateShowing
-      this._editForm.destination = [`condimentum sed nibh vitae, sodales`];
-      this.rerender();
-    });
+          this._editForm.city = evt.target.value;
+          this._editForm.destination = [`condimentum sed nibh vitae, sodales`];
+          this.rerender();
+        });
     element.querySelector(`.event__type-group`).addEventListener(`click`, (evt) => {
       if (evt.target.tagName !== `LABEL`) {
         return;
@@ -78,7 +79,7 @@ export default class FormForEdit extends AbstractSmartComponent {
 
       this._editForm.options = option[(this._editForm.type).toLowerCase()];
       this.rerender();
-    })
+    });
 
   }
 }

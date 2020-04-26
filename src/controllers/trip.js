@@ -55,8 +55,8 @@ const renderPoints = (parent, points, onDataChange, onViewChange) => {
     const pointController = new PointController(parent, onDataChange, onViewChange);
     pointController.render(point);
     return pointController;
-  })
-}
+  });
+};
 
 export default class TripController {
   constructor(container) {
@@ -112,7 +112,7 @@ export default class TripController {
       littleArray = [].concat(littleArray.slice(0, index),
           newPoint, littleArray.slice(index + 1));
       pointController.render(littleArray[index]);
-    })
+    });
   }
 
   _onViewChange() {
@@ -125,21 +125,21 @@ export default class TripController {
     parentList.innerHTML = ``;
     //  выравниваем
     if (filterType !== FilterType.EVERYTHING) {
-      parentList.insertAdjacentHTML(`beforeend`, generateDays({date: new Date()}, 0)); // *
-      parentList.querySelector(`.day__counter`).textContent = ``; // *
-      parentList.querySelector(`.day__date`).textContent = ``; // *
+      parentList.insertAdjacentHTML(`beforeend`, generateDays({date: new Date()}, 0));
+      parentList.querySelector(`.day__counter`).textContent = ``;
+      parentList.querySelector(`.day__date`).textContent = ``;
 
       const newPoints = renderPoints(this._container.querySelector(`.trip-events__list`),
-        filteredPoints, this._onDataChange, this._onViewChange);
+          filteredPoints, this._onDataChange, this._onViewChange);
       this._showedPointControllers = newPoints;
     } else {
       render(this._container, new ListOfDaysComponent(this._days), RenderPosition.BEFOREEND);
-      let listOfDays = this._container.querySelectorAll(`.trip-events__list`); // *
+      let listOfDays = this._container.querySelectorAll(`.trip-events__list`);
       this._showedPointControllers = [];
       for (let x = 0; x < this._allPoints.length; x++) {
         const newPoint = renderPoints(listOfDays[x], this._allPoints[x],
             this._onDataChange, this._onViewChange);
-        this._showedPointControllers = this._showedPointControllers.concat(newPoint); ///!!!
+        this._showedPointControllers = this._showedPointControllers.concat(newPoint);
       }
     }
   }

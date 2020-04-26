@@ -21,7 +21,7 @@ export default class PointController {
   }
   render(dataOfRoute) {
     const oldPointComponent = this._pointOfRouteComponent;
-    const oldPointEditComponent = this._formForEditComponent; /// !!!!
+    const oldPointEditComponent = this._formForEditComponent;
 
     this._pointOfRouteComponent = new PointOfRouteComponent(dataOfRoute);
     this._formForEditComponent = new FormForEditComponent(dataOfRoute);
@@ -38,13 +38,12 @@ export default class PointController {
     });
 
     this._formForEditComponent.setFavoriteChangeHandler(() => {
-      //this.setAttribute(`checked`, true);
       this._onDataChange(this, dataOfRoute, Object.assign({}, dataOfRoute, {
         isFavorite: !dataOfRoute.isFavorite,
-      }))
+      }));
     });
 
-    if (oldPointComponent && oldPointEditComponent) { /// !!!
+    if (oldPointComponent && oldPointEditComponent) {
       replace(this._pointOfRouteComponent, oldPointComponent);
       replace(this._formForEditComponent, oldPointEditComponent);
     } else {
@@ -62,21 +61,21 @@ export default class PointController {
     this._onViewChange();
     replace(this._formForEditComponent, this._pointOfRouteComponent);
     this._mode = Mode.EDIT;
-  };
+  }
 
   _replaceFormToPoint() {
     document.removeEventListener(`keydown`, this._onEscKeyDown);
-    this._formForEditComponent.reset(); /// !!!перед закрытием откатываем изменения
+    this._formForEditComponent.reset(); // перед закрытием откатываем изменения
     replace(this._pointOfRouteComponent, this._formForEditComponent);
     this._mode = Mode.DEFAULT;
-  };
+  }
 
   _onEscKeyDown(evt) {
     const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
 
     if (isEscKey) {
-      replaceFormToPoint();
+      this._replaceFormToPoint();
       document.removeEventListener(`keydown`, this._onEscKeyDown);
     }
-  };
+  }
 }
