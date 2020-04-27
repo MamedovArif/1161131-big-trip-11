@@ -3,7 +3,7 @@ const types = [`Taxi`, `Bus`, `Train`, `Ship`,
 
 const cities = [`Amsterdam`, `London`, `Brussel`];
 
-const option = {
+export const option = {
   'taxi': {
     essence: [`uber`, `yandex`],
     offer: [`Order Uber`, `Order Yandex`],
@@ -87,7 +87,9 @@ export const defaultData = {
   options: option.flight,
   destination: [`The city was founded by Tsar Peter the Great on 27`],
   photos: [`http://picsum.photos/248/152?r=${Math.random()}`,
-    `http://picsum.photos/248/152?r=${Math.random()}`]
+    `http://picsum.photos/248/152?r=${Math.random()}`],
+  isFavorite: false,
+  placeholder: ``,
 };
 
 const getRandomArrayItem = (array) => {
@@ -103,7 +105,7 @@ const getRandomDate = (targetDate, positiveNegative) => {
   const totalDate = new Date(targetDate.getFullYear(), targetDate.getMonth(),
       targetDate.getDate(), targetDate.getHours(), targetDate.getMinutes());
 
-  const diffValue = getRandomIntegerNumber(0, 120) * positiveNegative;
+  const diffValue = getRandomIntegerNumber(0, 1500) * positiveNegative;
   totalDate.setMinutes(totalDate.getMinutes() + diffValue);
   return totalDate;
 };
@@ -123,6 +125,8 @@ const generatePoint = (timeDate) => {
     price: getRandomIntegerNumber(20, 400),
     destination: [...destination],
     photos: [...photos],
+    isFavorite: (Math.random() < 0.4) ? true : false,
+    placeholder: ``,
   };
 
   obj.timeBegin = getRandomDate(timeDate, -1);
