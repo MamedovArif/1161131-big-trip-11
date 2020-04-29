@@ -120,6 +120,7 @@ const generatePoint = (timeDate) => {
   }
 
   const obj = {
+    id: String(new Date() + Math.random()),
     type: getRandomArrayItem(types),
     city: getRandomArrayItem(cities),
     price: getRandomIntegerNumber(20, 400),

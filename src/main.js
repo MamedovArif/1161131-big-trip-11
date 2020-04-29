@@ -4,6 +4,7 @@ import {render, RenderPosition} from './utils/render.js';
 import {generateDate} from './mock/list-trips.js';
 import {generatePoints} from './mock/route-point.js';
 import TripController, {createDefaultForm} from './controllers/trip.js';
+import PointsModel from './models/points.js';
 
 const NUMBER_OF_STOPS = 2;
 const QUANTITY_OF_DAYS = 4;
@@ -12,6 +13,7 @@ const tripControls = document.querySelector(`.trip-controls`);
 
 const tripEvents = document.querySelector(`.trip-events`);
 const tripMain = document.querySelector(`.trip-main`);
+
 
 render(tripControls.children[0], new MenuComponent(), RenderPosition.AFTEREND);
 export const filterComponent = new FilterComponent();
@@ -46,5 +48,8 @@ for (let j = 0; j < datesOfTravel.length; j++) {
   }
 }
 
-const tripController = new TripController(tripEvents);
-tripController.render(datesOfTravel, allDataPoints, totalCosts, routeOfCities, tripMain);
+const pointsModel = new PointsModel();
+pointsModel.setPoints(allDataPoints);
+
+const tripController = new TripController(tripEvents, pointsModel);
+tripController.render(datesOfTravel, totalCosts, routeOfCities, tripMain);
