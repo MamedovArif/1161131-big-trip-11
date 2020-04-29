@@ -73,13 +73,13 @@ export default class FormForEdit extends AbstractSmartComponent {
       this._flatpickr = null;
     }
 
-    // const dateBegin = this.getElement()
-    //     .querySelector(`input[name = event-start-time]`);
-    // this._flatpickr = flatpickr(dateBegin, {
-    //   altInput: true,
-    //   allowInput: true,
-    //   defaultDate: this._editForm.timeBegin || `today`,
-    // });
+    const dateBegin = this.getElement()
+        .querySelector(`input[name = event-start-time]`);
+    this._flatpickr = flatpickr(dateBegin, {
+      altInput: true,
+      allowInput: true,
+      defaultDate: this._editForm.timeBegin || `today`,
+    });
     const dateEnd = this.getElement()
         .querySelector(`input[name = event-end-time]`);
     this._flatpickr = flatpickr(dateEnd, {
