@@ -1,6 +1,5 @@
 import RouteComponent from '../components/route.js';
 import CostComponent from '../components/cost.js';
-import SortComponent from '../components/sort.js';
 import NoPointsComponent from '../components/no-points.js';
 import FormForEditComponent from '../components/editing-form.js';
 import ListOfDaysComponent, {generateDays} from '../components/list-trips.js';
@@ -10,6 +9,8 @@ import {render, RenderPosition, remove} from '../utils/render.js';
 import {filterComponent} from '../main.js';
 import {FilterType} from '../components/filters.js';
 import PointController from './point.js';
+import SortController from './sort.js';
+import {pointsModel} from '../main.js';
 
 export const createDefaultForm = (button, container) => {
   remove(noPointsComponent);
@@ -64,7 +65,6 @@ export default class TripController {
     this._showedPointControllers = [];
     this._pointsModel = pointsModel;
 
-    this._sortComponent = new SortComponent();
     this._handlerFilter = this._handlerFilter.bind(this);
     this._onDataChange = this._onDataChange.bind(this);
     this._onViewChange = this._onViewChange.bind(this);
@@ -81,8 +81,13 @@ export default class TripController {
       render(this._container, noPointsComponent, RenderPosition.BEFOREEND);
       return;
     }
+    ////////////
+    // // const pointsModel = new PointsModel(); from main
+    const sortController = new SortController(this._container, pointsModel)
+    sortController.render();
 
-    render(this._container, this._sortComponent, RenderPosition.BEFOREEND);
+    //
+    //render(this._container, this._sortComponent, RenderPosition.BEFOREEND);
 
     this._days = datesOfTravel.map((item, counter) => {
       return generateDays(item, counter);
@@ -104,15 +109,10 @@ export default class TripController {
   }
 
   _onDataChange(pointController, oldPoint, newPoint) {
-    this._pointsModel.getPoints().forEach((littleArray) => {
-      const index = littleArray.findIndex((point) => point === oldPoint);
-      if (index === -1) {
-        return;
-      }
-      littleArray = [].concat(littleArray.slice(0, index),
-          newPoint, littleArray.slice(index + 1));
-      pointController.render(littleArray[index]);
-    });
+    const isSuccess = this._pointsModel.updatePoint(oldPoint.id, newPoint);
+    if (isSuccess) {
+      pointController.render(newPoint);
+    }
   }
 
   _onViewChange() {

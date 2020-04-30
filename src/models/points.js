@@ -1,16 +1,32 @@
+import {getPointsBySort} from "../utils/sort.js";
+import {SortType} from "../const.js";
+
 export default class Points {
   constructor() {
     this._dates = [];
-    this._dataChangeHandlers = []; // observer
+    this._activeSortType = SortType.EVENT;
+
+
+    this._dataChangeHandlers = []; // хранение обработчиков точек
+    this._sortChangeHandlers = []; // хранение обработчиков сорта
   }
 
   getPoints() {
+    return getPointsBySort(this._points, this._activeSortType);
+  }
+
+  getPointsAll() {
     return this._points;
   }
 
   setPoints(allDataPoints) {
     this._points = Array.from(allDataPoints);
     this._callHandlers(this._dataChangeHandlers);
+  }
+
+  setSort(sortType) {
+    this._activeSortType = sortType;
+    this._callHandlers(this._sortChangeHandlers);
   }
 
   updatePoint(id, newPoint) {

@@ -1,6 +1,6 @@
 import PointOfRouteComponent from '../components/route-point.js';
 import FormForEditComponent from '../components/editing-form.js';
-import {render, RenderPosition, replace} from '../utils/render.js';
+import {render, RenderPosition, remove, replace} from '../utils/render.js';
 
 const Mode = {
   DEFAULT: `default`,
@@ -55,6 +55,12 @@ export default class PointController {
     if (this._mode !== Mode.DEFAULT) {
       this._replaceFormToPoint();
     }
+  }
+
+  destroy() {
+    remove(this._pointOfRouteComponent);
+    remove(this._formForEditComponent);
+    document.removeEventListener(`keydown`, this._onEscKeyDown);
   }
 
   _replacePointToForm() {

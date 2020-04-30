@@ -48,7 +48,7 @@ for (let j = 0; j < datesOfTravel.length; j++) {
   }
 }
 
-const pointsModel = new PointsModel();
+export const pointsModel = new PointsModel();
 pointsModel.setPoints(allDataPoints);
 
 const tripController = new TripController(tripEvents, pointsModel);
