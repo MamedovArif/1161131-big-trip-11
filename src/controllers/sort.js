@@ -15,7 +15,6 @@ export default class SortController {
     this._onSortChange = this._onSortChange.bind(this);
 
     this._pointsModel.setDataChangeHandler(this._onDataChange);
-    // //setSortChangeHandler
   }
 
   render() {
@@ -30,7 +29,7 @@ export default class SortController {
 
     const oldComponent = this._sortComponent;
 
-    this._sortComponent = new SortComponent(sorts); // берем содержимое компонента
+    this._sortComponent = new SortComponent(sorts); //
     this._sortComponent.setSortChangeHandler(this._onSortChange);
 
     if (oldComponent) {
@@ -42,12 +41,7 @@ export default class SortController {
 
   _onSortChange(sortType) {
     this._pointsModel.setSort(sortType);
-
     this._activeSortType = sortType;
-    ////remove
-    //const points = this._pointsModel.getPoints();
-    ////console.log(points);
-    ////_onDataChange()
   }
 
   _onDataChange() {
