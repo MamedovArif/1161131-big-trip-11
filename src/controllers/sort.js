@@ -15,6 +15,7 @@ export default class SortController {
     this._onSortChange = this._onSortChange.bind(this);
 
     this._pointsModel.setDataChangeHandler(this._onDataChange);
+    // //setSortChangeHandler
   }
 
   render() {
@@ -43,9 +44,10 @@ export default class SortController {
     this._pointsModel.setSort(sortType);
 
     this._activeSortType = sortType;
-    //remove
-    const points = this._pointsModel.getPoints();
-    console.log(points);
+    ////remove
+    //const points = this._pointsModel.getPoints();
+    ////console.log(points);
+    ////_onDataChange()
   }
 
   _onDataChange() {

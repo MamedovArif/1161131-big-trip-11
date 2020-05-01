@@ -14,8 +14,7 @@ const getSortOnTime = (allPoints) => {
     const durationA = durationOfPoint(a.timeBegin, a.timeEnd);
     const durationB = durationOfPoint(b.timeBegin, b.timeEnd);
     return durationB - durationA;
-  })
-  console.log(points);
+  });
   return points;
 };
 
@@ -27,7 +26,6 @@ const getSortOnPrice = (allPoints) => {
   points.sort((a, b) => {
     return b.price - a.price;
   });
-  console.log(points);
   return points;
 };
 

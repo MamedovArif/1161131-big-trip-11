@@ -78,6 +78,7 @@ export default class TripController {
 
   render(datesOfTravel, totalCosts, routeOfCities, header) {
     const allPoints = this._pointsModel.getPoints();
+    console.log(allPoints);
     const isAllPointsAbsence = allPoints.length === 0;
 
     if (isAllPointsAbsence) {

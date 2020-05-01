@@ -13,7 +13,6 @@ export default class Points {
   }
 
   getPoints() {
-    console.log(this._points);
     return getPointsBySort(this._points, this._activeSortType);
   }
 
@@ -66,9 +65,11 @@ export default class Points {
 
   setDataChangeHandler(handler) {
     this._dataChangeHandlers.push(handler);
+    console.log(this._dataChangeHandlers);
   }
 
   setSortChangeHandler(handler) {
     this._sortChangeHandlers.push(handler);
+    //console.log(this._sortChangeHandlers);
   }
 }
