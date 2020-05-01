@@ -1,7 +1,7 @@
 import {SortType} from "../const.js";
 import SortComponent from "../components/sort.js";
 import {render, replace, RenderPosition} from "../utils/render.js";
-import {getPointsByFilter} from "../utils/sort.js";
+//import {getPointsBySort} from "../utils/sort.js";
 
 export default class SortController {
   constructor(container, pointsModel) {
@@ -19,7 +19,7 @@ export default class SortController {
 
   render() {
     const container = this._container;
-    const allPoints = this._pointsModel.getPointsAll(); // !!!
+    const allPoints = this._pointsModel.getPointsAll();
     const sorts = Object.values(SortType).map((sortType) => {
       return {
         name: sortType,
@@ -27,14 +27,9 @@ export default class SortController {
       };
     });
 
-  //   export const SortType = {
-  // EVENT: `EVENT`,
-  // TIME: `TIME`,
-  // PRICE: `PRICE`,
-
     const oldComponent = this._sortComponent;
 
-    this._sortComponent = new SortComponent(sorts);
+    this._sortComponent = new SortComponent(sorts); // берем содержимое компонента
     this._sortComponent.setSortChangeHandler(this._onSortChange);
 
     if (oldComponent) {
@@ -46,7 +41,11 @@ export default class SortController {
 
   _onSortChange(sortType) {
     this._pointsModel.setSort(sortType);
+
     this._activeSortType = sortType;
+    //remove
+    const points = this._pointsModel.getPoints();
+    console.log(points);
   }
 
   _onDataChange() {

@@ -5,6 +5,7 @@ export default class Points {
   constructor() {
     this._dates = [];
     this._activeSortType = SortType.EVENT;
+    this._points = [];
 
 
     this._dataChangeHandlers = []; // хранение обработчиков точек
@@ -12,8 +13,23 @@ export default class Points {
   }
 
   getPoints() {
+    console.log(this._points);
     return getPointsBySort(this._points, this._activeSortType);
   }
+
+//   export const getPointsBySort = (points, sortType) => {
+//   switch (sortType) {
+//     case SortType.EVENT:
+//       return getSortOnEvent(points);
+//     case SortType.TIME:
+//       return getSortOnTime(points);
+//     case SortType.PRICE:
+//       return getSortOnPrice(points);
+//     default:
+//       throw new Error('getPointsBySort принимает неверный тип');
+//   }
+//   return points;
+// }
 
   getPointsAll() {
     return this._points;
@@ -50,5 +66,9 @@ export default class Points {
 
   setDataChangeHandler(handler) {
     this._dataChangeHandlers.push(handler);
+  }
+
+  setSortChangeHandler(handler) {
+    this._sortChangeHandlers.push(handler);
   }
 }

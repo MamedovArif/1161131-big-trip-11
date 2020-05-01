@@ -1,17 +1,12 @@
 import {SortType} from "../const.js";
+import {durationOfPoint} from "./common.js";
 
 const getSortOnEvent = (allPoints) => {
   return allPoints;
 };
 
-export const durationOfPoint = (dateA, dateB) => {
-  const a = moment(dateA);
-  const b = moment(dateB);
-  return a.diff(b, `minutes`);
-};
-
 const getSortOnTime = (allPoints) => {
-  const points = [];
+  let points = [];
   allPoints.map((littleArray) => {
     points = points.concat(littleArray);
   });
@@ -20,10 +15,12 @@ const getSortOnTime = (allPoints) => {
     const durationB = durationOfPoint(b.timeBegin, b.timeEnd);
     return durationB - durationA;
   })
+  console.log(points);
+  return points;
 };
 
 const getSortOnPrice = (allPoints) => {
-  const points = [];
+  let points = [];
   allPoints.map((littleArray) => {
     points = points.concat(littleArray);
   });
@@ -31,6 +28,7 @@ const getSortOnPrice = (allPoints) => {
     return b.price - a.price;
   });
   console.log(points);
+  return points;
 };
 
 export const getPointsBySort = (points, sortType) => {

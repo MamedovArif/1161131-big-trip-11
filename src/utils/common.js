@@ -1,5 +1,11 @@
 import moment from "moment";
 
+export const durationOfPoint = (dateA, dateB) => {
+  const a = moment(dateA);
+  const b = moment(dateB);
+  return a.diff(b, `minutes`);
+};
+
 export const castTimeFormat = (value) => {
   return value < 10 ? `0${value}` : String(value);
 };
