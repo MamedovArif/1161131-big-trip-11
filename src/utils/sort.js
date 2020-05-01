@@ -24,7 +24,7 @@ const getSortOnPrice = (allPoints) => {
     points = points.concat(littleArray);
   });
   points.sort((a, b) => {
-    return b.price - a.price;
+    return a.price - b.price;
   });
   return points;
 };

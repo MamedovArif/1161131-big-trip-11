@@ -36,11 +36,13 @@ export default class Points {
 
   setPoints(allDataPoints) {
     this._points = Array.from(allDataPoints);
+    console.log(this._dataChangeHandlers);
     this._callHandlers(this._dataChangeHandlers);
   }
 
   setSort(sortType) {
     this._activeSortType = sortType;
+    console.log(this._sortChangeHandlers);
     this._callHandlers(this._sortChangeHandlers);
   }
 
@@ -70,6 +72,6 @@ export default class Points {
 
   setSortChangeHandler(handler) {
     this._sortChangeHandlers.push(handler);
-    //console.log(this._sortChangeHandlers);
+    console.log(this._sortChangeHandlers);
   }
 }

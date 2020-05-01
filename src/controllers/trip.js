@@ -68,17 +68,16 @@ export default class TripController {
     this._handlerFilter = this._handlerFilter.bind(this);
     this._onDataChange = this._onDataChange.bind(this);
     this._onViewChange = this._onViewChange.bind(this);
-    //this._onSortChange = this._onSortChange.bind(this);
+    this._onSortChange = this._onSortChange.bind(this);
     this._pointController = null;
     this._days = null;
 
     filterComponent.setFilterTypeChangeHandler(this._handlerFilter);
-    //this._pointsModel.setSortChangeHandler(this._onSortChange);
+    this._pointsModel.setSortChangeHandler(this._onSortChange);
   }
 
   render(datesOfTravel, totalCosts, routeOfCities, header) {
     const allPoints = this._pointsModel.getPoints();
-    console.log(allPoints);
     const isAllPointsAbsence = allPoints.length === 0;
 
     if (isAllPointsAbsence) {
@@ -86,11 +85,10 @@ export default class TripController {
       return;
     }
     ////////////
-    // // const pointsModel = new PointsModel(); from main
+    // // const pointsModel = new PointsModel(); экпортировали из main
     const sortController = new SortController(this._container, pointsModel)
     sortController.render();
 
-    //
     //render(this._container, this._sortComponent, RenderPosition.BEFOREEND);
 
     this._days = datesOfTravel.map((item, counter) => {
@@ -105,6 +103,7 @@ export default class TripController {
       const newPoints = renderPoints(listDays[x], allPoints[x],
           this._onDataChange, this._onViewChange);
       this._showedPointControllers = this._showedPointControllers.concat(newPoints);
+      //console.log(this._showedPointControllers);
     }
 
     render(header, new RouteComponent(routeOfCities, datesOfTravel), RenderPosition.AFTERBEGIN); // a1
@@ -112,10 +111,30 @@ export default class TripController {
     render(tripInfo, new CostComponent(totalCosts), RenderPosition.BEFOREEND); // a3
   }
 
-  // _removePoints() {
-  //   this._showedPointControllers.forEach((pointController) => pointController.destroy());
-  //   this._showedPointControllers = [];
-  // }
+  _removePoints() {
+    this._showedPointControllers.forEach((pointController) => pointController.destroy());
+    this._showedPointControllers = [];
+    const days = this._container.querySelectorAll(`.trip-days__item`);
+    days.forEach((day) => {
+      day.remove();
+    })
+  }
+
+  _updatePoints() {
+    this._removePoints();
+    const parentList = this._container.querySelector(`.trip-days`);
+    parentList.insertAdjacentHTML(`beforeend`, generateDays({date: new Date()}, 0));
+    parentList.querySelector(`.day__counter`).textContent = ``;
+    parentList.querySelector(`.day__date`).textContent = ``;
+
+    const newPoints = renderPoints(this._container.querySelector(`.trip-events__list`),
+        this._pointsModel.getPoints(), this._onDataChange, this._onViewChange);
+    this._showedPointControllers = newPoints;
+  }
+
+  _onSortChange() {
+    this._updatePoints()
+  }
 
   _onDataChange(pointController, oldPoint, newPoint) {
     const isSuccess = this._pointsModel.updatePoint(oldPoint.id, newPoint);
@@ -127,10 +146,6 @@ export default class TripController {
   _onViewChange() {
     this._showedPointControllers.forEach((it) => it.setDefaultView());
   }
-
-  // _onSortChange() {
-  //   this._removePoints();
-  // }
 
   _handlerFilter(filterType) {
     const allPoints = this._pointsModel.getPoints()
