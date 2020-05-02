@@ -1,7 +1,7 @@
 import {MONTH_NAMES} from '../const.js';
 import AbstractComponent from './abstract-component.js';
 
-const createAboutRouteTemplate = (array, days) => {
+const createAboutRouteTemplate = (array, fullDataPoints) => {
   let cities = Array.from(array);
 
   let citiesString = ``;
@@ -9,12 +9,16 @@ const createAboutRouteTemplate = (array, days) => {
     citiesString += `${cities[i]} — `;
   }
 
-  const monthBegin = MONTH_NAMES[days[0].date.getMonth()];
-  const dayBegin = days[0].date.getDate();
+  let days = fullDataPoints.map((littleArray) => {
+    return littleArray[0].timeBegin;
+  })
+
+  const monthBegin = MONTH_NAMES[days[0].getMonth()];
+  const dayBegin = days[0].getDate();
   const monthEnd = (monthBegin ===
-    MONTH_NAMES[days[days.length - 1].date.getMonth()]) ? `` :
-    MONTH_NAMES[days[days.length - 1].date.getMonth()];
-  const dayEnd = days[days.length - 1].date.getDate();
+    MONTH_NAMES[days[days.length - 1].getMonth()]) ? `` :
+    MONTH_NAMES[days[days.length - 1].getMonth()];
+  const dayEnd = days[days.length - 1].getDate();
 
   return (
     `<section class="trip-main__trip-info  trip-info">
@@ -28,13 +32,13 @@ const createAboutRouteTemplate = (array, days) => {
 };
 
 export default class Route extends AbstractComponent {
-  constructor(cities, days) {
+  constructor(cities, fullDataPoints) {
     super();
     this._cities = cities;
-    this._days = days;
+    this._fullDataPoints = fullDataPoints;
   }
 
   getTemplate() {
-    return createAboutRouteTemplate(this._cities, this._days);
+    return createAboutRouteTemplate(this._cities, this._fullDataPoints);
   }
 }

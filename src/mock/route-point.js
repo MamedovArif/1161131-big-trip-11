@@ -101,16 +101,33 @@ const getRandomIntegerNumber = (min, max) => {
   return min + Math.floor(Math.random() * (max - min));
 };
 
-const getRandomDate = (targetDate, positiveNegative) => {
+const getRandomTimeEnd = (targetDate) => {
   const totalDate = new Date(targetDate.getFullYear(), targetDate.getMonth(),
       targetDate.getDate(), targetDate.getHours(), targetDate.getMinutes());
 
-  const diffValue = getRandomIntegerNumber(0, 1500) * positiveNegative;
+  const diffValue = getRandomIntegerNumber(0, 120);
   totalDate.setMinutes(totalDate.getMinutes() + diffValue);
   return totalDate;
 };
 
-const generatePoint = (timeDate) => {
+const getRandomDate = () => {
+  let date = new Date();
+  let diff = getRandomIntegerNumber(0, 3);
+  if (Math.random() * 10 > 5) {
+    diff = diff * (-1);
+  }
+  date.setDate(date.getDate() + diff);
+  date = getRandomTimeEnd(date);
+  return date;
+};
+
+export const generateDate = () => {
+  return {
+    date: getRandomDate(),
+  };
+};
+
+const generatePoint = () => {
   let destination = new Set();
   const photos = [];
 
@@ -128,18 +145,18 @@ const generatePoint = (timeDate) => {
     photos: [...photos],
     isFavorite: (Math.random() < 0.4) ? true : false,
     placeholder: ``,
+    timeBegin: getRandomDate(),
   };
 
-  obj.timeBegin = getRandomDate(timeDate, -1);
-  obj.timeEnd = getRandomDate(timeDate, 1);
+  obj.timeEnd = getRandomTimeEnd(obj.timeBegin);
   obj.options = option[(obj.type).toLowerCase()];
 
   return obj;
 };
 
-const generatePoints = (count, dateDay) => {
+const generatePoints = (count) => {
   return new Array(count).fill(``).map(() => {
-    return generatePoint(dateDay);
+    return generatePoint();
   });
 };
 
