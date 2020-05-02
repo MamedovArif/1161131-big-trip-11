@@ -2,8 +2,12 @@ import {castTimeFormat} from '../utils/common.js';
 import {MONTH_NAMES} from '../const.js';
 import AbstractComponent from "./abstract-component.js";
 
-const generateDays = (fullPoint, counter) => {
+export const generateDays = (fullPoint, counter) => {
+  console.log(fullPoint);
   const date = fullPoint[0].timeBegin;
+  console.log(date);
+
+  //generateDays([[{timeBegin: new Date()}]], 0);
 
   const dateAttribute =
   `${date.getFullYear()}-${castTimeFormat(date.getMonth())}-${castTimeFormat(date.getDate())}`;
@@ -23,7 +27,6 @@ const listTrips = (fullPoints) => {
   let array = fullPoints.map((dayArray, counter) => {
     return generateDays(dayArray, counter);
   })
-  console.log(array);
   return (
     `<ul class="trip-days">
       ${array.join(`\n`)}

@@ -7,7 +7,6 @@ import TripController, {createDefaultForm} from './controllers/trip.js';
 import PointsModel from './models/points.js';
 
 const NUMBER_OF_STOPS = 7;
-//const QUANTITY_OF_DAYS = 4;
 
 const tripControls = document.querySelector(`.trip-controls`);
 
@@ -24,19 +23,11 @@ const buttonEvent = tripMain.querySelector(`.btn`);
 let tiedСreateDefaultForm = createDefaultForm.bind(null, buttonEvent, tripEvents);
 buttonEvent.addEventListener(`click`, tiedСreateDefaultForm);
 
-
-// const datesOfTravel = [];
-// for (let y = 0; y < QUANTITY_OF_DAYS; y++) {
-//   datesOfTravel.push(generateDate());
-// }
-// datesOfTravel.sort((a, b) => a.date - b.date);
-
 let allDataPoints = [];
 let totalCosts = [];
 let routeOfCities = new Set();
 
-allDataPoints = generatePoints(NUMBER_OF_STOPS) //, datesOfTravel[j].date))
-console.log(allDataPoints);
+allDataPoints = generatePoints(NUMBER_OF_STOPS);
 
 allDataPoints.sort((a, b) => a.timeBegin - b.timeBegin);
 
@@ -59,21 +50,6 @@ for (let i = 0; i < allDataPoints.length - 1; i++) {
     fullDataPoints.push(littleArray)
   }
 }
-
-console.log(fullDataPoints);
-
-// for (let j = 0; j < datesOfTravel.length; j++) {
-//   const points = generatePoints(NUMBER_OF_STOPS, datesOfTravel[j].date);
-//   points.sort((a, b) => {
-//     return a.timeBegin - b.timeBegin;
-//   });
-//   allDataPoints.push(points);
-
-//   for (let i = 0; i < points.length; i++) {
-//     totalCosts.push(points[i].price);
-//     routeOfCities.add(points[i].city);
-//   }
-// }
 
 export const pointsModel = new PointsModel();
 pointsModel.setPoints(fullDataPoints);
