@@ -16,20 +16,6 @@ export default class Points {
     return getPointsBySort(this._points, this._activeSortType);
   }
 
-//   export const getPointsBySort = (points, sortType) => {
-//   switch (sortType) {
-//     case SortType.EVENT:
-//       return getSortOnEvent(points);
-//     case SortType.TIME:
-//       return getSortOnTime(points);
-//     case SortType.PRICE:
-//       return getSortOnPrice(points);
-//     default:
-//       throw new Error('getPointsBySort принимает неверный тип');
-//   }
-//   return points;
-// }
-
   getPointsAll() {
     return this._points;
   }
@@ -43,7 +29,29 @@ export default class Points {
     this._activeSortType = sortType;
     this._callHandlers(this._sortChangeHandlers);
   }
+//////////////////
+  removePoint(id) { // у меня двойная структура так что не найдет
+    const pointsWithoutOne = this._points.map((littleArray) => {
+      const index = littleArray.findIndex((item) => item.id === id);
+      if (index === -1) {
+        return littleArray;
+      }
+      return littleArray = [].concat(littleArray.slice(0, index), littleArray.slice(index + 1));
+    });
+    console.log(pointsWithoutOne);
+    for (let i = 0; i < pointsWithoutOne.length; i++) {
+      if (pointsWithoutOne[i].length === 0) {
+        pointsWithoutOne.splice(i, 1);
+      }
+    }
+    this._points = pointsWithoutOne;
+  }
 
+  addPoint(point) { //не понятно к какой дате добавляем
+    this._points = [].concat(point, this._points);
+    this._callHandlers(this._dataChangeHandlers); //какие же обработчики вызываются
+  }
+/////////////////
   updatePoint(id, newPoint) {
     this._dates.map((date) => {
       const index = date.findIndex((point) => point.id === id);

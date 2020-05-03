@@ -20,6 +20,22 @@ const createEditingFormTemplate = (object) => {
   );
 };
 
+// const parseFormData = (formData) => { /////////////////
+//   return {
+//     id: String(new Date() + Math.random()),
+//     type: formData.get(``),
+//     city: formData.get(`event-destination`),
+//     price: formData.get(`event-price`),
+//     destination: [],
+//     photos: [],
+//     isFavorite: (Math.random() < 0.4) ? true : false,
+//     placeholder: ``,
+//     timeBegin: formData.get(`event-start-time`),
+//     timeEnd: formData.get(`event-end-time`)
+//     options: option[(obj.type).toLowerCase()];
+//   }
+// }
+
 export default class FormForEdit extends AbstractSmartComponent {
   constructor(editForm) {
     super();
@@ -28,6 +44,7 @@ export default class FormForEdit extends AbstractSmartComponent {
 
     this._flatpickr = null;
     this._submitHandler = null;
+    this._deleteButtonClickHandler = null; //////////
 
     this._applyFlatpickr();
     this._subscribeOnEvents();
@@ -37,8 +54,18 @@ export default class FormForEdit extends AbstractSmartComponent {
     return createEditingFormTemplate(this._editForm);
   }
 
+  removeElement() {
+    if (this._flatpickr) {
+      this._flatpickr.destroy();
+      this._flatpickr = null;
+    }
+
+    super.removeElement();
+  }
+
   recoveryListeners() {
     this.setSubmitHandler(this._submitHandler);
+    this.setDeleteButtonClickHandler(this._deleteButtonClickHandler); /////
     this._subscribeOnEvents();
   }
 
@@ -55,6 +82,20 @@ export default class FormForEdit extends AbstractSmartComponent {
     this._editForm.placeholder = this._defaultEditForm.placeholder;
     this._editForm.options = option[(this._defaultEditForm.type).toLowerCase()];
     this.rerender();
+  }
+
+  getData() { //////////
+    const form = this.getElement().querySelector(`.trip-events__item`);
+    const formData = new FormData(form);
+
+    return parseFormData(formData);
+  }
+
+  setDeleteButtonClickHandler(handler) {
+    this.getElement().querySelector(`.event__reset-btn`)
+      .addEventListener(`click`, handler);
+
+    this._deleteButtonClickHandler = handler;
   }
 
   setSubmitHandler(handler) {

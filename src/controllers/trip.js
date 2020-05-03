@@ -8,7 +8,7 @@ import {defaultData} from '../mock/route-point.js';
 import {render, RenderPosition, remove} from '../utils/render.js';
 import {filterComponent} from '../main.js';
 import {FilterType} from '../components/filters.js';
-import PointController from './point.js';
+import PointController, {Mode as PointControllerMode, EmptyPoint} from './point.js';
 import SortController from './sort.js';
 import {pointsModel} from '../main.js';
 
@@ -58,7 +58,7 @@ const getFilteredPoints = (points, filterType) => {
 const renderPoints = (parent, points, onDataChange, onViewChange) => {
   return points.map((point) => {
     const pointController = new PointController(parent, onDataChange, onViewChange);
-    pointController.render(point);
+    pointController.render(point, PointControllerMode.DEFAULT);
     return pointController;
   });
 };
@@ -143,14 +143,29 @@ export default class TripController {
   _onSortChange() {
     this._updatePoints()
   }
-
+//////////////////
   _onDataChange(pointController, oldPoint, newPoint) {
-    const isSuccess = this._pointsModel.updatePoint(oldPoint.id, newPoint);
-    if (isSuccess) {
-      pointController.render(newPoint);
+    if (oldPoint === EmptyPoint) {
+      this._creatingPoint = null; //открыта ли какая-тa задача
+      if (newPoint === null) {
+        pointController.destroy();
+        this._updatePoints();
+      } else {
+        this._pointsModel.addPoint(newPoint);
+        pointController.render(newPoint, PointControllerMode.DEFAULT);
+      }
+      this._showedPointControllers = [].concat(pointController, this._showedPointControllers);
+    } else if (newPoint === null) {
+      this._pointsModel.removePoint(oldPoint.id);
+      this._updatePoints();
+    } else {
+      const isSuccess = this._pointsModel.updatePoint(oldPoint.id, newPoint);
+      if (isSuccess) {
+        pointController.render(newPoint);
+      }
     }
   }
-
+///////////
   _onViewChange() {
     this._showedPointControllers.forEach((it) => it.setDefaultView());
   }
@@ -161,13 +176,11 @@ export default class TripController {
     const fullDataPoints = this._pointsModel.getPoints();
     const filteredPoints = getFilteredPoints(fullDataPoints, filterType);
     const parentList = this._container.querySelector(`.trip-days`);
-    parentList.innerHTML = ``;
+    this._removePoints(); // parentList.innerHTML = ``;
     parentList.remove();
     //  выравниваем
     if (filterType !== FilterType.EVERYTHING) {
       this._renderPoints(filteredPoints);
-      // //this._removePoints();
-      // //renderPoints()
     } else {
       this._renderPoints(fullDataPoints);
     }

@@ -3,11 +3,7 @@ import {MONTH_NAMES} from '../const.js';
 import AbstractComponent from "./abstract-component.js";
 
 export const generateDays = (fullPoint, counter) => {
-  console.log(fullPoint);
   const date = fullPoint[0].timeBegin;
-  console.log(date);
-
-  //generateDays([[{timeBegin: new Date()}]], 0);
 
   const dateAttribute =
   `${date.getFullYear()}-${castTimeFormat(date.getMonth())}-${castTimeFormat(date.getDate())}`;
