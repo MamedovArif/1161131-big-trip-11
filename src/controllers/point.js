@@ -33,14 +33,20 @@ export default class PointController {
       document.addEventListener(`keydown`, this._onEscKeyDown);
     });
 
+    this._formForEditComponent.getElement().querySelector(`.event__rollup-btn`)
+        .addEventListener(`click`, () => { // восстановитель не работает
+      this._replaceFormToPoint();
+    });
+
     this._formForEditComponent.setSubmitHandler((evt) => {
       evt.preventDefault(); ////
       //this._replaceFormToPoint();
       const data = this._formForEditComponent.getData();////////
+      console.log(data);
       this._onDataChange(this, dataOfRoute, data);////////
       //document.removeEventListener(`keydown`, this._onEscKeyDown);
     });
-    this._formForEditComponent.setDeleteButtonClickHandler(() => this._onDataChange(this, dataOfRoute, null));/////////
+    this._formForEditComponent.setDeleteButtonClickHandler(() => this._onDataChange(this, dataOfRoute, null));
 
     this._formForEditComponent.setFavoriteChangeHandler(() => {
       this._onDataChange(this, dataOfRoute, Object.assign({}, dataOfRoute, {

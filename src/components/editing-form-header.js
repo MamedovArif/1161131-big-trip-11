@@ -16,7 +16,8 @@ const createHeaderEditingForm = (object) => {
           <span class="visually-hidden">Choose event type</span>
           <img class="event__type-icon" width="17" height="17" src="img/icons/${type.toLowerCase()}.png" alt="Event type icon">
         </label>
-        <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
+        <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox"
+        name="type-type" value="YUYTUU">
 
         <div class="event__type-list">
           <fieldset class="event__type-group">
@@ -111,7 +112,7 @@ const createHeaderEditingForm = (object) => {
       <div class="event__field-group  event__field-group--price">
         <label class="event__label" for="event-price-1">
           <span class="visually-hidden">Price</span>
-          &euro;${price}
+          &euro;
         </label>
         <input class="event__input  event__input--price" id="event-price-1" type="text"
         name="event-price" value="${price}">
@@ -121,7 +122,7 @@ const createHeaderEditingForm = (object) => {
       <button class="event__reset-btn" type="reset">Delete</button>
 
       <input id="event-favorite-1" class="event__favorite-checkbox  visually-hidden"
-          type="checkbox" name="event-favorite" ${isChecked}>
+          type="checkbox" name="event-favorite" ${isChecked} value="${isFavorite}">
       <label class="event__favorite-btn" for="event-favorite-1">
         <span class="visually-hidden">Add to favorite</span>
         <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">

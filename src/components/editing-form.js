@@ -20,21 +20,34 @@ const createEditingFormTemplate = (object) => {
   );
 };
 
-// const parseFormData = (formData) => { /////////////////
-//   return {
-//     id: String(new Date() + Math.random()),
-//     type: formData.get(``),
-//     city: formData.get(`event-destination`),
-//     price: formData.get(`event-price`),
-//     destination: [],
-//     photos: [],
-//     isFavorite: (Math.random() < 0.4) ? true : false,
-//     placeholder: ``,
-//     timeBegin: formData.get(`event-start-time`),
-//     timeEnd: formData.get(`event-end-time`)
-//     options: option[(obj.type).toLowerCase()];
-//   }
-// }
+const stringToDate = (string) => { //01.05.20 06:05
+  const dates = string.split(' ');
+  const date = dates[0].split('.');
+  const time = dates[1].split(':');
+
+  date[2] = Number(`20` + date[2]);
+  date[1] = Number(date[1]) - 1;
+  date[0] = Number(date[0]);
+  time[0] = Number(time[0]);
+  time[1] = Number(time[1]);
+  return new Date(date[2], date[1], date[0], time[0], time[1]);
+}
+
+const parseFormData = (formData) => { /////////////////
+  return {
+    type: `Flight`,//formData.get(`type-type`),
+    isFavorite: false,//formData.get(`event-favorite`), // !!!!!
+    city: formData.get(`event-destination`),
+    price: Number(formData.get(`event-price`)),
+    placeholder: ``,
+    timeBegin: stringToDate(formData.get(`event-start-time`)),
+    timeEnd: stringToDate(formData.get(`event-end-time`)),
+    //destination: formData.get(`event__photos-tape`),
+    // photos: [],
+    //options: option[(obj.type).toLowerCase()];
+  }
+
+}
 
 export default class FormForEdit extends AbstractSmartComponent {
   constructor(editForm) {
@@ -85,8 +98,10 @@ export default class FormForEdit extends AbstractSmartComponent {
   }
 
   getData() { //////////
-    const form = this.getElement().querySelector(`.trip-events__item`);
+    const form = this.getElement().parentElement.querySelector(`.trip-events__item`);
+    console.log(form);
     const formData = new FormData(form);
+    console.log(formData);
 
     return parseFormData(formData);
   }
@@ -114,20 +129,20 @@ export default class FormForEdit extends AbstractSmartComponent {
       this._flatpickr = null;
     }
 
-    const dateBegin = this.getElement()
-        .querySelector(`input[name = event-start-time]`);
-    this._flatpickr = flatpickr(dateBegin, {
-      altInput: true,
-      allowInput: true,
-      defaultDate: this._editForm.timeBegin || `today`,
-    });
-    const dateEnd = this.getElement()
-        .querySelector(`input[name = event-end-time]`);
-    this._flatpickr = flatpickr(dateEnd, {
-      altInput: true,
-      allowInput: true,
-      defaultDate: this._editForm.timeEnd || `today`,
-    });
+    // const dateBegin = this.getElement()
+    //     .querySelector(`input[name = event-start-time]`);
+    // this._flatpickr = flatpickr(dateBegin, {
+    //   altInput: true,
+    //   allowInput: true,
+    //   defaultDate: this._editForm.timeBegin || `today`,
+    // });
+    // const dateEnd = this.getElement()
+    //     .querySelector(`input[name = event-end-time]`);
+    // this._flatpickr = flatpickr(dateEnd, {
+    //   altInput: true,
+    //   allowInput: true,
+    //   defaultDate: this._editForm.timeEnd || `today`,
+    // });
   }
 
   _subscribeOnEvents() {
