@@ -4,6 +4,7 @@ import {createDestinationEditingForm} from './editing-form-destination.js';
 import AbstractSmartComponent from "./abstract-smart-component.js";
 import {option} from "../mock/route-point.js";
 import flatpickr from "flatpickr";
+
 import "flatpickr/dist/flatpickr.min.css";
 
 const createEditingFormTemplate = (object) => {
@@ -21,9 +22,9 @@ const createEditingFormTemplate = (object) => {
 };
 
 const stringToDate = (string) => {
-  const dates = string.split(' ');
-  const date = dates[0].split('.');
-  const time = dates[1].split(':');
+  const dates = string.split(` `);
+  const date = dates[0].split(`.`);
+  const time = dates[1].split(`:`);
 
   date[2] = Number(`20` + date[2]);
   date[1] = Number(date[1]) - 1;
@@ -31,13 +32,11 @@ const stringToDate = (string) => {
   time[0] = Number(time[0]);
   time[1] = Number(time[1]);
   return new Date(date[2], date[1], date[0], time[0], time[1]);
-}
+};
 
 const parseFormData = (formData) => {
   const formObject = {
     id: String(new Date() + Math.random()),
-    type: `Flight`, // formData.get(`type-type`),
-    isFavorite: false, // formData.get(`event-favorite`), // !!!!!
     city: formData.get(`event-destination`),
     price: Number(formData.get(`event-price`)),
     placeholder: ``,
@@ -46,11 +45,13 @@ const parseFormData = (formData) => {
 
     destination: [],
     photos: [],
-    // options: option[(obj.type).toLowerCase()];
-  }
+    type: `Flight`, // formData.get(`type-type`),
+    isFavorite: false, // formData.get(`event-favorite`), // !!!!!
+  };
+
   formObject.options = option[(formObject.type).toLowerCase()];
   return formObject;
-}
+};
 
 export default class FormForEdit extends AbstractSmartComponent {
   constructor(editForm) {
@@ -136,13 +137,13 @@ export default class FormForEdit extends AbstractSmartComponent {
       this._flatpickr = null;
     }
     //                НЕ УДАЛЯТЬ!!!
-    // const dateBegin = this.getElement()
-    //     .querySelector(`input[name = event-start-time]`);
-    // this._flatpickr = flatpickr(dateBegin, {
-    //   altInput: true,
-    //   allowInput: true,
-    //   defaultDate: this._editForm.timeBegin || `today`,
-    // });
+    const dateBegin = this.getElement()
+        .querySelector(`input[name = event-start-time]`);
+    this._flatpickr = flatpickr(dateBegin, {
+      altInput: true,
+      allowInput: true,
+      defaultDate: this._editForm.timeBegin || `today`,
+    });
     // const dateEnd = this.getElement()
     //     .querySelector(`input[name = event-end-time]`);
     // this._flatpickr = flatpickr(dateEnd, {

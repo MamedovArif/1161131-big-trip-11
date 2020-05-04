@@ -1,7 +1,6 @@
 import {SortType} from "../const.js";
 import SortComponent from "../components/sort.js";
 import {render, replace, RenderPosition} from "../utils/render.js";
-//import {getPointsBySort} from "../utils/sort.js";
 
 export default class SortController {
   constructor(container, pointsModel) {
@@ -19,7 +18,6 @@ export default class SortController {
 
   render() {
     const container = this._container;
-    const allPoints = this._pointsModel.getPointsAll();
     const sorts = Object.values(SortType).map((sortType) => {
       return {
         name: sortType,

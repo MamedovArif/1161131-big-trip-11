@@ -9,7 +9,7 @@ export const Mode = {
   EDIT: `edit`,
 };
 
-export const EmptyPoint = { ////////12
+export const EmptyPoint = {
   id: String(new Date() + Math.random()),
   type: `Taxi`,
   isFavorite: false,
@@ -54,10 +54,8 @@ export default class PointController {
 
     this._formForEditComponent.setSubmitHandler((evt) => {
       evt.preventDefault();
-      //this._replaceFormToPoint();
       const data = this._formForEditComponent.getData();
       this._onDataChange(this, dataOfRoute, data);
-      //document.removeEventListener(`keydown`, this._onEscKeyDown);
     });
     this._formForEditComponent.setDeleteButtonClickHandler(() => this._onDataChange(this,
         dataOfRoute, null));
@@ -68,7 +66,7 @@ export default class PointController {
       }));
     });
 
-    switch (mode) { ////////// 12
+    switch (mode) {
       case Mode.DEFAULT:
         if (oldPointComponent && oldPointEditComponent) {
           replace(this._pointOfRouteComponent, oldPointComponent);
@@ -109,8 +107,8 @@ export default class PointController {
 
   _replaceFormToPoint() {
     document.removeEventListener(`keydown`, this._onEscKeyDown);
-    //this._formForEditComponent.reset(); // перед закрытием откатываем изменения
-    //replace(this._pointOfRouteComponent, this._formForEditComponent);
+    // this._formForEditComponent.reset(); // перед закрытием откатываем изменения
+    // replace(this._pointOfRouteComponent, this._formForEditComponent);
 
     if (document.contains(this._formForEditComponent.getElement())) {
       replace(this._pointOfRouteComponent, this._formForEditComponent);
@@ -123,7 +121,7 @@ export default class PointController {
 
     if (isEscKey) {
       if (this._mode === Mode.ADDING) {
-        this._onDataChange(this, EmptyPoint, null);  //////////12
+        this._onDataChange(this, EmptyPoint, null); // 12
       }
       this._replaceFormToPoint();
       document.removeEventListener(`keydown`, this._onEscKeyDown);

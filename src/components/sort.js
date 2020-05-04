@@ -14,8 +14,8 @@ const createSortMarkup = (sort) => {
         </svg>
       </label>
     </div>`
-  )
-}
+  );
+};
 
 const createSortTemplate = (sorts) => {
   const sortsMarkup = sorts.map((item) => createSortMarkup(item)).join(`\n`);
@@ -53,14 +53,6 @@ export default class Sort extends AbstractComponent {
       const sortName = getSortNameById(evt.target.id);
 
       handler(sortName);
-    })
+    });
   }
 }
-
-/*
-<div class="trip-sort__item  trip-sort__item--event">
-  <input id="sort-event" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-event" checked>
-  <label class="trip-sort__btn" for="sort-event">Event</label>
-</div>
-
-      */

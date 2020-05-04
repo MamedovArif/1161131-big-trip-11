@@ -22,7 +22,7 @@ export const generateDays = (fullPoint, counter) => {
 const listTrips = (fullPoints) => {
   let array = fullPoints.map((dayArray, counter) => {
     return generateDays(dayArray, counter);
-  })
+  });
   return (
     `<ul class="trip-days">
       ${array.join(`\n`)}

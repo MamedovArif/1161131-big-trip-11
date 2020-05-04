@@ -38,7 +38,7 @@ export const getPointsBySort = (points, sortType) => {
     case SortType.PRICE:
       return getSortOnPrice(points);
     default:
-      throw new Error('getPointsBySort принимает неверный тип');
+      throw new Error(`getPointsBySort принимает неверный тип`);
   }
-  return points;
-}
+  // return points; // Недостижимый код
+};

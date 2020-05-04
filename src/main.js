@@ -1,9 +1,8 @@
-import MenuComponent, {MenuItem} from './components/menu.js';
+import MenuComponent from './components/menu.js';
 import FilterComponent from './components/filters.js';
 import {render, RenderPosition} from './utils/render.js';
-import {generateDate} from './mock/list-trips.js';
 import {generatePoints} from './mock/route-point.js';
-import TripController, {createDefaultForm} from './controllers/trip.js';
+import TripController from './controllers/trip.js';
 import PointsModel from './models/points.js';
 
 const NUMBER_OF_STOPS = 7;
@@ -38,11 +37,11 @@ for (let i = 0; i < allDataPoints.length - 1; i++) {
 
   if (allDataPoints[i].timeBegin.getDate() === allDataPoints[i + 1].timeBegin.getDate() &&
       allDataPoints[i].timeBegin.getMonth() === allDataPoints[i + 1].timeBegin.getMonth()) {
-    fullDataPoints[fullDataPoints.length - 1].push(allDataPoints[i + 1])
+    fullDataPoints[fullDataPoints.length - 1].push(allDataPoints[i + 1]);
   } else {
     let littleArray = [];
     littleArray.push(allDataPoints[i + 1]);
-    fullDataPoints.push(littleArray)
+    fullDataPoints.push(littleArray);
   }
 }
 
@@ -62,7 +61,7 @@ tripController.render(totalCosts, routeOfCities, tripMain);
 // });
 
 const buttonEvent = tripMain.querySelector(`.btn`);
-//let tiedСreateDefaultForm = createDefaultForm.bind(null, buttonEvent, tripEvents);
+// let tiedСreateDefaultForm = createDefaultForm.bind(null, buttonEvent, tripEvents); // СКОРЕЕ НЕ ПОНАДОБИТСЯ
 buttonEvent.addEventListener(`click`, () => {
   tripController.createPoint();
 });

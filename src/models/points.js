@@ -3,7 +3,6 @@ import {SortType} from "../const.js";
 
 export default class Points {
   constructor() {
-    //this._dates = [];
     this._activeSortType = SortType.EVENT;
     this._points = [];
 
@@ -29,16 +28,16 @@ export default class Points {
     this._activeSortType = sortType;
     this._callHandlers(this._sortChangeHandlers);
   }
-//////////////////
-  removePoint(id) { // у меня двойная структура так что не найдет
+
+  removePoint(id) {
     const pointsWithoutOne = this._points.map((littleArray) => {
       const index = littleArray.findIndex((item) => item.id === id);
       if (index === -1) {
         return littleArray;
       }
-      return littleArray = [].concat(littleArray.slice(0, index), littleArray.slice(index + 1));
+      littleArray = [].concat(littleArray.slice(0, index), littleArray.slice(index + 1));
+      return littleArray;
     });
-    console.log(pointsWithoutOne);
     for (let i = 0; i < pointsWithoutOne.length; i++) {
       if (pointsWithoutOne[i].length === 0) {
         pointsWithoutOne.splice(i, 1);
@@ -47,23 +46,24 @@ export default class Points {
     this._points = pointsWithoutOne;
   }
 
-  addPoint(point) { //не понятно к какой дате добавляем
+  addPoint(point) { // не понятно к какой дате добавляем 12
     this._points = [].concat(point, this._points);
-    this._callHandlers(this._dataChangeHandlers); //какие же обработчики вызываются
+    this._callHandlers(this._dataChangeHandlers); // какие же обработчики вызываются
   }
-/////////////////
+
   updatePoint(id, newPoint) {
     let isSuccess = false;
     this._points = this._points.map((littleArray) => {
       const index = littleArray.findIndex((point) => point.id === id);
 
       if (index === -1) {
-      return littleArray;
+        return littleArray;
       }
       isSuccess = true;
-      return littleArray = [].concat(littleArray.slice(0, index),
-        newPoint, littleArray.slice(index + 1));
-      //this._callHandlers(this._dataChangeHandlers); // нужен ли он если сортировка не обновл?
+      littleArray = [].concat(littleArray.slice(0, index),
+          newPoint, littleArray.slice(index + 1));
+      return littleArray;
+      // this._callHandlers(this._dataChangeHandlers); // нужен ли он если сортировка не обновл?
     });
     return isSuccess;
   }
