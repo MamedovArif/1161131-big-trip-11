@@ -3,7 +3,7 @@ import {SortType} from "../const.js";
 
 export default class Points {
   constructor() {
-    this._dates = [];
+    //this._dates = [];
     this._activeSortType = SortType.EVENT;
     this._points = [];
 
@@ -53,18 +53,19 @@ export default class Points {
   }
 /////////////////
   updatePoint(id, newPoint) {
-    this._dates.map((date) => {
-      const index = date.findIndex((point) => point.id === id);
+    let isSuccess = false;
+    this._points = this._points.map((littleArray) => {
+      const index = littleArray.findIndex((point) => point.id === id);
 
       if (index === -1) {
-      return false;
+      return littleArray;
       }
-      date = [].concat(date.slice(0, index),
-        newPoint, date.slice(index + 1));
-
-      this._callHandlers(this._dataChangeHandlers);
-      return true;
+      isSuccess = true;
+      return littleArray = [].concat(littleArray.slice(0, index),
+        newPoint, littleArray.slice(index + 1));
+      //this._callHandlers(this._dataChangeHandlers); // нужен ли он если сортировка не обновл?
     });
+    return isSuccess;
   }
 
   _callHandlers(handlers) {

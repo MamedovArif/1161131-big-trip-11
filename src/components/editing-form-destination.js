@@ -2,8 +2,12 @@ export const createDestinationEditingForm = (object) => {
   const {destination, photos} = object;
 
   let combinationPhotos = [];
-  for (let i = 0; i < photos.length; i++) {
-    combinationPhotos.push(`<img class="event__photo" src="${photos[i]}" alt="Event photo">`);
+  if (photos.length === 0) {
+    combinationPhotos = [];
+  } else {
+    for (let i = 0; i < photos.length; i++) {
+      combinationPhotos.push(`<img class="event__photo" src="${photos[i]}" alt="Event photo">`);
+    }
   }
 
   return (

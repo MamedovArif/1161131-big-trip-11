@@ -20,7 +20,7 @@ const createEditingFormTemplate = (object) => {
   );
 };
 
-const stringToDate = (string) => { //01.05.20 06:05
+const stringToDate = (string) => {
   const dates = string.split(' ');
   const date = dates[0].split('.');
   const time = dates[1].split(':');
@@ -33,20 +33,23 @@ const stringToDate = (string) => { //01.05.20 06:05
   return new Date(date[2], date[1], date[0], time[0], time[1]);
 }
 
-const parseFormData = (formData) => { /////////////////
-  return {
-    type: `Flight`,//formData.get(`type-type`),
-    isFavorite: false,//formData.get(`event-favorite`), // !!!!!
+const parseFormData = (formData) => {
+  const formObject = {
+    id: String(new Date() + Math.random()),
+    type: `Flight`, // formData.get(`type-type`),
+    isFavorite: false, // formData.get(`event-favorite`), // !!!!!
     city: formData.get(`event-destination`),
     price: Number(formData.get(`event-price`)),
     placeholder: ``,
     timeBegin: stringToDate(formData.get(`event-start-time`)),
     timeEnd: stringToDate(formData.get(`event-end-time`)),
-    //destination: formData.get(`event__photos-tape`),
-    // photos: [],
-    //options: option[(obj.type).toLowerCase()];
-  }
 
+    destination: [],
+    photos: [],
+    // options: option[(obj.type).toLowerCase()];
+  }
+  formObject.options = option[(formObject.type).toLowerCase()];
+  return formObject;
 }
 
 export default class FormForEdit extends AbstractSmartComponent {
@@ -57,7 +60,7 @@ export default class FormForEdit extends AbstractSmartComponent {
 
     this._flatpickr = null;
     this._submitHandler = null;
-    this._deleteButtonClickHandler = null; //////////
+    this._deleteButtonClickHandler = null;
 
     this._applyFlatpickr();
     this._subscribeOnEvents();
@@ -78,7 +81,8 @@ export default class FormForEdit extends AbstractSmartComponent {
 
   recoveryListeners() {
     this.setSubmitHandler(this._submitHandler);
-    this.setDeleteButtonClickHandler(this._deleteButtonClickHandler); /////
+    this.setCloseHandler(this._closeHandler);
+    this.setDeleteButtonClickHandler(this._deleteButtonClickHandler);
     this._subscribeOnEvents();
   }
 
@@ -97,11 +101,9 @@ export default class FormForEdit extends AbstractSmartComponent {
     this.rerender();
   }
 
-  getData() { //////////
+  getData() {
     const form = this.getElement().parentElement.querySelector(`.trip-events__item`);
-    console.log(form);
     const formData = new FormData(form);
-    console.log(formData);
 
     return parseFormData(formData);
   }
@@ -117,6 +119,11 @@ export default class FormForEdit extends AbstractSmartComponent {
     this.getElement().addEventListener(`submit`, handler);
     this._submitHandler = handler;
   }
+  setCloseHandler(handler) {
+    this.getElement().querySelector(`.event__rollup-btn`)
+        .addEventListener(`click`, handler);
+    this._closeHandler = handler;
+  }
 
   setFavoriteChangeHandler(handler) {
     this.getElement().querySelector(`input[name = event-favorite]`)
@@ -128,7 +135,7 @@ export default class FormForEdit extends AbstractSmartComponent {
       this._flatpickr.destroy();
       this._flatpickr = null;
     }
-
+    //                НЕ УДАЛЯТЬ!!!
     // const dateBegin = this.getElement()
     //     .querySelector(`input[name = event-start-time]`);
     // this._flatpickr = flatpickr(dateBegin, {
