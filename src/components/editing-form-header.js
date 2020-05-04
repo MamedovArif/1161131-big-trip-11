@@ -1,18 +1,18 @@
 import {formatTime, formatTimeDate} from '../utils/common.js';
-import {encode} from "he";
+// import {encode} from "he";
 
 const createHeaderEditingForm = (object) => {
   const {type, city, timeBegin, timeEnd, price, isFavorite, placeholder} = object;
 
-  const timeStart = encode(timeBegin);
-  const timeFinish = encode(timeEnd);
-  const safePrice = encode(price);
-  const town = encode(city);
+  // const timeStart = encode(timeBegin);
+  // const timeFinish = encode(timeEnd);
+  // const safePrice = encode(price);
+  // const town = encode(city);
 
-  const hoursBegin = formatTime(timeStart);
-  const dateBegin = formatTimeDate(timeStart);
-  const hoursFinish = formatTime(timeFinish);
-  const dateFinish = formatTimeDate(timeFinish);
+  const hoursBegin = formatTime(timeBegin);
+  const dateBegin = formatTimeDate(timeBegin);
+  const hoursFinish = formatTime(timeEnd);
+  const dateFinish = formatTimeDate(timeEnd);
   const isChecked = (isFavorite) ? `checked` : ``;
 
   return (
@@ -92,7 +92,7 @@ const createHeaderEditingForm = (object) => {
         </label>
         <input class="event__input  event__input--destination"
         id="event-destination-1" type="text" name="event-destination"
-        value="${town}" list="destination-list-1" placeholder=${placeholder}>
+        value="${city}" list="destination-list-1" placeholder=${placeholder}>
         <datalist id="destination-list-1">
           <option value="Amsterdam"></option>
           <option value="Geneva"></option>
@@ -121,7 +121,7 @@ const createHeaderEditingForm = (object) => {
           &euro;
         </label>
         <input class="event__input  event__input--price" id="event-price-1" type="text"
-        name="event-price" value="${safePrice}">
+        name="event-price" value="${price}">
       </div>
 
       <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
