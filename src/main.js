@@ -1,4 +1,4 @@
-import MenuComponent from './components/menu.js';
+import MenuComponent, {MenuItem} from './components/menu.js';
 import FilterComponent from './components/filters.js';
 import {render, RenderPosition} from './utils/render.js';
 import {generateDate} from './mock/list-trips.js';
@@ -13,15 +13,10 @@ const tripControls = document.querySelector(`.trip-controls`);
 const tripEvents = document.querySelector(`.trip-events`);
 const tripMain = document.querySelector(`.trip-main`);
 
-
-render(tripControls.children[0], new MenuComponent(), RenderPosition.AFTEREND);
+const menuComponent = new MenuComponent();
+render(tripControls.children[0], menuComponent, RenderPosition.AFTEREND);
 export const filterComponent = new FilterComponent();
 render(tripControls, filterComponent, RenderPosition.BEFOREEND);
-
-
-const buttonEvent = tripMain.querySelector(`.btn`);
-let tiedСreateDefaultForm = createDefaultForm.bind(null, buttonEvent, tripEvents);
-buttonEvent.addEventListener(`click`, tiedСreateDefaultForm);
 
 let allDataPoints = [];
 let totalCosts = [];
@@ -56,3 +51,18 @@ pointsModel.setPoints(fullDataPoints);
 
 const tripController = new TripController(tripEvents, pointsModel);
 tripController.render(totalCosts, routeOfCities, tripMain);
+
+// menuComponent.setOnChange((menuItem) => {  ///// 12
+//   switch (menuItem) {
+//     case MenuItem.NEW_EVENT:
+//       menuComponent.setActiveItem(MenuItem.TABLE);
+//       tripController.createTask();
+//       break;
+//   }
+// });
+
+const buttonEvent = tripMain.querySelector(`.btn`);
+//let tiedСreateDefaultForm = createDefaultForm.bind(null, buttonEvent, tripEvents);
+buttonEvent.addEventListener(`click`, () => {
+  tripController.createPoint();
+});

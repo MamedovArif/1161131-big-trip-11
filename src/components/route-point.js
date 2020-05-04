@@ -68,6 +68,7 @@ export default class PointOfRoute extends AbstractComponent {
   }
 
   setClickHandler(handler) {
-    this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, handler);
+    this.getElement().querySelector(`.event__rollup-btn`)
+        .addEventListener(`click`, handler);
   }
 }

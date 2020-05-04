@@ -1,13 +1,27 @@
 import PointOfRouteComponent from '../components/route-point.js';
 import FormForEditComponent from '../components/editing-form.js';
 import {render, RenderPosition, remove, replace} from '../utils/render.js';
+import {option} from "../mock/route-point.js";
 
 export const Mode = {
+  ADDING: `adding`,
   DEFAULT: `default`,
   EDIT: `edit`,
 };
 
-export const EmptyPoint = {}; ///////////////
+export const EmptyPoint = { ////////12
+  id: String(new Date() + Math.random()),
+  type: `Taxi`,
+  isFavorite: false,
+  city: ``,
+  price: 0,
+  placeholder: ``,
+  timeBegin: new Date(),
+  timeEnd: new Date(),
+  destination: [],
+  photos: [],
+  options: option[`Taxi`.toLowerCase()],
+};
 
 export default class PointController {
   constructor(container, onDataChange, onViewChange) {
@@ -39,14 +53,14 @@ export default class PointController {
     });
 
     this._formForEditComponent.setSubmitHandler((evt) => {
-      evt.preventDefault(); ////
+      evt.preventDefault();
       //this._replaceFormToPoint();
-      const data = this._formForEditComponent.getData();////////
-      //console.log(data);
-      this._onDataChange(this, dataOfRoute, data);////////
+      const data = this._formForEditComponent.getData();
+      this._onDataChange(this, dataOfRoute, data);
       //document.removeEventListener(`keydown`, this._onEscKeyDown);
     });
-    this._formForEditComponent.setDeleteButtonClickHandler(() => this._onDataChange(this, dataOfRoute, null));
+    this._formForEditComponent.setDeleteButtonClickHandler(() => this._onDataChange(this,
+        dataOfRoute, null));
 
     this._formForEditComponent.setFavoriteChangeHandler(() => {
       this._onDataChange(this, dataOfRoute, Object.assign({}, dataOfRoute, {
@@ -54,12 +68,24 @@ export default class PointController {
       }));
     });
 
-    if (oldPointComponent && oldPointEditComponent) {
-      replace(this._pointOfRouteComponent, oldPointComponent);
-      replace(this._formForEditComponent, oldPointEditComponent);
-      this._replaceFormToPoint();// почему не закрывается форма при сохранении
-    } else {
-      render(this._container, this._pointOfRouteComponent, RenderPosition.BEFOREEND);
+    switch (mode) { ////////// 12
+      case Mode.DEFAULT:
+        if (oldPointComponent && oldPointEditComponent) {
+          replace(this._pointOfRouteComponent, oldPointComponent);
+          replace(this._formForEditComponent, oldPointEditComponent);
+          this._replaceFormToPoint();
+        } else {
+          render(this._container, this._pointOfRouteComponent, RenderPosition.BEFOREEND);
+        }
+        break;
+      case Mode.ADDING:
+        if (oldPointComponent && oldPointEditComponent) { // в каком случае они возвращают правду
+          remove(oldPointComponent);
+          remove(oldPointEditComponent);
+        }
+        document.addEventListener(`keydown`, this._onEscKeyDown);
+        render(this._container, this._formForEditComponent, RenderPosition.AFTERBEGIN);
+        break;
     }
   }
 
@@ -96,6 +122,9 @@ export default class PointController {
     const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
 
     if (isEscKey) {
+      if (this._mode === Mode.ADDING) {
+        this._onDataChange(this, EmptyPoint, null);  //////////12
+      }
       this._replaceFormToPoint();
       document.removeEventListener(`keydown`, this._onEscKeyDown);
     }

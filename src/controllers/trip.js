@@ -12,17 +12,17 @@ import PointController, {Mode as PointControllerMode, EmptyPoint} from './point.
 import SortController from './sort.js';
 import {pointsModel} from '../main.js';
 
-export const createDefaultForm = (button, container) => {
-  remove(noPointsComponent);
+// export const createDefaultForm = (button, container) => {
+//   remove(noPointsComponent);
 
-  const defaultFormComponent = new FormForEditComponent(defaultData);
-  render(container, defaultFormComponent, RenderPosition.AFTERBEGIN);
-  button.removeEventListener(`click`, createDefaultForm);
-  defaultFormComponent.setSubmitHandler(function () {
-    remove(defaultFormComponent);
-    button.addEventListener(`click`, createDefaultForm);
-  });
-};
+//   const defaultFormComponent = new FormForEditComponent(defaultData);
+//   render(container, defaultFormComponent, RenderPosition.AFTERBEGIN);
+//   button.removeEventListener(`click`, createDefaultForm);
+//   defaultFormComponent.setSubmitHandler(function () {
+//     remove(defaultFormComponent);
+//     button.addEventListener(`click`, createDefaultForm);
+//   });
+// };
 
 const noPointsComponent = new NoPointsComponent();
 
@@ -65,6 +65,7 @@ const renderPoints = (parent, points, onDataChange, onViewChange) => {
 
 export default class TripController {
   constructor(container, pointsModel) {
+    console.log(container);
     this._container = container;
     this._showedPointControllers = [];
     this._pointsModel = pointsModel;
@@ -74,15 +75,15 @@ export default class TripController {
     this._onViewChange = this._onViewChange.bind(this);
     this._onSortChange = this._onSortChange.bind(this);
     this._pointController = null;
-    this._days = null;
 
     filterComponent.setFilterTypeChangeHandler(this._handlerFilter);
     this._pointsModel.setSortChangeHandler(this._onSortChange);
 
     this._sortController = null;
 
-    this._listDays = null; // !!
-    //this._renderPoints = this._renderPoints.bind(this);
+    this._listDays = null;
+
+    this._creatingPoint = null; /// 12
   }
 
   render(totalCosts, routeOfCities, header) {
@@ -102,6 +103,18 @@ export default class TripController {
     render(header, new RouteComponent(routeOfCities, fullDataPoints), RenderPosition.AFTERBEGIN); // a1
     const tripInfo = header.querySelector(`.trip-info`); // a2
     render(tripInfo, new CostComponent(totalCosts), RenderPosition.BEFOREEND); // a3
+  }
+
+  createPoint() { /// 12
+    if (this._creatingPoint) {
+      return;
+    }
+
+    const tripListElement = this._container.querySelector(`.trip-days`);
+    console.log(tripListElement);
+    this._creatingPoint = new PointController(tripListElement,
+        this._onDataChange, this._onViewChange);
+    this._creatingPoint.render(EmptyPoint, PointControllerMode.ADDING);
   }
 
   _renderPoints(points) {
@@ -143,7 +156,7 @@ export default class TripController {
   _onSortChange() {
     this._updatePoints()
   }
-//////////////////
+
   _onDataChange(pointController, oldPoint, newPoint) {
     if (oldPoint === EmptyPoint) {
       this._creatingPoint = null; //открыта ли какая-тa задача
@@ -164,10 +177,9 @@ export default class TripController {
       if (isSuccess) {
         pointController.render(newPoint, PointControllerMode.DEFAULT);
       }
-
     }
   }
-///////////
+
   _onViewChange() {
     this._showedPointControllers.forEach((it) => it.setDefaultView());
   }
