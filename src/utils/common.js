@@ -1,5 +1,10 @@
 import moment from "moment";
 
+export const upperFirstElement = (string) => {
+  let str = string[0].toUpperCase() + string.slice(1);
+  return str;
+}
+
 export const durationOfPoint = (dateA, dateB) => {
   const a = moment(dateA);
   const b = moment(dateB);

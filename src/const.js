@@ -19,3 +19,16 @@ export const SortType = {
   TIME: `time`,
   PRICE: `price`,
 };
+
+export const pretext = {
+  "taxi": `to`,
+  "bus": `to`,
+  "train": `to`,
+  "ship": `to`,
+  "transport": `to`,
+  "drive": `to`,
+  "flight": `to`,
+  "check-in": `in`,
+  "sightseeing": `in`,
+  "restaurant": `in`,
+}

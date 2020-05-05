@@ -1,24 +1,7 @@
-import {formatTime, diffTime} from "../utils/common.js";
+import {formatTime, diffTime, upperFirstElement} from "../utils/common.js";
 import {getRandomArrayItem, getRandomIntegerNumber} from "../mock/route-point.js";
 import AbstractComponent from "./abstract-component.js";
-
-const pretext = {
-  "taxi": `to`,
-  "bus": `to`,
-  "train": `to`,
-  "ship": `to`,
-  "transport": `to`,
-  "drive": `to`,
-  "flight": `to`,
-  "check-in": `in`,
-  "sightseeing": `in`,
-  "restaurant": `in`,
-}
-
-const upperFirstElement = (string) => {
-  let str = string[0].toUpperCase() + string.slice(1);
-  return str;
-}
+import {pretext} from "../const.js";
 
 const generateOptions = (offer, cost) => {
   return (

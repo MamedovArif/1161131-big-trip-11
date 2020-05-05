@@ -13,15 +13,13 @@ const createEditingFormTemplate = (object) => {
       ${createHeaderEditingForm(object)}
       <section class="event__details">
         ${createOffersEditingForm(object)}
-        <section class="event__section  event__section--destination">
-          ${createDestinationEditingForm(object)}
-        </section>
+        ${createDestinationEditingForm(object)}
       </section>
     </form>`
   );
 };
 
-const stringToDate = (string) => {
+const stringToDate = (string) => { // для flatpickr другая функция
   console.log(string);
   const dates = string.split(` `);
   const date = dates[0].split(`.`);
@@ -48,6 +46,7 @@ const parseFormData = (formData) => {
     destination: [],
     photos: [],
     type: `Flight`, // formData.get(`type-type`), коротить код разметки, дописать name value
+    //вставить placeholder,options в type
     //console.log(formData.get(event-favorite));
     isFavorite: false, // formData.get(`event-favorite`), // добавить функцию при при null-false
   };

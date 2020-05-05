@@ -16,6 +16,10 @@ const generateOffers = (offer) => {
 export const createOffersEditingForm = (object) => {
   const {offers} = object;
 
+  if (offers.length === 0) {
+    return ``;
+  }
+
   let offersList = [];
   for (let i = 0; i < offers.length; i++) {
     offersList.push(generateOffers(offers[i]));
