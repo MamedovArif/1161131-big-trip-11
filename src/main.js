@@ -23,20 +23,19 @@ let routeOfCities = new Set();
 
 allDataPoints = generatePoints(NUMBER_OF_STOPS);
 
-allDataPoints.sort((a, b) => a.timeBegin - b.timeBegin);
+allDataPoints.sort((a, b) => a.dateFrom - b.dateTo);
 
 allDataPoints.map((item) => {
-  totalCosts.push(item.price);
-  routeOfCities.add(item.city);
+  totalCosts.push(item.basePrice);
+  routeOfCities.add(item.destination.name);
 });
-
 
 let fullDataPoints = [[allDataPoints[0]]];
 
 for (let i = 0; i < allDataPoints.length - 1; i++) {
 
-  if (allDataPoints[i].timeBegin.getDate() === allDataPoints[i + 1].timeBegin.getDate() &&
-      allDataPoints[i].timeBegin.getMonth() === allDataPoints[i + 1].timeBegin.getMonth()) {
+  if (allDataPoints[i].dateFrom.getDate() === allDataPoints[i + 1].dateFrom.getDate() &&
+      allDataPoints[i].dateFrom.getMonth() === allDataPoints[i + 1].dateFrom.getMonth()) {
     fullDataPoints[fullDataPoints.length - 1].push(allDataPoints[i + 1]);
   } else {
     let littleArray = [];

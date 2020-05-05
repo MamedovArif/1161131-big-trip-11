@@ -9,19 +9,19 @@ export const Mode = {
   EDIT: `edit`,
 };
 
-export const EmptyPoint = {
-  id: String(new Date() + Math.random()),
-  type: `Taxi`,
-  isFavorite: false,
-  city: ``,
-  price: 0,
-  placeholder: ``,
-  timeBegin: new Date(),
-  timeEnd: new Date(),
-  destination: [],
-  photos: [],
-  options: option[`Taxi`.toLowerCase()],
-};
+// export const EmptyPoint = {
+//   id: String(new Date() + Math.random()),
+//   type: `Taxi`,
+//   isFavorite: false,
+//   city: ``,
+//   price: 0,
+//   placeholder: ``,
+//   timeBegin: new Date(),
+//   timeEnd: new Date(),
+//   destination: [],
+//   photos: [],
+//   options: option[`Taxi`.toLowerCase()],
+// };
 
 export default class PointController {
   constructor(container, onDataChange, onViewChange) {
@@ -82,7 +82,7 @@ export default class PointController {
           remove(oldPointEditComponent);
         }
         document.addEventListener(`keydown`, this._onEscKeyDown);
-        render(this._container, this._formForEditComponent, RenderPosition.AFTERBEGIN);
+        render(this._container, this._formForEditComponent, RenderPosition.BEFOREEND);
         break;
     }
   }

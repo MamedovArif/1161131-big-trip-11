@@ -10,7 +10,7 @@ const createAboutRouteTemplate = (array, fullDataPoints) => {
   }
 
   let days = fullDataPoints.map((littleArray) => {
-    return littleArray[0].timeBegin;
+    return littleArray[0].dateFrom;
   });
 
   const monthBegin = MONTH_NAMES[days[0].getMonth()];

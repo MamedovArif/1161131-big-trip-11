@@ -2,17 +2,19 @@ import {formatTime, formatTimeDate} from '../utils/common.js';
 // import {encode} from "he";
 
 const createHeaderEditingForm = (object) => {
-  const {type, city, timeBegin, timeEnd, price, isFavorite, placeholder} = object;
+  const {type, destination, dateFrom, dateTo, basePrice, isFavorite} = object;
+  const placeholder = ``;
+  const city = destination.name;
 
   // const timeStart = encode(timeBegin);
   // const timeFinish = encode(timeEnd);
   // const safePrice = encode(price);
   // const town = encode(city);
 
-  const hoursBegin = formatTime(timeBegin);
-  const dateBegin = formatTimeDate(timeBegin);
-  const hoursFinish = formatTime(timeEnd);
-  const dateFinish = formatTimeDate(timeEnd);
+  const hoursBegin = formatTime(dateFrom);
+  const dateBegin = formatTimeDate(dateFrom);
+  const hoursFinish = formatTime(dateTo);
+  const dateFinish = formatTimeDate(dateTo);
   const isChecked = (isFavorite) ? `checked` : ``;
 
   return (
@@ -20,10 +22,10 @@ const createHeaderEditingForm = (object) => {
       <div class="event__type-wrapper">
         <label class="event__type  event__type-btn" for="event-type-toggle-1">
           <span class="visually-hidden">Choose event type</span>
-          <img class="event__type-icon" width="17" height="17" src="img/icons/${type.toLowerCase()}.png" alt="Event type icon">
+          <img class="event__type-icon" width="17" height="17" src="img/icons/${type}.png" alt="Event type icon">
         </label>
         <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox"
-        name="type-type" value="YUYTUU">
+        name="type-type" value="${type}">
 
         <div class="event__type-list">
           <fieldset class="event__type-group">
@@ -121,7 +123,7 @@ const createHeaderEditingForm = (object) => {
           &euro;
         </label>
         <input class="event__input  event__input--price" id="event-price-1" type="text"
-        name="event-price" value="${price}">
+        name="event-price" value="${basePrice}">
       </div>
 
       <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>

@@ -22,6 +22,7 @@ const createEditingFormTemplate = (object) => {
 };
 
 const stringToDate = (string) => {
+  console.log(string);
   const dates = string.split(` `);
   const date = dates[0].split(`.`);
   const time = dates[1].split(`:`);
@@ -35,9 +36,10 @@ const stringToDate = (string) => {
 };
 
 const parseFormData = (formData) => {
+  //console.log(formData.get(event-destination));
   const formObject = {
     id: String(new Date() + Math.random()),
-    city: formData.get(`event-destination`),
+    city: formData.get(`event-destination`), //вставить destination,photos в city
     price: Number(formData.get(`event-price`)),
     placeholder: ``,
     timeBegin: stringToDate(formData.get(`event-start-time`)),
@@ -45,8 +47,9 @@ const parseFormData = (formData) => {
 
     destination: [],
     photos: [],
-    type: `Flight`, // formData.get(`type-type`),
-    isFavorite: false, // formData.get(`event-favorite`), // !!!!!
+    type: `Flight`, // formData.get(`type-type`), коротить код разметки, дописать name value
+    //console.log(formData.get(event-favorite));
+    isFavorite: false, // formData.get(`event-favorite`), // добавить функцию при при null-false
   };
 
   formObject.options = option[(formObject.type).toLowerCase()];
@@ -137,13 +140,13 @@ export default class FormForEdit extends AbstractSmartComponent {
       this._flatpickr = null;
     }
     //                НЕ УДАЛЯТЬ!!!
-    const dateBegin = this.getElement()
-        .querySelector(`input[name = event-start-time]`);
-    this._flatpickr = flatpickr(dateBegin, {
-      altInput: true,
-      allowInput: true,
-      defaultDate: this._editForm.timeBegin || `today`,
-    });
+    // const dateBegin = this.getElement()
+    //     .querySelector(`input[name = event-start-time]`);
+    // this._flatpickr = flatpickr(dateBegin, {
+    //   altInput: true,
+    //   allowInput: true,
+    //   defaultDate: this._editForm.timeBegin || `today`,
+    // });
     // const dateEnd = this.getElement()
     //     .querySelector(`input[name = event-end-time]`);
     // this._flatpickr = flatpickr(dateEnd, {

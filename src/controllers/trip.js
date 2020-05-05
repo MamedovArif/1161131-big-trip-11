@@ -107,7 +107,9 @@ export default class TripController {
       return;
     }
     const tripListElement = this._container.querySelector(`.trip-days`);
-    this._creatingPoint = new PointController(tripListElement,
+    tripListElement.insertAdjacentHTML(`afterbegin`, generateDays(new Date(), -1));
+    const parentAdd = tripListElement.querySelector(`.trip-days__item`);
+    this._creatingPoint = new PointController(parentAdd,
         this._onDataChange, this._onViewChange);
     this._creatingPoint.render(EmptyPoint, PointControllerMode.ADDING);
   }
@@ -136,7 +138,7 @@ export default class TripController {
     this._removePoints();
     if (this._pointsModel._activeSortType !== `event`) {
       const parentList = this._container.querySelector(`.trip-days`);
-      parentList.insertAdjacentHTML(`beforeend`, generateDays([{timeBegin: new Date()}], 0));
+      parentList.insertAdjacentHTML(`beforeend`, generateDays(new Date(), 0));
       parentList.querySelector(`.day__counter`).textContent = ``;
       parentList.querySelector(`.day__date`).textContent = ``;
 
