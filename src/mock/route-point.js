@@ -1,5 +1,3 @@
-//const cities = [`Amsterdam`, `London`, `Brussel`];
-
 // export const option = {
 //   'taxi': {
 //     essence: [`uber`, `yandex`],
@@ -89,65 +87,66 @@
 //   placeholder: ``,
 // };
 
-const destinations = [
-  {
-    "description": "Brussel, is a beautiful city, a true asian pearl, with crowded streets.",
-    "name": `Brussel`,
-    "pictures": [
-      {
-        "src": `http://picsum.photos/248/152?r=${Math.random()}`,
-        "description": "Brussel parliament building"
-      },
-      {
-        "src": `http://picsum.photos/248/152?r=${Math.random()}`,
-        "description": "Brussel parliament building"
-      },
-      {
-        "src": `http://picsum.photos/248/152?r=${Math.random()}`,
-        "description": "Brussel parliament building"
-      }
-    ]
-  },
-  {
-    "description": "Amsterdam became one of the most important ports in the world " +
-        "in the Dutch Golden Age of the 17th century and became the leading centre for finance and trade.",
-    "name": `Amsterdam`,
-    "pictures": [
-      {
-        "src": `http://picsum.photos/248/152?r=${Math.random()}`,
-        "description": "Amsterdam parliament building"
-      },
-      {
-        "src": `http://picsum.photos/248/152?r=${Math.random()}`,
-        "description": "Amsterdam parliament building"
-      }
-    ]
-  },
-  {
-    "description": "London exerts a considerable impact upon the arts, " +
-        "commerce, education, entertainment, fashion, finance, healthcare, " +
-        "media, professional services, research and development, tourism and " +
-        "transportation.London ranks 26th out of 300 major cities for economic performance.",
-    "name": `London`,
-    "pictures": [
-      {
-        "src": `http://picsum.photos/248/152?r=${Math.random()}`,
-        "description": "London parliament building"
-      }
-    ]
-  },
-];
+const cities = [`Amsterdam`, `London`, `Brussel`];
 
-const offers = {
+export const destinations = {
+  'Brussel': {
+      "description": "Brussel, is a beautiful city, a true asian pearl, with crowded streets.",
+      "name": `Brussel`,
+      "pictures": [
+        {
+          "src": `http://picsum.photos/248/152?r=${Math.random()}`,
+          "description": "Brussel parliament building"
+        },
+        {
+          "src": `http://picsum.photos/248/152?r=${Math.random()}`,
+          "description": "Brussel parliament building"
+        },
+        {
+          "src": `http://picsum.photos/248/152?r=${Math.random()}`,
+          "description": "Brussel parliament building"
+        }
+      ]
+    },
+  'Amsterdam': {
+      "description": "Amsterdam became one of the most important ports in the world " +
+          "in the Dutch Golden Age of the 17th century and became the leading centre for finance and trade.",
+      "name": `Amsterdam`,
+      "pictures": [
+        {
+          "src": `http://picsum.photos/248/152?r=${Math.random()}`,
+          "description": "Amsterdam parliament building"
+        },
+        {
+          "src": `http://picsum.photos/248/152?r=${Math.random()}`,
+          "description": "Amsterdam parliament building"
+        }
+      ]
+    },
+  'London': {
+      "description": "London exerts a considerable impact upon the arts, " +
+          "commerce, education, entertainment, fashion, finance, healthcare, " +
+          "media, professional services, research and development, tourism and " +
+          "transportation.London ranks 26th out of 300 major cities for economic performance.",
+      "name": `London`,
+      "pictures": [
+        {
+          "src": `http://picsum.photos/248/152?r=${Math.random()}`,
+          "description": "London parliament building"
+        }
+      ]
+    },
+};
+
+export const offers = {
   'taxi': [
       {
-        title: `Order Uber`,
-        price: 20,
-      },
-      {
-        title: `Order Yandex`,
-        price: 30,
-      },
+        "title": "Choose meal",
+        "price": 180
+      }, {
+        "title": "Upgrade to comfort class",
+        "price": 50
+      }
     ],
   'bus': [
       {
@@ -264,7 +263,7 @@ const generatePoint = () => {
   const obj = {
   "basePrice": getRandomIntegerNumber(300, 700),
   "dateFrom": getRandomDate(),
-  "destination": getRandomArrayItem(destinations),
+  "destination": destinations[getRandomArrayItem(cities)],
   "id": String(new Date() + Math.random()),
   "isFavorite": (Math.random() < 0.4) ? true : false,
   "type": getRandomArrayItem(types),

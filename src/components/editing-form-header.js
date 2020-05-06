@@ -27,7 +27,7 @@ const createHeaderEditingForm = (object) => {
           <img class="event__type-icon" width="17" height="17" src="img/icons/${type}.png" alt="Event type icon">
         </label>
         <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox"
-        name="type-type" value="${type}">
+        name="type-type" value="{type}">
 
         <div class="event__type-list">
           <fieldset class="event__type-group">

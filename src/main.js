@@ -23,7 +23,7 @@ let routeOfCities = new Set();
 
 allDataPoints = generatePoints(NUMBER_OF_STOPS);
 
-allDataPoints.sort((a, b) => a.dateFrom - b.dateTo);
+allDataPoints.sort((a, b) => a.dateFrom - b.dateFrom);
 
 allDataPoints.map((item) => {
   totalCosts.push(item.basePrice);

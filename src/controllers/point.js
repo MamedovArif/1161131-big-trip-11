@@ -9,19 +9,36 @@ export const Mode = {
   EDIT: `edit`,
 };
 
-// export const EmptyPoint = {
-//   id: String(new Date() + Math.random()),
-//   type: `Taxi`,
-//   isFavorite: false,
-//   city: ``,
-//   price: 0,
-//   placeholder: ``,
-//   timeBegin: new Date(),
-//   timeEnd: new Date(),
-//   destination: [],
-//   photos: [],
-//   options: option[`Taxi`.toLowerCase()],
-// };
+export const EmptyPoint = {
+  "basePrice": 222,
+  "dateFrom": new Date(),
+  "dateTo": new Date(),
+  "destination": {
+      "description": "London exerts a considerable impact upon the arts, " +
+          "commerce, education, entertainment, fashion, finance, healthcare, " +
+          "media, professional services, research and development, tourism and " +
+          "transportation.London ranks 26th out of 300 major cities for economic performance.",
+      "name": `London`,
+      "pictures": [
+          {
+            "src": `http://picsum.photos/248/152?r=${Math.random()}`,
+            "description": "London parliament building"
+          },
+        ]
+      },
+  "id": String(new Date() + Math.random()),
+  "isFavorite": false,
+  "type": "taxi",
+  "offers": [
+      {
+        "title": "Choose meal",
+        "price": 180
+      }, {
+        "title": "Upgrade to comfort class",
+        "price": 50
+      },
+  ]
+}
 
 export default class PointController {
   constructor(container, onDataChange, onViewChange) {
@@ -56,6 +73,7 @@ export default class PointController {
       evt.preventDefault();
       const data = this._formForEditComponent.getData();
       this._onDataChange(this, dataOfRoute, data);
+      this._replaceFormToPoint();
     });
     this._formForEditComponent.setDeleteButtonClickHandler(() => this._onDataChange(this,
         dataOfRoute, null));
@@ -71,7 +89,6 @@ export default class PointController {
         if (oldPointComponent && oldPointEditComponent) {
           replace(this._pointOfRouteComponent, oldPointComponent);
           replace(this._formForEditComponent, oldPointEditComponent);
-          this._replaceFormToPoint();
         } else {
           render(this._container, this._pointOfRouteComponent, RenderPosition.BEFOREEND);
         }

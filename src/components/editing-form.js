@@ -2,7 +2,7 @@ import {createHeaderEditingForm} from './editing-form-header.js';
 import {createOffersEditingForm} from './editing-form-offers.js';
 import {createDestinationEditingForm} from './editing-form-destination.js';
 import AbstractSmartComponent from "./abstract-smart-component.js";
-import {option} from "../mock/route-point.js";
+import {destinations, offers} from "../mock/route-point.js";
 import flatpickr from "flatpickr";
 
 import "flatpickr/dist/flatpickr.min.css";
@@ -12,15 +12,14 @@ const createEditingFormTemplate = (object) => {
     `<form class="trip-events__item  event  event--edit" action="#" method="post">
       ${createHeaderEditingForm(object)}
       <section class="event__details">
-        ${createOffersEditingForm(object)}
-        ${createDestinationEditingForm(object)}
+        ${(object.offers.length === 0) ? `` : createOffersEditingForm(object)}
+        ${(object.destination) ? createDestinationEditingForm(object) : ``}
       </section>
     </form>`
   );
 };
 
 const stringToDate = (string) => { // для flatpickr другая функция
-  console.log(string);
   const dates = string.split(` `);
   const date = dates[0].split(`.`);
   const time = dates[1].split(`:`);
@@ -34,24 +33,26 @@ const stringToDate = (string) => { // для flatpickr другая функци
 };
 
 const parseFormData = (formData) => {
-  //console.log(formData.get(event-destination));
+  const definitionFavorite = (bool) => {
+    if (bool) {
+      return true;
+    }
+    return false;
+  }
+
   const formObject = {
-    id: String(new Date() + Math.random()),
-    city: formData.get(`event-destination`), //вставить destination,photos в city
-    price: Number(formData.get(`event-price`)),
-    placeholder: ``,
-    timeBegin: stringToDate(formData.get(`event-start-time`)),
-    timeEnd: stringToDate(formData.get(`event-end-time`)),
+    "basePrice": Number(formData.get(`event-price`)),
+    "dateFrom": stringToDate(formData.get(`event-start-time`)),
+    "dateTo": stringToDate(formData.get(`event-end-time`)),
+    "destination": destinations[formData.get(`event-destination`)],
+    "isFavorite": definitionFavorite(formData.get(`event-favorite`)),
+    "type": "taxi",
 
-    destination: [],
-    photos: [],
-    type: `Flight`, // formData.get(`type-type`), коротить код разметки, дописать name value
-    //вставить placeholder,options в type
-    //console.log(formData.get(event-favorite));
-    isFavorite: false, // formData.get(`event-favorite`), // добавить функцию при при null-false
+    // type: `Flight`, // formData.get(`type-type`), коротить код разметки, дописать name value
+    // //вставить placeholder,options в type
   };
-
-  formObject.options = option[(formObject.type).toLowerCase()];
+  formObject.offers = offers[formObject.type];
+  console.log(formData.get(`event-type`));
   return formObject;
 };
 
@@ -159,8 +160,7 @@ export default class FormForEdit extends AbstractSmartComponent {
     const element = this.getElement();
     element.querySelector(`input[name = event-destination]`)
         .addEventListener(`input`, (evt) => {
-          this._editForm.city = evt.target.value;
-          this._editForm.destination = [`condimentum sed nibh vitae, sodales`];
+          this._editForm.destination = destinations[evt.target.value];
           this.rerender();
         });
     element.querySelector(`.event__type-group`).addEventListener(`click`, (evt) => {
@@ -168,12 +168,12 @@ export default class FormForEdit extends AbstractSmartComponent {
         return;
       }
       this._editForm.type = evt.target.textContent;
-      this._editForm.city = ``;
-      this._editForm.placeholder = `Moscow`;
+      console.log(evt.target.textContent);
+      this._editForm.destination = ``;
+      this._editForm.placeholder = `Brussel`;
 
-      this._editForm.options = option[(this._editForm.type).toLowerCase()];
+      this._editForm.offers = offers[(this._editForm.type).toLowerCase()];
       this.rerender();
     });
-
   }
 }
