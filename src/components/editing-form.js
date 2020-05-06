@@ -32,27 +32,25 @@ const stringToDate = (string) => { // для flatpickr другая функци
   return new Date(date[2], date[1], date[0], time[0], time[1]);
 };
 
-const parseFormData = (formData) => {
+const parseFormData = (formData, form) => {
   const definitionFavorite = (bool) => {
     if (bool) {
       return true;
     }
     return false;
   }
-
+  const transferText = form.querySelector(`.event__label`).textContent.trim().split(` `);
+  const type = transferText[0].toLowerCase();
+  console.log(transferText);
   const formObject = {
     "basePrice": Number(formData.get(`event-price`)),
     "dateFrom": stringToDate(formData.get(`event-start-time`)),
     "dateTo": stringToDate(formData.get(`event-end-time`)),
     "destination": destinations[formData.get(`event-destination`)],
     "isFavorite": definitionFavorite(formData.get(`event-favorite`)),
-    "type": "taxi",
-
-    // type: `Flight`, // formData.get(`type-type`), коротить код разметки, дописать name value
-    // //вставить placeholder,options в type
+    "type": type,
   };
   formObject.offers = offers[formObject.type];
-  console.log(formData.get(`event-type`));
   return formObject;
 };
 
@@ -109,7 +107,7 @@ export default class FormForEdit extends AbstractSmartComponent {
     const form = this.getElement().parentElement.querySelector(`.trip-events__item`);
     const formData = new FormData(form);
 
-    return parseFormData(formData);
+    return parseFormData(formData, form);
   }
 
   setDeleteButtonClickHandler(handler) {
@@ -163,13 +161,13 @@ export default class FormForEdit extends AbstractSmartComponent {
           this._editForm.destination = destinations[evt.target.value];
           this.rerender();
         });
-    element.querySelector(`.event__type-group`).addEventListener(`click`, (evt) => {
+    element.querySelector(`.event__type-list`).addEventListener(`click`, (evt) => {
       if (evt.target.tagName !== `LABEL`) {
         return;
       }
       this._editForm.type = evt.target.textContent;
       console.log(evt.target.textContent);
-      this._editForm.destination = ``;
+      this._editForm.destination = destinations['noChoose'];
       this._editForm.placeholder = `Brussel`;
 
       this._editForm.offers = offers[(this._editForm.type).toLowerCase()];

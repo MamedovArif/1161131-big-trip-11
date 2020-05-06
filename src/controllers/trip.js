@@ -10,19 +10,6 @@ import PointController, {Mode as PointControllerMode, EmptyPoint} from './point.
 import SortController from './sort.js';
 import {pointsModel} from '../main.js';
 
-// СКОРЕЕ ВСЕГО НЕ ПОНАДОБИТСЯ
-// export const createDefaultForm = (button, container) => {
-//   remove(noPointsComponent);
-
-//   const defaultFormComponent = new FormForEditComponent(defaultData);
-//   render(container, defaultFormComponent, RenderPosition.AFTERBEGIN);
-//   button.removeEventListener(`click`, createDefaultForm);
-//   defaultFormComponent.setSubmitHandler(function () {
-//     remove(defaultFormComponent);
-//     button.addEventListener(`click`, createDefaultForm);
-//   });
-// };
-
 const noPointsComponent = new NoPointsComponent();
 
 const getFilteredPoints = (points, filterType) => {

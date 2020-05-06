@@ -1,5 +1,11 @@
+import {destinations} from "../mock/route-point.js";
+
 export const createDestinationEditingForm = (object) => {
   const {destination} = object;
+
+  if (destination === destinations.noChoose) {
+    return ``;
+  }
   const photos = destination.pictures;
 
   let combinationPhotos = [];

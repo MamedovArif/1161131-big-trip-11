@@ -3,10 +3,32 @@ import {pretext} from "../const.js";
 
 // import {encode} from "he";
 
+const typesTransfer = ["taxi", "bus", "train", "ship", "transport", "drive", "flight"];
+const typesActivity = ["check-in", "sightseeing", "restaurant"];
+
+const generateTransfer = (typeMove) => {
+  return (
+    `<div class="event__type-item">
+      <input id="event-type-${typeMove}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${typeMove}">
+      <label class="event__type-label  event__type-label--${typeMove}" for="event-type-${typeMove}-1">${upperFirstElement(typeMove)}</label>
+    </div>`
+  );
+}
+
+const generateActivity = (typePlace) => {
+  return (
+    `<div class="event__type-item">
+      <input id="event-type-${typePlace}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${typePlace}">
+      <label class="event__type-label  event__type-label--${typePlace}" for="event-type-${typePlace}-1">${upperFirstElement(typePlace)}</label>
+    </div>`
+  )
+}
+
 const createHeaderEditingForm = (object) => {
   const {type, destination, dateFrom, dateTo, basePrice, isFavorite} = object;
   const placeholder = ``;
   const city = destination.name;
+  //upperFirstElement
 
   // const timeStart = encode(timeBegin);
   // const timeFinish = encode(timeEnd);
@@ -19,6 +41,16 @@ const createHeaderEditingForm = (object) => {
   const dateFinish = formatTimeDate(dateTo);
   const isChecked = (isFavorite) ? `checked` : ``;
 
+  let transfer = [];
+  for (let i = 0; i < typesTransfer.length; i++) {
+    transfer.push(generateTransfer(typesTransfer[i]));
+  }
+
+  let activity = [];
+  for (let j = 0; j < typesActivity.length; j++) {
+    activity.push(generateActivity(typesActivity[j]));
+  }
+
   return (
     `<header class="event__header">
       <div class="event__type-wrapper">
@@ -26,81 +58,32 @@ const createHeaderEditingForm = (object) => {
           <span class="visually-hidden">Choose event type</span>
           <img class="event__type-icon" width="17" height="17" src="img/icons/${type}.png" alt="Event type icon">
         </label>
-        <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox"
-        name="type-type" value="{type}">
+        <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
 
         <div class="event__type-list">
           <fieldset class="event__type-group">
             <legend class="visually-hidden">Transfer</legend>
-
-            <div class="event__type-item">
-              <input id="event-type-taxi-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="taxi">
-              <label class="event__type-label  event__type-label--taxi" for="event-type-taxi-1">Taxi</label>
-            </div>
-
-            <div class="event__type-item">
-              <input id="event-type-bus-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="bus">
-              <label class="event__type-label  event__type-label--bus" for="event-type-bus-1">Bus</label>
-            </div>
-
-            <div class="event__type-item">
-              <input id="event-type-train-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="train">
-              <label class="event__type-label  event__type-label--train" for="event-type-train-1">Train</label>
-            </div>
-
-            <div class="event__type-item">
-              <input id="event-type-ship-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="ship">
-              <label class="event__type-label  event__type-label--ship" for="event-type-ship-1">Ship</label>
-            </div>
-
-            <div class="event__type-item">
-              <input id="event-type-transport-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="transport">
-              <label class="event__type-label  event__type-label--transport" for="event-type-transport-1">Transport</label>
-            </div>
-
-            <div class="event__type-item">
-              <input id="event-type-drive-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="drive">
-              <label class="event__type-label  event__type-label--drive" for="event-type-drive-1">Drive</label>
-            </div>
-
-            <div class="event__type-item">
-              <input id="event-type-flight-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="flight" checked>
-              <label class="event__type-label  event__type-label--flight" for="event-type-flight-1">Flight</label>
-            </div>
+            ${transfer.join(`\n`)}
           </fieldset>
 
           <fieldset class="event__type-group">
             <legend class="visually-hidden">Activity</legend>
-
-            <div class="event__type-item">
-              <input id="event-type-check-in-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="check-in">
-              <label class="event__type-label  event__type-label--check-in" for="event-type-check-in-1">Check-in</label>
-            </div>
-
-            <div class="event__type-item">
-              <input id="event-type-sightseeing-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="sightseeing">
-              <label class="event__type-label  event__type-label--sightseeing" for="event-type-sightseeing-1">Sightseeing</label>
-            </div>
-
-            <div class="event__type-item">
-              <input id="event-type-restaurant-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="restaurant">
-              <label class="event__type-label  event__type-label--restaurant" for="event-type-restaurant-1">Restaurant</label>
-            </div>
+            ${activity.join(`\n`)}
           </fieldset>
         </div>
       </div>
 
       <div class="event__field-group  event__field-group--destination">
         <label class="event__label  event__type-output" for="event-destination-1">
-          ${upperFirstElement(type)} ${pretext[type]}
+          ${upperFirstElement(type)} ${pretext[type.toLowerCase()]}
         </label>
         <input class="event__input  event__input--destination"
         id="event-destination-1" type="text" name="event-destination"
         value="${city}" list="destination-list-1" placeholder=${placeholder}>
         <datalist id="destination-list-1">
           <option value="Amsterdam"></option>
-          <option value="Geneva"></option>
-          <option value="Chamonix"></option>
+          <option value="London"></option>
+          <option value="Brussel"></option>
           <option value="Saint Petersburg"></option>
         </datalist>
       </div>

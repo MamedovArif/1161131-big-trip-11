@@ -60,7 +60,6 @@ tripController.render(totalCosts, routeOfCities, tripMain);
 // });
 
 const buttonEvent = tripMain.querySelector(`.btn`);
-// let tiedСreateDefaultForm = createDefaultForm.bind(null, buttonEvent, tripEvents); // СКОРЕЕ НЕ ПОНАДОБИТСЯ
 buttonEvent.addEventListener(`click`, () => {
   tripController.createPoint();
 });

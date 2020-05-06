@@ -124,9 +124,6 @@ export default class PointController {
 
   _replaceFormToPoint() {
     document.removeEventListener(`keydown`, this._onEscKeyDown);
-    // this._formForEditComponent.reset(); // перед закрытием откатываем изменения
-    // replace(this._pointOfRouteComponent, this._formForEditComponent);
-
     if (document.contains(this._formForEditComponent.getElement())) {
       replace(this._pointOfRouteComponent, this._formForEditComponent);
     }
