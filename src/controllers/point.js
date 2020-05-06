@@ -71,7 +71,7 @@ export default class PointController {
 
     this._formForEditComponent.setSubmitHandler((evt) => {
       evt.preventDefault();
-      const data = this._formForEditComponent.getData();
+      const data = this._formForEditComponent.getData(dataOfRoute.id);
       this._onDataChange(this, dataOfRoute, data);
       this._replaceFormToPoint();
     });
