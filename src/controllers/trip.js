@@ -18,7 +18,7 @@ const getFilteredPoints = (points, filterType) => {
   switch (filterType) {
     case FilterType.FUTURE:
       dataOfPoints = points.map((littleArray) => {
-        return littleArray.filter((item) => item.timeBegin > new Date());
+        return littleArray.filter((item) => item.dateFrom > new Date());
       });
       dataOfPoints = dataOfPoints.filter((littleArray) => {
         return littleArray.length !== 0;
@@ -26,7 +26,7 @@ const getFilteredPoints = (points, filterType) => {
       break;
     case FilterType.PAST:
       dataOfPoints = points.map((littleArray) => {
-        return littleArray.filter((item) => item.timeBegin < new Date());
+        return littleArray.filter((item) => item.dateFrom < new Date());
       });
       dataOfPoints = dataOfPoints.filter((littleArray) => {
         return littleArray.length !== 0;
@@ -168,18 +168,13 @@ export default class TripController {
   }
 
   _handlerFilter(filterType) {
-    this._sortController._activeSortType = `event`;
-    this._sortController.render();
+    // this._sortController._activeSortType = `event`;
+    // this._sortController.render();
     const fullDataPoints = this._pointsModel.getPoints();
     const filteredPoints = getFilteredPoints(fullDataPoints, filterType);
     const parentList = this._container.querySelector(`.trip-days`);
     this._removePoints(); // parentList.innerHTML = ``;
     parentList.remove();
-    //  выравниваем
-    if (filterType !== FilterType.EVERYTHING) {
-      this._renderPoints(filteredPoints);
-    } else {
-      this._renderPoints(fullDataPoints);
-    }
+    this._renderPoints(filteredPoints)
   }
 }

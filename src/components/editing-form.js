@@ -32,7 +32,7 @@ const stringToDate = (string) => { // для flatpickr другая функци
   return new Date(date[2], date[1], date[0], time[0], time[1]);
 };
 
-const parseFormData = (formData, form) => {
+const parseFormData = (formData, form, id) => {
   const definitionFavorite = (bool) => {
     if (bool) {
       return true;
@@ -43,6 +43,7 @@ const parseFormData = (formData, form) => {
   const type = transferText[0].toLowerCase();
   console.log(transferText);
   const formObject = {
+    "id": id,
     "basePrice": Number(formData.get(`event-price`)),
     "dateFrom": stringToDate(formData.get(`event-start-time`)),
     "dateTo": stringToDate(formData.get(`event-end-time`)),
@@ -103,11 +104,11 @@ export default class FormForEdit extends AbstractSmartComponent {
     this.rerender();
   }
 
-  getData() {
+  getData(id) {
     const form = this.getElement().parentElement.querySelector(`.trip-events__item`);
     const formData = new FormData(form);
 
-    return parseFormData(formData, form);
+    return parseFormData(formData, form, id);
   }
 
   setDeleteButtonClickHandler(handler) {

@@ -5,31 +5,28 @@ export const FilterType = {
   FUTURE: `future`,
   PAST: `past`,
 };
+const generateOneFilter = (type, bool) => {
+  return (
+    `<div class="trip-filters__filter">
+      <input id="filter-${type}" class="trip-filters__filter-input
+      visually-hidden" type="radio" name="trip-filter" value="${type}"
+      ${(bool) ? `checked` : ``}>
+      <label class="trip-filters__filter-label" data-filter-type="${type}"
+      for="filter-${type}">${type.toUpperCase()}</label>
+    </div>`
+  )
+}
 
 const createFiltersTemplate = () => {
+  const filters = Object.values(FilterType);
+  const booleans = [true, false, false];
+  const filtersMarkup = [];
+  for (let i = 0; i < filters.length; i++) {
+    filtersMarkup.push(generateOneFilter(filters[i], booleans[i]));
+  }
   return (
     `<form class="trip-filters" action="#" method="get">
-      <div class="trip-filters__filter">
-        <input id="filter-everything" class="trip-filters__filter-input
-        visually-hidden" type="radio" name="trip-filter" value="everything" checked>
-        <label class="trip-filters__filter-label" data-filter-type="${FilterType.EVERYTHING}"
-        for="filter-everything">Everything</label>
-      </div>
-
-      <div class="trip-filters__filter">
-        <input id="filter-future" class="trip-filters__filter-input
-        visually-hidden" type="radio" name="trip-filter" value="future" >
-        <label class="trip-filters__filter-label" data-filter-type="${FilterType.FUTURE}"
-        for="filter-future">Future</label>
-      </div>
-
-      <div class="trip-filters__filter">
-        <input id="filter-past" class="trip-filters__filter-input
-        visually-hidden" type="radio" name="trip-filter" value="past" >
-        <label class="trip-filters__filter-label" data-filter-type="${FilterType.PAST}"
-        for="filter-past">Past</label>
-      </div>
-
+      ${filtersMarkup.join(`\n`)}
       <button class="visually-hidden" type="submit">Accept filter</button>
     </form>`
   );

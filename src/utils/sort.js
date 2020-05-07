@@ -6,14 +6,16 @@ const getSortOnEvent = (allPoints) => {
 };
 
 const getSortOnTime = (allPoints) => {
+  console.log(allPoints);
   let points = [];
   allPoints.map((littleArray) => {
     points = points.concat(littleArray);
   });
+  console.log(points);
   points.sort((a, b) => {
-    const durationA = durationOfPoint(a.timeBegin, a.timeEnd);
-    const durationB = durationOfPoint(b.timeBegin, b.timeEnd);
-    return durationB - durationA;
+    const durationA = durationOfPoint(a.dateFrom, a.dateTo);
+    const durationB = durationOfPoint(b.dateFrom, b.dateTo);
+    return durationA - durationB;
   });
   return points;
 };
@@ -24,7 +26,7 @@ const getSortOnPrice = (allPoints) => {
     points = points.concat(littleArray);
   });
   points.sort((a, b) => {
-    return a.price - b.price;
+    return b.basePrice - a.basePrice;
   });
   return points;
 };
@@ -40,5 +42,5 @@ export const getPointsBySort = (points, sortType) => {
     default:
       throw new Error(`getPointsBySort принимает неверный тип`);
   }
-  // return points; // Недостижимый код
+  //return points; // Недостижимый код
 };
