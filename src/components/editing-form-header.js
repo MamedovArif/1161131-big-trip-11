@@ -79,7 +79,7 @@ const createHeaderEditingForm = (object) => {
         </label>
         <select class="event__input event__input--destination"
         name="event-destination" id="destination-list-1">
-          <option disabled ${(city === ``) ? `selected` : ``}>to</option>
+          <option disabled ${(city === ``) ? `selected` : ``}></option>
           <option value="Amsterdam" ${(city === `Amsterdam`) ? `selected` : ``}>Amsterdam</option>
           <option value="London" ${(city === `London`) ? `selected` : ``}>London</option>
           <option value="Brussel" ${(city === `Brussel`) ? `selected` : ``}>Brussel</option>

@@ -92,14 +92,18 @@ export default class PointController {
       arr.splice(0, 2);
       arr.pop();
       const title = upperFirstElement(arr.join(` `));
-      console.log(title);
       const deepClone = _.cloneDeep(dataOfRoute);
-      console.log(deepClone);
       const markerObject = deepClone.offers.filter((offer) => {
         return offer.title === title;
       });
       markerObject[0].isChecked = !markerObject[0].isChecked;
-      this._onDataChange(this, dataOfRoute, deepClone); //dataOfRoute.offers
+      this._onDataChange(this, dataOfRoute, deepClone);
+    });
+
+    this._formForEditComponent.setBasePriceChangeHandler((evt) => {
+      this._onDataChange(this, dataOfRoute, Object.assign({}, dataOfRoute, {
+        basePrice: Math.abs(parseInt(evt.target.value)),
+      }));
     });
 
     switch (mode) {

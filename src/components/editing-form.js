@@ -52,12 +52,9 @@ const parseFormData = (formData, form, id) => {
   };
   formObject.offers = offers[formObject.type];
   for (let offer of formObject.offers) {
-    console.log(offer.title.toLowerCase().split(` `).join(`-`));
-    console.log(formData.get(`event-offer-${offer.title.toLowerCase().split(` `).join(`-`)}`));
     offer.isChecked =
       formData.get(`event-offer-${offer.title.toLowerCase().split(` `).join(`-`)}`);
   }
-  console.log(formObject.offers);
   return formObject;
 };
 
@@ -144,6 +141,11 @@ export default class FormForEdit extends AbstractSmartComponent {
     if (element) {
       element.addEventListener(`change`, handler);
     }
+  }
+
+  setBasePriceChangeHandler(handler) {
+    this.getElement().querySelector(`input[name = event-price]`)
+        .addEventListener(`blur`, handler);
   }
 
   _applyFlatpickr() {
