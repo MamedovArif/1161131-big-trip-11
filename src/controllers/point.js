@@ -84,6 +84,14 @@ export default class PointController {
       }));
     });
 
+    // this._formForEditComponent.setOfferChangeHandler((evt) => {  ///!!!
+    //   console.log(evt.target.id);
+    //   title
+    //   this._onDataChange(this, dataOfRoute, Object.assign({}, dataOfRoute) //, {
+    //     //isFavorite: !dataOfRoute.isFavorite,
+    //   }), dataOfRoute.offers) //dataOfRoute.offers
+    // })
+
     switch (mode) {
       case Mode.DEFAULT:
         if (oldPointComponent && oldPointEditComponent) {

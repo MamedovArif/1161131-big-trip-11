@@ -10,7 +10,7 @@
 //   `Nunc fermentum tortor ac porta dapibus.`,
 //   `In rutrum ac purus sit amet tempus.`];
 
-const cities = [`Amsterdam`, `London`, `Brussel`];
+const cities = [`Amsterdam`, `London`, `Brussel`, `Saint Petersburg`];
 
 export const destinations = {
   'noChoose': {
@@ -23,15 +23,15 @@ export const destinations = {
       "name": `Brussel`,
       "pictures": [
         {
-          "src": `http://picsum.photos/248/152?r=${Math.random()}`,
+          "src": `https://i.picsum.photos/id/630/248/152.jpg`,
           "description": "Brussel parliament building"
         },
         {
-          "src": `http://picsum.photos/248/152?r=${Math.random()}`,
+          "src": `https://i.picsum.photos/id/630/248/152.jpg`,
           "description": "Brussel parliament building"
         },
         {
-          "src": `http://picsum.photos/248/152?r=${Math.random()}`,
+          "src": `https://i.picsum.photos/id/630/248/152.jpg`,
           "description": "Brussel parliament building"
         }
       ]
@@ -42,11 +42,11 @@ export const destinations = {
       "name": `Amsterdam`,
       "pictures": [
         {
-          "src": `http://picsum.photos/248/152?r=${Math.random()}`,
+          "src": `https://i.picsum.photos/id/835/248/152.jpg`,
           "description": "Amsterdam parliament building"
         },
         {
-          "src": `http://picsum.photos/248/152?r=${Math.random()}`,
+          "src": `https://i.picsum.photos/id/835/248/152.jpg`,
           "description": "Amsterdam parliament building"
         }
       ]
@@ -57,43 +57,60 @@ export const destinations = {
           "media, professional services, research and development, tourism and " +
           "transportation.London ranks 26th out of 300 major cities for economic performance.",
       "name": `London`,
-      "pictures": [
+      "pictures": [ // http://picsum.photos/248/152?r=${Math.random()}
         {
-          "src": `http://picsum.photos/248/152?r=${Math.random()}`,
+          "src": `https://i.picsum.photos/id/1018/248/152.jpg`,
           "description": "London parliament building"
         }
       ]
     },
+  'Saint Petersburg': {
+    "description": "Saint Petersburg is a city situated on the Neva River, " +
+        "at the head of the Gulf of Finland on the Baltic Sea.",
+    "name": `Saint Petersburg`,
+    "pictures": [
+      {
+        "src": `https://i.picsum.photos/id/834/248/152.jpg`,
+        "description": "London parliament building"
+      }
+    ]
+  }
 };
 
 export const offers = {
   'taxi': [
       {
-        "title": "Choose meal",
-        "price": 180
+        title: "Choose meal",
+        price: 180,
+        isChecked: false,
       }, {
-        "title": "Upgrade to comfort class",
-        "price": 50
+        title: "Upgrade to comfort class",
+        price: 50,
+        isChecked: false,
       }
     ],
   'bus': [
       {
         title: `Choose seats`,
         price: 100,
+        isChecked: false,
       },
       {
         title: `Add luggage`,
         price: 50,
+        isChecked: false,
       },
     ],
   'train': [
       {
         title: `Travel by train`,
         price: 78,
+        isChecked: false,
       },
       {
       title: `Order tea`,
       price: 5,
+      isChecked: false,
       },
     ],
   'ship': [],
@@ -101,42 +118,50 @@ export const offers = {
   'drive': [],
   'flight': [
       {
-        "title": "Choose meal",
-        "price": 180,
+        title: "Choose meal",
+        price: 180,
+        isChecked: false,
       },
       {
-        "title": "Upgrade to comfort class",
-        "price": 50,
+        title: "Upgrade to comfort class",
+        price: 50,
+        isChecked: false,
       },
     ],
   'check-in': [
       {
         title: `Add breakfast`,
         price: 57,
+        isChecked: false,
       },
       {
         title: `Add dinner`,
         price: 60,
+        isChecked: false,
       },
     ],
   'sightseeing': [
       {
         title: `Lucnch in city`,
         price: 150,
+        isChecked: false,
       },
       {
         title: `Book tickets`,
         price: 600,
+        isChecked: false,
       },
     ],
   'restaurant': [
       {
         title: `Add meal`,
         price: 34,
+        isChecked: false,
       },
       {
         title: `Order coffee`,
         price: 456,
+        isChecked: false,
       },
     ],
 }

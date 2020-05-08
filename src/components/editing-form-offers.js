@@ -1,13 +1,17 @@
 const generateOffers = (offer) => {
-  const essence = offer.title.toLowerCase().split(` `).join(`-`);
+  //console.log(offer.isChecked);
+  const {isChecked: value, title, price} = offer;
+  const essence = title.toLowerCase().split(` `).join(`-`);
+  const checked = (value) ? `checked` : ``;
+  console.log(value);
   return (
     `<div class="event__offer-selector">
       <input class="event__offer-checkbox  visually-hidden" id="event-offer-${essence}-1"
-      type="checkbox" name="event-offer-${essence}" ${(Math.random() > 0.6) ? `checked` : ``}>
+      type="checkbox" name="event-offer-${essence}" ${checked} value="${value}">
       <label class="event__offer-label" for="event-offer-${essence}-1">
-        <span class="event__offer-title">${offer.title}</span>
+        <span class="event__offer-title">${title}</span>
         &plus;
-        &euro;&nbsp;<span class="event__offer-price">${offer.price}</span>
+        &euro;&nbsp;<span class="event__offer-price">${price}</span>
       </label>
     </div>`
   );

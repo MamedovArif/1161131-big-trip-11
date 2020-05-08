@@ -41,10 +41,9 @@ const parseFormData = (formData, form, id) => {
   }
   const transferText = form.querySelector(`.event__label`).textContent.trim().split(` `);
   const type = transferText[0].toLowerCase();
-  console.log(transferText);
   const formObject = {
     "id": id,
-    "basePrice": Number(formData.get(`event-price`)),
+    "basePrice": Math.abs(parseInt(formData.get(`event-price`))),
     "dateFrom": stringToDate(formData.get(`event-start-time`)),
     "dateTo": stringToDate(formData.get(`event-end-time`)),
     "destination": destinations[formData.get(`event-destination`)],
@@ -52,6 +51,13 @@ const parseFormData = (formData, form, id) => {
     "type": type,
   };
   formObject.offers = offers[formObject.type];
+  for (let offer of formObject.offers) {
+    console.log(offer.title.toLowerCase().split(` `).join(`-`));
+    console.log(formData.get(`event-offer-${offer.title.toLowerCase().split(` `).join(`-`)}`));
+    offer.isChecked =
+      formData.get(`event-offer-${offer.title.toLowerCase().split(` `).join(`-`)}`);
+  }
+  console.log(formObject.offers);
   return formObject;
 };
 
@@ -133,6 +139,11 @@ export default class FormForEdit extends AbstractSmartComponent {
         .addEventListener(`change`, handler);
   }
 
+  setOfferChangeHandler(handler) { ///////!!!!
+    this.getElement().querySelector(`.event__available-offers`)
+        .addEventListener(`change`, handler);
+  }
+
   _applyFlatpickr() {
     if (this._flatpickr) {
       this._flatpickr.destroy();
@@ -157,8 +168,8 @@ export default class FormForEdit extends AbstractSmartComponent {
 
   _subscribeOnEvents() {
     const element = this.getElement();
-    element.querySelector(`input[name = event-destination]`)
-        .addEventListener(`input`, (evt) => {
+    element.querySelector(`select[name = event-destination]`)
+        .addEventListener(`change`, (evt) => {
           this._editForm.destination = destinations[evt.target.value];
           this.rerender();
         });
@@ -167,9 +178,7 @@ export default class FormForEdit extends AbstractSmartComponent {
         return;
       }
       this._editForm.type = evt.target.textContent;
-      console.log(evt.target.textContent);
       this._editForm.destination = destinations['noChoose'];
-      this._editForm.placeholder = `Brussel`;
 
       this._editForm.offers = offers[(this._editForm.type).toLowerCase()];
       this.rerender();

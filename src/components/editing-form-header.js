@@ -77,15 +77,15 @@ const createHeaderEditingForm = (object) => {
         <label class="event__label  event__type-output" for="event-destination-1">
           ${upperFirstElement(type)} ${pretext[type.toLowerCase()]}
         </label>
-        <input class="event__input  event__input--destination"
-        id="event-destination-1" type="text" name="event-destination"
-        value="${city}" list="destination-list-1" placeholder=${placeholder}>
-        <datalist id="destination-list-1">
-          <option value="Amsterdam"></option>
-          <option value="London"></option>
-          <option value="Brussel"></option>
-          <option value="Saint Petersburg"></option>
-        </datalist>
+        <select class="event__input event__input--destination"
+        name="event-destination" id="destination-list-1">
+          <option disabled ${(city === ``) ? `selected` : ``}>to</option>
+          <option value="Amsterdam" ${(city === `Amsterdam`) ? `selected` : ``}>Amsterdam</option>
+          <option value="London" ${(city === `London`) ? `selected` : ``}>London</option>
+          <option value="Brussel" ${(city === `Brussel`) ? `selected` : ``}>Brussel</option>
+          <option value="Saint Petersburg" ${(city === `Saint Petersburg`) ? `selected` : ``}>Saint Petersburg</option>
+        </select>
+
       </div>
 
       <div class="event__field-group  event__field-group--time">
@@ -107,7 +107,7 @@ const createHeaderEditingForm = (object) => {
           <span class="visually-hidden">Price</span>
           &euro;
         </label>
-        <input class="event__input  event__input--price" id="event-price-1" type="text"
+        <input class="event__input  event__input--price" id="event-price-1" type="number"
         name="event-price" value="${basePrice}">
       </div>
 

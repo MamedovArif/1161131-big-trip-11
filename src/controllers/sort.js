@@ -49,7 +49,6 @@ export default class SortController {
   }
 
   throwDateOnTimeAndPrice() {
-    console.log(this._activeSortType);
     if (this._activeSortType !== SortType.EVENT) {
       const parentList = this._container.querySelector(`.trip-days`);
       parentList.querySelector(`.day__counter`).textContent = ``;
