@@ -62,6 +62,7 @@ export default class TripController {
     this._pointController = null;
 
     filterComponent.setFilterTypeChangeHandler(this._handlerFilter);
+
     this._pointsModel.setSortChangeHandler(this._onSortChange);
 
     this._sortController = null;
@@ -79,7 +80,7 @@ export default class TripController {
       return;
     }
 
-    this._sortController = new SortController(this._container, pointsModel);
+    this._sortController = new SortController(this._container, pointsModel, filterComponent); //per
     this._sortController.render();
 
     this._renderPoints(fullDataPoints);
@@ -119,18 +120,23 @@ export default class TripController {
     days.forEach((day) => {
       day.remove();
     });
+    this._container.querySelector(`.trip-days`).remove(); // sin
   }
 
   _updatePoints() {
     this._removePoints();
     if (this._pointsModel._activeSortType !== `event`) {
-      const parentList = this._container.querySelector(`.trip-days`);
-      parentList.insertAdjacentHTML(`beforeend`, generateDays(new Date(), 0));
-      parentList.querySelector(`.day__counter`).textContent = ``;
-      parentList.querySelector(`.day__date`).textContent = ``;
+      // const parentList = this._container.querySelector(`.trip-days`);
+      // parentList.insertAdjacentHTML(`beforeend`, generateDays(new Date(), 0));
+      // parentList.querySelector(`.day__counter`).textContent = ``;
+      // parentList.querySelector(`.day__date`).textContent = ``;
 
-      renderPoints(this._container.querySelector(`.trip-events__list`),
-          this._pointsModel.getPoints(), this._onDataChange, this._onViewChange);
+      // renderPoints(this._container.querySelector(`.trip-events__list`),
+      //     this._pointsModel.getPoints(), this._onDataChange, this._onViewChange);
+      this._renderPoints(this._pointsModel.getPoints());
+      const parentList = this._container.querySelector(`.trip-days`);
+      parentList.querySelector(`.day__counter`).textContent = ``;
+      parentList.querySelector(`.day__date`).textContent = ``; // sin
     } else {
       const fullDataPoints = this._pointsModel.getPoints();
       this._renderPoints(fullDataPoints);
@@ -168,13 +174,13 @@ export default class TripController {
   }
 
   _handlerFilter(filterType) {
-    // this._sortController._activeSortType = `event`;
-    // this._sortController.render();
     const fullDataPoints = this._pointsModel.getPoints();
     const filteredPoints = getFilteredPoints(fullDataPoints, filterType);
     const parentList = this._container.querySelector(`.trip-days`);
     this._removePoints(); // parentList.innerHTML = ``;
     parentList.remove();
-    this._renderPoints(filteredPoints)
+    this._renderPoints(filteredPoints);
+
+    this._sortController.throwDateOnTimeAndPrice();
   }
 }

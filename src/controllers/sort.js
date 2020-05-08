@@ -3,7 +3,7 @@ import SortComponent from "../components/sort.js";
 import {render, replace, RenderPosition} from "../utils/render.js";
 
 export default class SortController {
-  constructor(container, pointsModel) {
+  constructor(container, pointsModel, filterComponent) {
     this._container = container;
     this._pointsModel = pointsModel;
 
@@ -14,6 +14,8 @@ export default class SortController {
     this._onSortChange = this._onSortChange.bind(this);
 
     this._pointsModel.setDataChangeHandler(this._onDataChange);
+
+    this._filterComponent = filterComponent; // per
   }
 
   render() {
@@ -27,8 +29,8 @@ export default class SortController {
 
     const oldComponent = this._sortComponent;
 
-    this._sortComponent = new SortComponent(sorts); //
-    this._sortComponent.setSortChangeHandler(this._onSortChange);
+    this._sortComponent = new SortComponent(sorts);
+    this._sortComponent.setSortChangeHandler(this._onSortChange, this._filterComponent);
 
     if (oldComponent) {
       replace(this._sortComponent, oldComponent);
@@ -44,5 +46,14 @@ export default class SortController {
 
   _onDataChange() {
     this.render();
+  }
+
+  throwDateOnTimeAndPrice() {
+    console.log(this._activeSortType);
+    if (this._activeSortType !== SortType.EVENT) {
+      const parentList = this._container.querySelector(`.trip-days`);
+      parentList.querySelector(`.day__counter`).textContent = ``;
+      parentList.querySelector(`.day__date`).textContent = ``;
+    }
   }
 }

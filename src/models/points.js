@@ -12,8 +12,6 @@ export default class Points {
   }
 
   getPoints() {
-    console.log(this._points);
-    console.log(this._activeSortType);
     return getPointsBySort(this._points, this._activeSortType);
   }
 

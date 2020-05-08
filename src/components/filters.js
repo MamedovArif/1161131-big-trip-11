@@ -69,4 +69,14 @@ export default class Filter extends AbstractComponent {
       handler(this._currenFilterType);
     });
   }
+
+  returnToEverything() {
+    if (this._currenFilterType === FilterType.EVERYTHING) {
+      return;
+    };
+    document.querySelector(`#filter-${this._currenFilterType}`).removeAttribute(`checked`);
+    this._currenFilterType = FilterType.EVERYTHING;
+    const input = document.querySelector(`#filter-${FilterType.EVERYTHING}`);
+    input.setAttribute(`checked`, true);
+  }
 }
