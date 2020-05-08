@@ -1,9 +1,7 @@
 const generateOffers = (offer) => {
-  //console.log(offer.isChecked);
   const {isChecked: value, title, price} = offer;
   const essence = title.toLowerCase().split(` `).join(`-`);
   const checked = (value) ? `checked` : ``;
-  console.log(value);
   return (
     `<div class="event__offer-selector">
       <input class="event__offer-checkbox  visually-hidden" id="event-offer-${essence}-1"

@@ -1,7 +1,9 @@
 import PointOfRouteComponent from '../components/route-point.js';
 import FormForEditComponent from '../components/editing-form.js';
 import {render, RenderPosition, remove, replace} from '../utils/render.js';
+import {upperFirstElement} from '../utils/common.js';
 import {option} from "../mock/route-point.js";
+import {cloneDeep} from 'lodash';
 
 export const Mode = {
   ADDING: `adding`,
@@ -84,13 +86,21 @@ export default class PointController {
       }));
     });
 
-    // this._formForEditComponent.setOfferChangeHandler((evt) => {  ///!!!
-    //   console.log(evt.target.id);
-    //   title
-    //   this._onDataChange(this, dataOfRoute, Object.assign({}, dataOfRoute) //, {
-    //     //isFavorite: !dataOfRoute.isFavorite,
-    //   }), dataOfRoute.offers) //dataOfRoute.offers
-    // })
+    this._formForEditComponent.setOfferChangeHandler((evt) => {  ///!!!
+      const id = evt.target.id;
+      const arr = id.split(`-`);
+      arr.splice(0, 2);
+      arr.pop();
+      const title = upperFirstElement(arr.join(` `));
+      console.log(title);
+      const deepClone = _.cloneDeep(dataOfRoute);
+      console.log(deepClone);
+      const markerObject = deepClone.offers.filter((offer) => {
+        return offer.title === title;
+      });
+      markerObject[0].isChecked = !markerObject[0].isChecked;
+      this._onDataChange(this, dataOfRoute, deepClone); //dataOfRoute.offers
+    });
 
     switch (mode) {
       case Mode.DEFAULT:

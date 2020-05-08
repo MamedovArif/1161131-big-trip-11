@@ -140,8 +140,10 @@ export default class FormForEdit extends AbstractSmartComponent {
   }
 
   setOfferChangeHandler(handler) { ///////!!!!
-    this.getElement().querySelector(`.event__available-offers`)
-        .addEventListener(`change`, handler);
+    const element = this.getElement().querySelector(`.event__available-offers`);
+    if (element) {
+      element.addEventListener(`change`, handler);
+    }
   }
 
   _applyFlatpickr() {
