@@ -9,6 +9,7 @@ import {FilterType} from '../components/filters.js';
 import PointController, {Mode as PointControllerMode, EmptyPoint} from './point.js';
 import SortController from './sort.js';
 import {pointsModel, buttonEvent} from '../main.js';
+import {SortType} from "../const.js";
 
 const noPointsComponent = new NoPointsComponent();
 
@@ -95,6 +96,12 @@ export default class TripController {
       return;
     }
     buttonEvent.setAttribute('disabled', 'disabled');
+    //сбросить сортировку и фильтрацию
+    console.log('sori');
+    this._sortController.throwSort();
+    this._pointsModel._activeSortType = SortType.EVENT;
+    this._onSortChange()
+
     const tripListElement = this._container.querySelector(`.trip-days`);
     tripListElement.insertAdjacentHTML(`afterbegin`, generateDays(new Date(), -1));
     tripListElement.querySelector(`.day__counter`).textContent = ``;
@@ -139,7 +146,7 @@ export default class TripController {
     }
   }
 
-  _onSortChange() {
+  _onSortChange() { // название не совсем корректное
     this._updatePoints();
   }
 
@@ -147,6 +154,7 @@ export default class TripController {
     if (oldPoint === EmptyPoint) {
       this._creatingPoint = null; // обнуляем значение creatingPoint
       buttonEvent.removeAttribute('disabled');
+
       if (newPoint === null) {
         pointController.destroy();
         this._updatePoints();

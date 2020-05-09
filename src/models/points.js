@@ -61,21 +61,28 @@ export default class Points {
     if (foundYourHome === false) {
       const newArray = [];
       newArray.push(point);
-      if (this._points[0][0].dateFrom > newPointDate) {
-        this._points.unshift(newArray);
-      } else {
-        for (let i = 1; i < this._points.length; i++) {
-          if (this._points[i][0].dateFrom > newPointDate) {
-            this._points.splice(i - 1, 0, newArray);
+      // if (this._points[0][0].dateFrom > newPointDate) {
+      //   this._points.unshift(newArray);
+      //   this._callHandlers(this._sortChangeHandlers);
+      //   foundYourHome = true;
+      // } else {
+
+        for (let j = 0; j < this._points.length; j++) {
+          if (this._points[j][0].dateFrom > newPointDate) {
+            this._points.splice(j, 0, newArray); ///
+            this._callHandlers(this._sortChangeHandlers);
             foundYourHome = true;
+            break;
           }
         }
-      }
+      // }
     }
     if (foundYourHome === false) {
       const newArray = [];
       newArray.push(point);
       this._points.push(newArray);
+      this._callHandlers(this._sortChangeHandlers);
+      foundYourHome = true;
     }
     console.log(this._points);
   }

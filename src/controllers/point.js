@@ -67,7 +67,7 @@ export default class PointController {
       document.addEventListener(`keydown`, this._onEscKeyDown);
     });
 
-    this._formForEditComponent.setCloseHandler(() => {
+    this._formForEditComponent.setCloseHandler(() => { //сброс значений
       this._replaceFormToPoint();
     });
 

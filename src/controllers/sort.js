@@ -30,7 +30,7 @@ export default class SortController {
     const oldComponent = this._sortComponent;
 
     this._sortComponent = new SortComponent(sorts);
-    this._sortComponent.setSortChangeHandler(this._onSortChange, this._filterComponent);
+    this._sortComponent.setSortChangeHandler(this._onSortChange, this._filterComponent); // per
 
     if (oldComponent) {
       replace(this._sortComponent, oldComponent);
@@ -53,6 +53,13 @@ export default class SortController {
       const parentList = this._container.querySelector(`.trip-days`);
       parentList.querySelector(`.day__counter`).textContent = ``;
       parentList.querySelector(`.day__date`).textContent = ``;
+    }
+  }
+
+  throwSort() {
+    if (this._activeSortType !== SortType.EVENT) {
+      this._activeSortType = SortType.EVENT;
+      this._onDataChange();
     }
   }
 }
