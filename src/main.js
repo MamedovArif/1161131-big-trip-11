@@ -50,7 +50,7 @@ pointsModel.setPoints(fullDataPoints);
 const tripController = new TripController(tripEvents, pointsModel);
 tripController.render(totalCosts, routeOfCities, tripMain);
 
-// menuComponent.setOnChange((menuItem) => {  ///// 12
+// menuComponent.setOnChange((menuItem) => {  ///// 12 stats
 //   switch (menuItem) {
 //     case MenuItem.NEW_EVENT:
 //       menuComponent.setActiveItem(MenuItem.TABLE);
@@ -59,7 +59,8 @@ tripController.render(totalCosts, routeOfCities, tripMain);
 //   }
 // });
 
-const buttonEvent = tripMain.querySelector(`.btn`);
+export const buttonEvent = tripMain.querySelector(`.btn`);
 buttonEvent.addEventListener(`click`, () => {
   tripController.createPoint();
+  //buttonEvent.setAttribute('disabled', 'disabled');
 });

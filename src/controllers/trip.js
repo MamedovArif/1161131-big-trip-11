@@ -8,7 +8,7 @@ import {filterComponent} from '../main.js';
 import {FilterType} from '../components/filters.js';
 import PointController, {Mode as PointControllerMode, EmptyPoint} from './point.js';
 import SortController from './sort.js';
-import {pointsModel} from '../main.js';
+import {pointsModel, buttonEvent} from '../main.js';
 
 const noPointsComponent = new NoPointsComponent();
 
@@ -52,7 +52,7 @@ const renderPoints = (parent, points, onDataChange, onViewChange) => {
 export default class TripController {
   constructor(container, model) {
     this._container = container;
-    this._showedPointControllers = [];
+    this._showedPointControllers = []; /////////!!!!!!
     this._pointsModel = model;
 
     this._handlerFilter = this._handlerFilter.bind(this);
@@ -94,8 +94,11 @@ export default class TripController {
     if (this._creatingPoint) {
       return;
     }
+    buttonEvent.setAttribute('disabled', 'disabled');
     const tripListElement = this._container.querySelector(`.trip-days`);
     tripListElement.insertAdjacentHTML(`afterbegin`, generateDays(new Date(), -1));
+    tripListElement.querySelector(`.day__counter`).textContent = ``;
+    tripListElement.querySelector(`.day__date`).textContent = ``;
     const parentAdd = tripListElement.querySelector(`.trip-days__item`);
     this._creatingPoint = new PointController(parentAdd,
         this._onDataChange, this._onViewChange);
@@ -126,13 +129,6 @@ export default class TripController {
   _updatePoints() {
     this._removePoints();
     if (this._pointsModel._activeSortType !== `event`) {
-      // const parentList = this._container.querySelector(`.trip-days`);
-      // parentList.insertAdjacentHTML(`beforeend`, generateDays(new Date(), 0));
-      // parentList.querySelector(`.day__counter`).textContent = ``;
-      // parentList.querySelector(`.day__date`).textContent = ``;
-
-      // renderPoints(this._container.querySelector(`.trip-events__list`),
-      //     this._pointsModel.getPoints(), this._onDataChange, this._onViewChange);
       this._renderPoints(this._pointsModel.getPoints());
       const parentList = this._container.querySelector(`.trip-days`);
       parentList.querySelector(`.day__counter`).textContent = ``;
@@ -149,12 +145,13 @@ export default class TripController {
 
   _onDataChange(pointController, oldPoint, newPoint) {
     if (oldPoint === EmptyPoint) {
-      this._creatingPoint = null; // открыта ли какая-тa задача
+      this._creatingPoint = null; // обнуляем значение creatingPoint
+      buttonEvent.removeAttribute('disabled');
       if (newPoint === null) {
         pointController.destroy();
         this._updatePoints();
       } else {
-        this._pointsModel.addPoint(newPoint);
+        this._pointsModel.addPoint(newPoint);  ////////////
         pointController.render(newPoint, PointControllerMode.DEFAULT);
       }
       this._showedPointControllers = [].concat(pointController, this._showedPointControllers);

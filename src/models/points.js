@@ -46,9 +46,38 @@ export default class Points {
     this._points = pointsWithoutOne;
   }
 
-  addPoint(point) { // не понятно к какой дате добавляем 12
-    this._points = [].concat(point, this._points);
-    this._callHandlers(this._dataChangeHandlers); // какие же обработчики вызываются
+  addPoint(point) { // куда вставляем новую точку
+    const newPointDate = point.dateFrom;
+    let foundYourHome = false;
+    for (let i = 0; i < this._points.length; i++) {
+      if (this._points[i][0].dateFrom.getMonth() === newPointDate.getMonth() &&
+        this._points[i][0].dateFrom.getDate() === newPointDate.getDate()) {
+        this._points[i].push(point);
+        this._points[i].sort((a, b) => a.dateFrom - b.dateFrom);
+        this._callHandlers(this._sortChangeHandlers);
+        foundYourHome = true;
+      }
+    }
+    if (foundYourHome === false) {
+      const newArray = [];
+      newArray.push(point);
+      if (this._points[0][0].dateFrom > newPointDate) {
+        this._points.unshift(newArray);
+      } else {
+        for (let i = 1; i < this._points.length; i++) {
+          if (this._points[i][0].dateFrom > newPointDate) {
+            this._points.splice(i - 1, 0, newArray);
+            foundYourHome = true;
+          }
+        }
+      }
+    }
+    if (foundYourHome === false) {
+      const newArray = [];
+      newArray.push(point);
+      this._points.push(newArray);
+    }
+    console.log(this._points);
   }
 
   updatePoint(id, newPoint) {
