@@ -4,6 +4,7 @@ import {render, RenderPosition} from './utils/render.js';
 import {generatePoints} from './mock/route-point.js';
 import TripController from './controllers/trip.js';
 import PointsModel from './models/points.js';
+import FilterController from './controllers/filter.js';
 
 const NUMBER_OF_STOPS = 7;
 
@@ -14,8 +15,6 @@ const tripMain = document.querySelector(`.trip-main`);
 
 const menuComponent = new MenuComponent();
 render(tripControls.children[0], menuComponent, RenderPosition.AFTEREND);
-export const filterComponent = new FilterComponent();
-render(tripControls, filterComponent, RenderPosition.BEFOREEND);
 
 let allDataPoints = [];
 let totalCosts = [];
@@ -47,6 +46,8 @@ for (let i = 0; i < allDataPoints.length - 1; i++) {
 export const pointsModel = new PointsModel();
 pointsModel.setPoints(fullDataPoints);
 
+export const filterController = new FilterController(tripControls, pointsModel); ////////ffffffff
+
 const tripController = new TripController(tripEvents, pointsModel);
 tripController.render(totalCosts, routeOfCities, tripMain);
 
@@ -62,5 +63,4 @@ tripController.render(totalCosts, routeOfCities, tripMain);
 export const buttonEvent = tripMain.querySelector(`.btn`);
 buttonEvent.addEventListener(`click`, () => {
   tripController.createPoint();
-  //buttonEvent.setAttribute('disabled', 'disabled');
 });

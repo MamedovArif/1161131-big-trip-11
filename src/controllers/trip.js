@@ -2,45 +2,14 @@ import RouteComponent from '../components/route.js';
 import CostComponent from '../components/cost.js';
 import NoPointsComponent from '../components/no-points.js';
 import ListOfDaysComponent, {generateDays} from '../components/list-trips.js';
-
 import {render, RenderPosition} from '../utils/render.js';
-import {filterComponent} from '../main.js';
-import {FilterType} from '../components/filters.js';
+import {filterController} from '../main.js';
 import PointController, {Mode as PointControllerMode, EmptyPoint} from './point.js';
 import SortController from './sort.js';
 import {pointsModel, buttonEvent} from '../main.js';
-import {SortType} from "../const.js";
+import {SortType, FilterType} from "../const.js";
 
 const noPointsComponent = new NoPointsComponent();
-
-const getFilteredPoints = (points, filterType) => {
-  let dataOfPoints;
-
-  switch (filterType) {
-    case FilterType.FUTURE:
-      dataOfPoints = points.map((littleArray) => {
-        return littleArray.filter((item) => item.dateFrom > new Date());
-      });
-      dataOfPoints = dataOfPoints.filter((littleArray) => {
-        return littleArray.length !== 0;
-      });
-      break;
-    case FilterType.PAST:
-      dataOfPoints = points.map((littleArray) => {
-        return littleArray.filter((item) => item.dateFrom < new Date());
-      });
-      dataOfPoints = dataOfPoints.filter((littleArray) => {
-        return littleArray.length !== 0;
-      });
-      break;
-    case FilterType.EVERYTHING:
-      dataOfPoints = points;
-      break;
-    default:
-      throw new Error(`функция getFilteredPoints принимает неверные аргументы`);
-  }
-  return dataOfPoints;
-};
 
 const renderPoints = (parent, points, onDataChange, onViewChange) => {
   return points.map((point) => {
@@ -62,26 +31,28 @@ export default class TripController {
     this._onSortChange = this._onSortChange.bind(this);
     this._pointController = null;
 
-    filterComponent.setFilterTypeChangeHandler(this._handlerFilter);
-
+    this._pointsModel.setFilterChangeHandler(this._handlerFilter); //ffffffffff!!!!!!!
     this._pointsModel.setSortChangeHandler(this._onSortChange);
 
     this._sortController = null;
+    this._filterController = filterController;
 
     this._listDays = null;
     this._creatingPoint = null;
   }
 
   render(totalCosts, routeOfCities, header) {
-    const fullDataPoints = this._pointsModel.getPoints();
-    const isAllPointsAbsence = fullDataPoints.length === 0;
+    this._filterController.render();
 
+    const fullDataPoints = this._pointsModel.getPoints();
+
+    const isAllPointsAbsence = fullDataPoints.length === 0;
     if (isAllPointsAbsence) {
       render(this._container, noPointsComponent, RenderPosition.BEFOREEND);
       return;
     }
 
-    this._sortController = new SortController(this._container, pointsModel, filterComponent); //per
+    this._sortController = new SortController(this._container, pointsModel, this._filterController); // filterComponent); //per
     this._sortController.render();
 
     this._renderPoints(fullDataPoints);
@@ -97,10 +68,12 @@ export default class TripController {
     }
     buttonEvent.setAttribute('disabled', 'disabled');
     //сбросить сортировку и фильтрацию
-    console.log('sori');
     this._sortController.throwSort();
     this._pointsModel._activeSortType = SortType.EVENT;
-    this._onSortChange()
+    this._onSortChange();
+    this._filterController.throwFilter();
+    this._pointsModel._activeFilterType = FilterType.EVERYTHING;
+    this._handlerFilter();
 
     const tripListElement = this._container.querySelector(`.trip-days`);
     tripListElement.insertAdjacentHTML(`afterbegin`, generateDays(new Date(), -1));
@@ -135,14 +108,11 @@ export default class TripController {
 
   _updatePoints() {
     this._removePoints();
+    this._renderPoints(this._pointsModel.getPoints());
     if (this._pointsModel._activeSortType !== `event`) {
-      this._renderPoints(this._pointsModel.getPoints());
       const parentList = this._container.querySelector(`.trip-days`);
       parentList.querySelector(`.day__counter`).textContent = ``;
       parentList.querySelector(`.day__date`).textContent = ``; // sin
-    } else {
-      const fullDataPoints = this._pointsModel.getPoints();
-      this._renderPoints(fullDataPoints);
     }
   }
 
@@ -179,10 +149,9 @@ export default class TripController {
   }
 
   _handlerFilter(filterType) {
-    const fullDataPoints = this._pointsModel.getPoints();
-    const filteredPoints = getFilteredPoints(fullDataPoints, filterType);
+    const filteredPoints = this._pointsModel.getPoints();
     const parentList = this._container.querySelector(`.trip-days`);
-    this._removePoints(); // parentList.innerHTML = ``;
+    this._removePoints();
     parentList.remove();
     this._renderPoints(filteredPoints);
 

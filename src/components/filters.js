@@ -1,82 +1,48 @@
 import AbstractComponent from "./abstract-component.js";
 
-export const FilterType = {
-  EVERYTHING: `everything`,
-  FUTURE: `future`,
-  PAST: `past`,
-};
-const generateOneFilter = (type, bool) => {
+const generateOneFilter = (object) => {
+  const {name, isChecked} = object;
   return (
     `<div class="trip-filters__filter">
-      <input id="filter-${type}" class="trip-filters__filter-input
-      visually-hidden" type="radio" name="trip-filter" value="${type}"
-      ${(bool) ? `checked` : ``}>
-      <label class="trip-filters__filter-label" data-filter-type="${type}"
-      for="filter-${type}">${type.toUpperCase()}</label>
+      <input id="filter-${name}" class="trip-filters__filter-input
+      visually-hidden" type="radio" name="trip-filter" value="${name}"
+      ${(isChecked) ? `checked` : ``}>
+      <label class="trip-filters__filter-label" data-filter-type="${name}"
+      for="filter-${name}">${name.toUpperCase()}</label>
     </div>`
-  )
-}
+  );
+};
 
-const createFiltersTemplate = () => {
-  const filters = Object.values(FilterType);
-  const booleans = [true, false, false];
-  const filtersMarkup = [];
-  for (let i = 0; i < filters.length; i++) {
-    filtersMarkup.push(generateOneFilter(filters[i], booleans[i]));
-  }
+const createFiltersTemplate = (filters) => {
+  const filtersMarkup = filters.map((item) => generateOneFilter(item)).join(`\n`);
   return (
     `<form class="trip-filters" action="#" method="get">
-      ${filtersMarkup.join(`\n`)}
+      ${filtersMarkup}
       <button class="visually-hidden" type="submit">Accept filter</button>
     </form>`
   );
 };
 
+const FILTER_ID_PREFIX = `filter-`;
+
+const getFilterNameById = (id) => {
+  return id.substring(FILTER_ID_PREFIX.length);
+};
+
 export default class Filter extends AbstractComponent {
-  constructor() {
+  constructor(filters) {
     super();
-    this._currenFilterType = FilterType.EVERYTHING;
+    this._filters = filters;
   }
 
   getTemplate() {
-    return createFiltersTemplate();
+    return createFiltersTemplate(this._filters);
   }
 
-  getFilterType() {
-    return this._currenFilterType;
-  }
-
-  setFilterTypeChangeHandler(handler) {
-    this.getElement().addEventListener(`click`, (evt) => {
-      evt.preventDefault();
-
-      if (evt.target.tagName !== `LABEL`) {
-        return;
-      }
-
-      const filterType = evt.target.dataset.filterType;
-
-      if (this._currenFilterType === filterType) {
-        return;
-      }
-      document.querySelector(`#filter-${this._currenFilterType}`).removeAttribute(`checked`);
-      const id = evt.target.getAttribute(`for`);
-      const input = document.querySelector(`#${id}`);
-      input.setAttribute(`checked`, true);
-
-      this._currenFilterType = filterType;
-
-      handler(this._currenFilterType);
+  setFilterChangeHandler(handler) {
+    this.getElement().addEventListener(`change`, (evt) => {
+      const filterName = getFilterNameById(evt.target.id);
+      handler(filterName);
     });
-  }
-
-  returnToEverything() {
-    if (this._currenFilterType === FilterType.EVERYTHING) {
-      return;
-    };
-    document.querySelector(`#filter-${this._currenFilterType}`).removeAttribute(`checked`);
-    this._currenFilterType = FilterType.EVERYTHING;
-    const input = document.querySelector(`#filter-${FilterType.EVERYTHING}`);
-    input.setAttribute(`checked`, true);
   }
 }
