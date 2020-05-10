@@ -8,7 +8,7 @@ import PointsModel from './models/points.js';
 import FilterController from './controllers/filter.js';
 
 //const NUMBER_OF_STOPS = 7;
-const AUTHORIZATION = `Basic hlkgjlfjljl56769hg`; //
+const AUTHORIZATION = `Basic YWxhZGRp7jhoojp96ngio4r66yj5ht7uYW1l`; //
 
 const tripControls = document.querySelector(`.trip-controls`);
 
@@ -23,7 +23,7 @@ let totalCosts = [];
 let routeOfCities = new Set();
 
 //allDataPoints = generatePoints(NUMBER_OF_STOPS);
-const api = new API();
+const api = new API(AUTHORIZATION);
 
 // allDataPoints.sort((a, b) => a.dateFrom - b.dateFrom);
 
@@ -68,7 +68,17 @@ buttonEvent.addEventListener(`click`, () => {
   tripController.createPoint();
 });
 
-api.getPoints(AUTHORIZATION)
+api.getCities()
+  .then((cities) => {
+    console.log(cities);
+  });
+
+api.getAddOffers()
+  .then((offerObject) => {
+    console.log(offerObject);
+  });
+
+api.getPoints()
   .then((allDataPoints) => {
     allDataPoints.sort((a, b) => a.dateFrom - b.dateFrom);
 
@@ -80,7 +90,6 @@ api.getPoints(AUTHORIZATION)
     let fullDataPoints = [[allDataPoints[0]]];
 
     for (let i = 0; i < allDataPoints.length - 1; i++) {
-
       if (allDataPoints[i].dateFrom.getDate() === allDataPoints[i + 1].dateFrom.getDate() &&
           allDataPoints[i].dateFrom.getMonth() === allDataPoints[i + 1].dateFrom.getMonth()) {
         fullDataPoints[fullDataPoints.length - 1].push(allDataPoints[i + 1]);

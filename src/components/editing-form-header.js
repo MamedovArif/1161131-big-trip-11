@@ -1,5 +1,6 @@
 import {formatTime, formatTimeDate, upperFirstElement} from '../utils/common.js';
 import {pretext} from "../const.js";
+import {api} from "../main.js";
 
 // import {encode} from "he";
 
@@ -23,6 +24,17 @@ const generateActivity = (typePlace) => {
     </div>`
   )
 }
+// const destinations = api.getCities()
+//   .then((object) => {
+//     return object;
+//   });
+
+// const generateCities = (object) => {
+//   const {name} = object;
+//   return (
+//     `<option value="${name}" ${(city === ${name}) ? `selected` : ``}>${name}</option>`
+//   )
+// }
 
 const createHeaderEditingForm = (object) => {
   const {type, destination, dateFrom, dateTo, basePrice, isFavorite} = object;
@@ -50,6 +62,11 @@ const createHeaderEditingForm = (object) => {
   for (let j = 0; j < typesActivity.length; j++) {
     activity.push(generateActivity(typesActivity[j]));
   }
+
+  // let cities = [];
+  // for (let w = 0; w < destinations.length; w++) {
+  //   cities.push(generateCities(destinations[w]));
+  // }
 
   return (
     `<header class="event__header">
@@ -80,10 +97,7 @@ const createHeaderEditingForm = (object) => {
         <select class="event__input event__input--destination"
         name="event-destination" id="destination-list-1">
           <option disabled ${(city === ``) ? `selected` : ``}></option>
-          <option value="Amsterdam" ${(city === `Amsterdam`) ? `selected` : ``}>Amsterdam</option>
-          <option value="London" ${(city === `London`) ? `selected` : ``}>London</option>
-          <option value="Brussel" ${(city === `Brussel`) ? `selected` : ``}>Brussel</option>
-          <option value="Saint Petersburg" ${(city === `Saint Petersburg`) ? `selected` : ``}>Saint Petersburg</option>
+          <option> {cities.join()}</option>
         </select>
 
       </div>
