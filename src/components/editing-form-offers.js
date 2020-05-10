@@ -1,10 +1,13 @@
-const generateOffers = (offer, price, essence) => {
+const generateOffers = (offer) => {
+  const {isChecked: value, title, price} = offer;
+  const essence = title.toLowerCase().split(` `).join(`-`);
+  const checked = (value) ? `checked` : ``;
   return (
     `<div class="event__offer-selector">
       <input class="event__offer-checkbox  visually-hidden" id="event-offer-${essence}-1"
-      type="checkbox" name="event-offer-${essence}" ${(Math.random() > 0.6) ? `checked` : ``}>
+      type="checkbox" name="event-offer-${essence}" ${checked} value="${value}">
       <label class="event__offer-label" for="event-offer-${essence}-1">
-        <span class="event__offer-title">${offer}</span>
+        <span class="event__offer-title">${title}</span>
         &plus;
         &euro;&nbsp;<span class="event__offer-price">${price}</span>
       </label>
@@ -13,12 +16,11 @@ const generateOffers = (offer, price, essence) => {
 };
 
 export const createOffersEditingForm = (object) => {
-
-  const {options} = object;
+  const {offers} = object;
 
   let offersList = [];
-  for (let i = 0; i < options.offer.length; i++) {
-    offersList.push(generateOffers(options.offer[i], options.cost[i], options.essence[i]));
+  for (let i = 0; i < offers.length; i++) {
+    offersList.push(generateOffers(offers[i]));
   }
 
   return (

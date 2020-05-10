@@ -1,50 +1,66 @@
 import MenuComponent from './components/menu.js';
 import FilterComponent from './components/filters.js';
 import {render, RenderPosition} from './utils/render.js';
-import {generateDate} from './mock/list-trips.js';
 import {generatePoints} from './mock/route-point.js';
-import TripController, {createDefaultForm} from './controllers/trip.js';
+import TripController from './controllers/trip.js';
+import PointsModel from './models/points.js';
 
-const NUMBER_OF_STOPS = 2;
-const QUANTITY_OF_DAYS = 4;
+const NUMBER_OF_STOPS = 7;
 
 const tripControls = document.querySelector(`.trip-controls`);
 
 const tripEvents = document.querySelector(`.trip-events`);
 const tripMain = document.querySelector(`.trip-main`);
 
-render(tripControls.children[0], new MenuComponent(), RenderPosition.AFTEREND);
+const menuComponent = new MenuComponent();
+render(tripControls.children[0], menuComponent, RenderPosition.AFTEREND);
 export const filterComponent = new FilterComponent();
 render(tripControls, filterComponent, RenderPosition.BEFOREEND);
-
-
-const buttonEvent = tripMain.querySelector(`.btn`);
-let tiedСreateDefaultForm = createDefaultForm.bind(null, buttonEvent, tripEvents);
-buttonEvent.addEventListener(`click`, tiedСreateDefaultForm);
-
-
-const datesOfTravel = [];
-for (let y = 0; y < QUANTITY_OF_DAYS; y++) {
-  datesOfTravel.push(generateDate());
-}
-datesOfTravel.sort((a, b) => a.date - b.date);
 
 let allDataPoints = [];
 let totalCosts = [];
 let routeOfCities = new Set();
 
-for (let j = 0; j < datesOfTravel.length; j++) {
-  const points = generatePoints(NUMBER_OF_STOPS, datesOfTravel[j].date);
-  points.sort((a, b) => {
-    return a.timeBegin - b.timeBegin;
-  });
-  allDataPoints.push(points);
+allDataPoints = generatePoints(NUMBER_OF_STOPS);
 
-  for (let i = 0; i < points.length; i++) {
-    totalCosts.push(points[i].price);
-    routeOfCities.add(points[i].city);
+allDataPoints.sort((a, b) => a.dateFrom - b.dateFrom);
+
+allDataPoints.map((item) => {
+  totalCosts.push(item.basePrice);
+  routeOfCities.add(item.destination.name);
+});
+
+let fullDataPoints = [[allDataPoints[0]]];
+
+for (let i = 0; i < allDataPoints.length - 1; i++) {
+
+  if (allDataPoints[i].dateFrom.getDate() === allDataPoints[i + 1].dateFrom.getDate() &&
+      allDataPoints[i].dateFrom.getMonth() === allDataPoints[i + 1].dateFrom.getMonth()) {
+    fullDataPoints[fullDataPoints.length - 1].push(allDataPoints[i + 1]);
+  } else {
+    let littleArray = [];
+    littleArray.push(allDataPoints[i + 1]);
+    fullDataPoints.push(littleArray);
   }
 }
 
-const tripController = new TripController(tripEvents);
-tripController.render(datesOfTravel, allDataPoints, totalCosts, routeOfCities, tripMain);
+export const pointsModel = new PointsModel();
+pointsModel.setPoints(fullDataPoints);
+
+const tripController = new TripController(tripEvents, pointsModel);
+tripController.render(totalCosts, routeOfCities, tripMain);
+
+// menuComponent.setOnChange((menuItem) => {  ///// 12 stats
+//   switch (menuItem) {
+//     case MenuItem.NEW_EVENT:
+//       menuComponent.setActiveItem(MenuItem.TABLE);
+//       tripController.createTask();
+//       break;
+//   }
+// });
+
+export const buttonEvent = tripMain.querySelector(`.btn`);
+buttonEvent.addEventListener(`click`, () => {
+  tripController.createPoint();
+  //buttonEvent.setAttribute('disabled', 'disabled');
+});

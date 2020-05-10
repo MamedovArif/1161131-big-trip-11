@@ -1,19 +1,32 @@
+import {destinations} from "../mock/route-point.js";
+
 export const createDestinationEditingForm = (object) => {
-  const {destination, photos} = object;
+  const {destination} = object;
+
+  if (destination === destinations.noChoose) {
+    return ``;
+  }
+  const photos = destination.pictures;
 
   let combinationPhotos = [];
-  for (let i = 0; i < photos.length; i++) {
-    combinationPhotos.push(`<img class="event__photo" src="${photos[i]}" alt="Event photo">`);
+  if (photos.length === 0) {
+    combinationPhotos = [];
+  } else {
+    for (let i = 0; i < photos.length; i++) {
+      combinationPhotos.push(`<img class="event__photo" src="${photos[i].src}" alt="${photos[i].description}">`);
+    }
   }
 
   return (
-    `<h3 class="event__section-title  event__section-title--destination">Destination</h3>
-    <p class="event__destination-description">${destination.join(`\n`)}</p>
+    `<section class="event__section  event__section--destination">
+      <h3 class="event__section-title  event__section-title--destination">Destination</h3>
+      <p class="event__destination-description">${destination.description}</p>
 
-    <div class="event__photos-container">
-      <div class="event__photos-tape">
-        ${combinationPhotos.join(`\n`)}
+      <div class="event__photos-container">
+        <div class="event__photos-tape">
+          ${combinationPhotos.join(`\n`)}
+        </div>
       </div>
-    </div>`
+    </section>`
   );
 };
