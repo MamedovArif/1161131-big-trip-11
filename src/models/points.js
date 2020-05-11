@@ -5,28 +5,25 @@ import {getFilteredPoints} from "../utils/filter.js";
 export default class Points {
   constructor() {
     this._activeSortType = SortType.EVENT;
-    this._activeFilterType = FilterType.EVERYTHING; ////!!!!!!
+    this._activeFilterType = FilterType.EVERYTHING;
     this._points = [];
 
 
     this._dataChangeHandlers = []; // хранение обработчиков renderFilter
     this._sortChangeHandlers = []; // хранение обработчиков сорта
-    this._filterChangeHandlers = []; //!!!!!!!
+    this._filterChangeHandlers = [];
+
+    this._dataAboutDestinations = null;
   }
 
   getPoints() {
     const filteredPoints = getFilteredPoints(this._points, this._activeFilterType);
     return getPointsBySort(filteredPoints, this._activeSortType);
   }
-  // getPointsFiltered() {
-  //   return getFilteredPoints(this._points, this._activeFilterType);
-  // }
 
   getPointsAll() {
     return this._points;
   }
-
-
 
   setPoints(allDataPoints) {
     this._points = Array.from(allDataPoints);
@@ -77,7 +74,7 @@ export default class Points {
       newArray.push(point);
       for (let j = 0; j < this._points.length; j++) {
         if (this._points[j][0].dateFrom > newPointDate) {
-          this._points.splice(j, 0, newArray); ///
+          this._points.splice(j, 0, newArray);
           this._callHandlers(this._sortChangeHandlers);
           foundYourHome = true;
           break;
@@ -114,7 +111,7 @@ export default class Points {
     handlers.forEach((handler) => handler());
   }
 
-  setDataChangeHandler(handler) { //
+  setDataChangeHandler(handler) {
     this._dataChangeHandlers.push(handler);
   }
 
@@ -122,9 +119,15 @@ export default class Points {
     this._sortChangeHandlers.push(handler);
   }
 
-
-
-  setFilterChangeHandler(handler) { ///!!!!!!!!
+  setFilterChangeHandler(handler) {
     this._filterChangeHandlers.push(handler);
+  }
+
+
+  setDataAboutDestinations(dataOfArray) {
+    this._dataAboutDestinations = dataOfArray;
+  }
+  getDataAboutDestinations() {
+    return this._dataAboutDestinations;
   }
 }

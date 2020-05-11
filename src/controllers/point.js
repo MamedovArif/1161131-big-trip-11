@@ -1,5 +1,6 @@
 import PointOfRouteComponent from '../components/route-point.js';
 import FormForEditComponent from '../components/editing-form.js';
+import PointModel from '../models/point.js';
 import {render, RenderPosition, remove, replace} from '../utils/render.js';
 import {upperFirstElement} from '../utils/common.js';
 import {option} from "../mock/route-point.js";
@@ -43,11 +44,12 @@ export const EmptyPoint = {
 }
 
 export default class PointController {
-  constructor(container, onDataChange, onViewChange) {
+  constructor(container, onDataChange, onViewChange, dataAboutDestinations) {
     this._container = container;
     this._pointOfRouteComponent = null;
     this._formForEditComponent = null;
     this._onDataChange = onDataChange;
+    this._dataAboutDestinations = dataAboutDestinations; ////!!!!
 
     this._onViewChange = onViewChange;
     this._mode = Mode.DEFAULT;
@@ -60,7 +62,7 @@ export default class PointController {
     this._mode = mode;
 
     this._pointOfRouteComponent = new PointOfRouteComponent(dataOfRoute);
-    this._formForEditComponent = new FormForEditComponent(dataOfRoute);
+    this._formForEditComponent = new FormForEditComponent(dataOfRoute, this._dataAboutDestinations);
 
     this._pointOfRouteComponent.setClickHandler(() => {
       this._replacePointToForm();

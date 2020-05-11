@@ -2,18 +2,18 @@ import {createHeaderEditingForm} from './editing-form-header.js';
 import {createOffersEditingForm} from './editing-form-offers.js';
 import {createDestinationEditingForm} from './editing-form-destination.js';
 import AbstractSmartComponent from "./abstract-smart-component.js";
-import {destinations, offers} from "../mock/route-point.js";
+import {offers} from "../mock/route-point.js";
 import flatpickr from "flatpickr";
 
 import "flatpickr/dist/flatpickr.min.css";
 
-const createEditingFormTemplate = (object) => {
+const createEditingFormTemplate = (object, dataAboutDestinations) => {
   return (
     `<form class="trip-events__item  event  event--edit" action="#" method="post">
-      ${createHeaderEditingForm(object)}
+      ${createHeaderEditingForm(object, dataAboutDestinations)}
       <section class="event__details">
         ${(object.offers.length === 0) ? `` : createOffersEditingForm(object)}
-        ${(object.destination) ? createDestinationEditingForm(object) : ``}
+        ${(object.destination) ? createDestinationEditingForm(object, dataAboutDestinations) : ``}
       </section>
     </form>`
   );
@@ -59,10 +59,11 @@ const parseFormData = (formData, form, id) => {
 };
 
 export default class FormForEdit extends AbstractSmartComponent {
-  constructor(editForm) {
+  constructor(editForm, destinations) {
     super();
     this._editForm = Object.assign({}, editForm);
     this._defaultEditForm = editForm;
+    this._destinations = destinations;
 
     this._flatpickr = null;
     this._submitHandler = null;
@@ -73,7 +74,7 @@ export default class FormForEdit extends AbstractSmartComponent {
   }
 
   getTemplate() {
-    return createEditingFormTemplate(this._editForm);
+    return createEditingFormTemplate(this._editForm, this._destinations);
   }
 
   removeElement() {
@@ -109,7 +110,7 @@ export default class FormForEdit extends AbstractSmartComponent {
 
   getData(id) {
     const form = this.getElement().parentElement.querySelector(`.trip-events__item`);
-    const formData = new FormData(form);
+    formData = new FormData(form);
 
     return parseFormData(formData, form, id);
   }
@@ -174,7 +175,9 @@ export default class FormForEdit extends AbstractSmartComponent {
     const element = this.getElement();
     element.querySelector(`select[name = event-destination]`)
         .addEventListener(`change`, (evt) => {
-          this._editForm.destination = destinations[evt.target.value];
+          this._editForm.destination = this._destinations.find((item) => {
+            return item.name === evt.target.value;
+          });
           this.rerender();
         });
     element.querySelector(`.event__type-list`).addEventListener(`click`, (evt) => {

@@ -1,6 +1,6 @@
 import {formatTime, formatTimeDate, upperFirstElement} from '../utils/common.js';
 import {pretext} from "../const.js";
-import {api} from "../main.js";
+import {pointsModel} from "../main.js";
 
 // import {encode} from "he";
 
@@ -24,23 +24,17 @@ const generateActivity = (typePlace) => {
     </div>`
   )
 }
-// const destinations = api.getCities()
-//   .then((object) => {
-//     return object;
-//   });
 
-// const generateCities = (object) => {
-//   const {name} = object;
-//   return (
-//     `<option value="${name}" ${(city === ${name}) ? `selected` : ``}>${name}</option>`
-//   )
-// }
+const generateCities = (object, city) => {
+  const {name} = object;
+  return (
+    `<option value="${name}" ${(city === name) ? `selected` : ``}>${name}</option>`
+  )
+}
 
-const createHeaderEditingForm = (object) => {
+const createHeaderEditingForm = (object, dataAboutDestinations) => {
   const {type, destination, dateFrom, dateTo, basePrice, isFavorite} = object;
-  const placeholder = ``;
   const city = destination.name;
-  //upperFirstElement
 
   // const timeStart = encode(timeBegin);
   // const timeFinish = encode(timeEnd);
@@ -63,10 +57,10 @@ const createHeaderEditingForm = (object) => {
     activity.push(generateActivity(typesActivity[j]));
   }
 
-  // let cities = [];
-  // for (let w = 0; w < destinations.length; w++) {
-  //   cities.push(generateCities(destinations[w]));
-  // }
+  let cities = [];
+  for (let w = 0; w < dataAboutDestinations.length; w++) {
+    cities.push(generateCities(dataAboutDestinations[w], city));
+  }
 
   return (
     `<header class="event__header">
@@ -97,7 +91,7 @@ const createHeaderEditingForm = (object) => {
         <select class="event__input event__input--destination"
         name="event-destination" id="destination-list-1">
           <option disabled ${(city === ``) ? `selected` : ``}></option>
-          <option> {cities.join()}</option>
+          ${cities.join(`\n`)}
         </select>
 
       </div>
