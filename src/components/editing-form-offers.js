@@ -1,11 +1,11 @@
-const generateOffers = (offer) => {
-  const {isChecked: value, title, price} = offer;
+const generateOffers = (offer, isSelect) => {
+  const {title, price} = offer;
   const essence = title.toLowerCase().split(` `).join(`-`);
-  const checked = (value) ? `checked` : ``;
+  const checked = (isSelect) ? `checked` : ``;
   return (
     `<div class="event__offer-selector">
-      <input class="event__offer-checkbox  visually-hidden" id="event-offer-${essence}-1"
-      type="checkbox" name="event-offer-${essence}" ${checked} value="${value}">
+      <input class="event__offer-checkbox visually-hidden" id="event-offer-${essence}-1"
+      type="checkbox" name="event-offer-${essence}" ${checked} value="${isSelect}">
       <label class="event__offer-label" for="event-offer-${essence}-1">
         <span class="event__offer-title">${title}</span>
         &plus;
@@ -15,12 +15,20 @@ const generateOffers = (offer) => {
   );
 };
 
-export const createOffersEditingForm = (object) => {
-  const {offers} = object;
-
+export const createOffersEditingForm = (object, dataAboutOffers) => {
+  const {offers, type} = object;
+  const actualOffers = dataAboutOffers.find((item) => {
+    return item.type === type;
+  });
+  let selected = [];
+  let allTitles = actualOffers.offers.map((item) => item.title);
+  let titles = offers.map((it) => it.title);
+  for (let i = 0; i < allTitles.length; i++) {
+    selected.push(titles.includes(allTitles[i]));
+  }
   let offersList = [];
-  for (let i = 0; i < offers.length; i++) {
-    offersList.push(generateOffers(offers[i]));
+  for (let j = 0; j < actualOffers.offers.length; j++) {
+    offersList.push(generateOffers(actualOffers.offers[j], selected[j]));
   }
 
   return (
@@ -33,4 +41,3 @@ export const createOffersEditingForm = (object) => {
     </section>`
   );
 };
-

@@ -7,13 +7,13 @@ import flatpickr from "flatpickr";
 
 import "flatpickr/dist/flatpickr.min.css";
 
-const createEditingFormTemplate = (object, dataAboutDestinations) => {
+const createEditingFormTemplate = (object, dataAboutDestinations, dataAboutOffers) => {
   return (
     `<form class="trip-events__item  event  event--edit" action="#" method="post">
       ${createHeaderEditingForm(object, dataAboutDestinations)}
       <section class="event__details">
-        ${(object.offers.length === 0) ? `` : createOffersEditingForm(object)}
-        ${(object.destination) ? createDestinationEditingForm(object, dataAboutDestinations) : ``}
+        ${(object.offers.length === 0) ? `` : createOffersEditingForm(object, dataAboutOffers)}
+        ${(object.destination) ? createDestinationEditingForm(object) : ``}
       </section>
     </form>`
   );
@@ -59,11 +59,12 @@ const parseFormData = (formData, form, id) => {
 };
 
 export default class FormForEdit extends AbstractSmartComponent {
-  constructor(editForm, destinations) {
+  constructor(editForm, destinations, dataAboutOffers) {
     super();
     this._editForm = Object.assign({}, editForm);
     this._defaultEditForm = editForm;
     this._destinations = destinations;
+    this._dataAboutOffers = dataAboutOffers;
 
     this._flatpickr = null;
     this._submitHandler = null;
@@ -74,7 +75,7 @@ export default class FormForEdit extends AbstractSmartComponent {
   }
 
   getTemplate() {
-    return createEditingFormTemplate(this._editForm, this._destinations);
+    return createEditingFormTemplate(this._editForm, this._destinations, this._dataAboutOffers);
   }
 
   removeElement() {

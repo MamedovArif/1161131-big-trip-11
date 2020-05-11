@@ -14,6 +14,7 @@ export default class Points {
     this._filterChangeHandlers = [];
 
     this._dataAboutDestinations = null;
+    this._dataAboutOffers = null;
   }
 
   getPoints() {
@@ -129,5 +130,12 @@ export default class Points {
   }
   getDataAboutDestinations() {
     return this._dataAboutDestinations;
+  }
+
+  setDataAboutOffers(dataAboutOffers) {
+    this._dataAboutOffers = dataAboutOffers;
+  }
+  getDataAboutOffers() {
+    return this._dataAboutOffers;
   }
 }

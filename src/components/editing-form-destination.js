@@ -3,7 +3,7 @@ import {destinations} from "../mock/route-point.js";
 export const createDestinationEditingForm = (object) => {
   const {destination} = object;
 
-  if (destination === destinations.noChoose) {
+  if (destination) {
     return ``;
   }
   const photos = destination.pictures;
