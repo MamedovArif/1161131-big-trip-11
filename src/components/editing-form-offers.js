@@ -1,6 +1,6 @@
 const generateOffers = (offer, isSelect) => {
   const {title, price} = offer;
-  const essence = title.toLowerCase().split(` `).join(`-`);
+  const essence = title.split(` `).join(`-`);
   const checked = (isSelect) ? `checked` : ``;
   return (
     `<div class="event__offer-selector">

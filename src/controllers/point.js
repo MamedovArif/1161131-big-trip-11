@@ -50,7 +50,7 @@ export default class PointController {
     this._formForEditComponent = null;
     this._onDataChange = onDataChange;
     this._dataAboutDestinations = dataAboutDestinations; ////!!!!
-    this._dataAboutOffers = dataAboutOffers
+    this._dataAboutOffers = dataAboutOffers;
 
     this._onViewChange = onViewChange;
     this._mode = Mode.DEFAULT;
@@ -92,15 +92,32 @@ export default class PointController {
 
     this._formForEditComponent.setOfferChangeHandler((evt) => {  ///!!!
       const id = evt.target.id;
-      const arr = id.split(`-`);
+      console.log(id);
+      const arr = id.split(`-`); //Choose comfort class
+      console.log(arr);
       arr.splice(0, 2);
+      console.log(arr);
       arr.pop();
-      const title = upperFirstElement(arr.join(` `));
-      const deepClone = _.cloneDeep(dataOfRoute);
-      const markerObject = deepClone.offers.filter((offer) => {
-        return offer.title === title;
+      console.log(arr);
+      const title = arr.join(` `);
+      console.log(title);
+      const object = this._dataAboutOffers.find((item) => {
+        return item.type === dataOfRoute.type;
       });
-      markerObject[0].isChecked = !markerObject[0].isChecked;
+      const deepClone = _.cloneDeep(dataOfRoute);
+      const isSuccess = dataOfRoute.offers.find((obj) => {
+        return obj.title === title;
+      });
+      if (isSuccess) {
+        deepClone.offers = deepClone.offers.filter((offer) => {
+          return offer.title !== title;
+        });
+      } else {
+        const offer = object.offers.find((offer) => {
+          return offer.title === title;
+        })
+        deepClone.offers.push(offer);
+      }
       this._onDataChange(this, dataOfRoute, deepClone);
     });
 

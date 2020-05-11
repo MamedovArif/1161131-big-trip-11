@@ -8,11 +8,15 @@ import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
 
 const createEditingFormTemplate = (object, dataAboutDestinations, dataAboutOffers) => {
+  const type = object.type;
+  const allOffers = dataAboutOffers.find((item) => {
+    return item.type === type;
+  });
   return (
     `<form class="trip-events__item  event  event--edit" action="#" method="post">
       ${createHeaderEditingForm(object, dataAboutDestinations)}
       <section class="event__details">
-        ${(object.offers.length === 0) ? `` : createOffersEditingForm(object, dataAboutOffers)}
+        ${(allOffers.offers.length === 0) ? `` : createOffersEditingForm(object, dataAboutOffers)}
         ${(object.destination) ? createDestinationEditingForm(object) : ``}
       </section>
     </form>`
