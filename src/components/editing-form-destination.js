@@ -1,5 +1,3 @@
-import {destinations} from "../mock/route-point.js";
-
 export const createDestinationEditingForm = (object) => {
   const {destination} = object;
 

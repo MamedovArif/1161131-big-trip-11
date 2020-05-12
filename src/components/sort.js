@@ -48,7 +48,7 @@ export default class Sort extends AbstractComponent {
     return createSortTemplate(this._sorts);
   }
 
-  setSortChangeHandler(handler, filterComponent) {
+  setSortChangeHandler(handler) {
     this.getElement().addEventListener(`change`, (evt) => {
 
       const sortName = getSortNameById(evt.target.id);

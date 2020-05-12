@@ -2,9 +2,8 @@ import PointOfRouteComponent from '../components/route-point.js';
 import FormForEditComponent from '../components/editing-form.js';
 import PointModel from '../models/point.js';
 import {render, RenderPosition, remove, replace} from '../utils/render.js';
-import {upperFirstElement} from '../utils/common.js';
-import {option} from "../mock/route-point.js";
-import {cloneDeep} from 'lodash';
+
+// import {cloneDeep} from 'lodash';
 
 export const Mode = {
   ADDING: `adding`,
@@ -17,31 +16,28 @@ export const EmptyPoint = {
   "dateFrom": new Date(),
   "dateTo": new Date(),
   "destination": {
-      "description": "London exerts a considerable impact upon the arts, " +
-          "commerce, education, entertainment, fashion, finance, healthcare, " +
-          "media, professional services, research and development, tourism and " +
-          "transportation.London ranks 26th out of 300 major cities for economic performance.",
-      "name": `London`,
-      "pictures": [
-          {
-            "src": `http://picsum.photos/248/152?r=${Math.random()}`,
-            "description": "London parliament building"
-          },
-        ]
+    "description": `London exerts a considerable impact upon the arts`,
+    "name": `London`,
+    "pictures": [
+      {
+        "src": `http://picsum.photos/248/152?r=${Math.random()}`,
+        "description": `London parliament building`
       },
+    ]
+  },
   "id": String(new Date() + Math.random()),
   "isFavorite": false,
-  "type": "taxi",
+  "type": `taxi`,
   "offers": [
-      {
-        "title": "Choose meal",
-        "price": 180
-      }, {
-        "title": "Upgrade to comfort class",
-        "price": 50
-      },
+    {
+      "title": `Choose meal`,
+      "price": 180
+    }, {
+      "title": `Upgrade to comfort class`,
+      "price": 50
+    },
   ]
-}
+};
 
 const stringToDate = (string) => { // для flatpickr другая функция
   const dates = string.split(` `);
@@ -62,15 +58,15 @@ const parseFormData = (formData, form, id, dataAboutDestinations, dataAboutOffer
       return true;
     }
     return false;
-  }
+  };
   const transferText = form.querySelector(`.event__label`).textContent.trim().split(` `);
   const type = transferText[0].toLowerCase();
   const destination = dataAboutDestinations.find((item) => {
-    return item.name === formData.get(`event-destination`)
+    return item.name === formData.get(`event-destination`);
   });
   const formObject = {
     "id": id,
-    "base_price": Math.abs(parseInt(formData.get(`event-price`))),
+    "base_price": Math.abs(parseInt(formData.get(`event-price`)), 10),
     "date_from": stringToDate(formData.get(`event-start-time`)),
     "date_to": stringToDate(formData.get(`event-end-time`)),
     "destination": destination,
@@ -85,8 +81,8 @@ const parseFormData = (formData, form, id, dataAboutDestinations, dataAboutOffer
   const arrayOfIdies = markerOffers.map((input) => {
     return input.getAttribute(`id`);
   });
-  const titles = arrayOfIdies.map((id) => {
-    let arr = id.split(`-`);
+  const titles = arrayOfIdies.map((iden) => {
+    let arr = iden.split(`-`);
     arr.splice(0, 2);
     arr.pop();
     const title = arr.join(` `);
@@ -97,8 +93,8 @@ const parseFormData = (formData, form, id, dataAboutDestinations, dataAboutOffer
   });
   formObject.offers = ourOffers.offers.filter((obj) => {
     return titles.includes(obj.title);
-  })
-  return formObject;
+  });
+  return new PointModel(formObject);
 };
 
 
@@ -108,7 +104,7 @@ export default class PointController {
     this._pointOfRouteComponent = null;
     this._formForEditComponent = null;
     this._onDataChange = onDataChange;
-    this._dataAboutDestinations = dataAboutDestinations; ////!!!!
+    this._dataAboutDestinations = dataAboutDestinations;
     this._dataAboutOffers = dataAboutOffers;
 
     this._onViewChange = onViewChange;
@@ -130,7 +126,7 @@ export default class PointController {
       document.addEventListener(`keydown`, this._onEscKeyDown);
     });
 
-    this._formForEditComponent.setCloseHandler(() => { //сброс значений
+    this._formForEditComponent.setCloseHandler(() => { // сброс значений
       this._replaceFormToPoint();
     });
 
@@ -138,8 +134,7 @@ export default class PointController {
       evt.preventDefault();
       const obj = this._formForEditComponent.getData();
       const data = parseFormData(obj.formData, obj.form, dataOfRoute.id,
-        this._dataAboutDestinations, this._dataAboutOffers);
-      console.log(data);
+          this._dataAboutDestinations, this._dataAboutOffers);
       this._onDataChange(this, dataOfRoute, data);
       this._replaceFormToPoint();
     });
@@ -148,12 +143,11 @@ export default class PointController {
 
     this._formForEditComponent.setFavoriteChangeHandler(() => {
       const newPoint = PointModel.clone(dataOfRoute);
-      console.log(newPoint);
       newPoint.isFavorite = !newPoint.isFavorite;
       this._onDataChange(this, dataOfRoute, newPoint);
     });
 
-    this._formForEditComponent.setOfferChangeHandler((evt) => {  ///!!!
+    this._formForEditComponent.setOfferChangeHandler((evt) => {
       const id = evt.target.id;
       const arr = id.split(`-`);
       arr.splice(0, 2);
@@ -171,9 +165,9 @@ export default class PointController {
           return offer.title !== title;
         });
       } else {
-        const offer = object.offers.find((offer) => {
-          return offer.title === title;
-        })
+        const offer = object.offers.find((offerOne) => {
+          return offerOne.title === title;
+        });
         deepClone.offers.push(offer);
       }
       this._onDataChange(this, dataOfRoute, deepClone);
@@ -181,7 +175,7 @@ export default class PointController {
 
     this._formForEditComponent.setBasePriceChangeHandler((evt) => {
       this._onDataChange(this, dataOfRoute, Object.assign({}, dataOfRoute, {
-        basePrice: Math.abs(parseInt(evt.target.value)),
+        basePrice: Math.abs(parseInt(evt.target.value), 10),
       }));
     });
 

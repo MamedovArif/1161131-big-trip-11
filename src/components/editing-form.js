@@ -109,7 +109,7 @@ export default class FormForEdit extends AbstractSmartComponent {
     this._editForm.destination = this._defaultEditForm.destination;
     this._editForm.type = this._defaultEditForm.type;
     this._editForm.placeholder = this._defaultEditForm.placeholder;
-    this._editForm.options = option[(this._defaultEditForm.type).toLowerCase()];
+    this._editForm.options = option[(this._defaultEditForm.type).toLowerCase()]; // !!!
     this.rerender();
   }
 
@@ -117,7 +117,7 @@ export default class FormForEdit extends AbstractSmartComponent {
     const form = this.getElement().parentElement.querySelector(`.trip-events__item`);
     return {
       formData: new FormData(form),
-      form: form,
+      form,
     };
   }
 
@@ -143,7 +143,7 @@ export default class FormForEdit extends AbstractSmartComponent {
         .addEventListener(`change`, handler);
   }
 
-  setOfferChangeHandler(handler) { ///////!!!!
+  setOfferChangeHandler(handler) {
     const element = this.getElement().querySelector(`.event__available-offers`);
     if (element) {
       element.addEventListener(`change`, handler);
@@ -191,7 +191,7 @@ export default class FormForEdit extends AbstractSmartComponent {
         return;
       }
       this._editForm.type = evt.target.textContent;
-      this._editForm.destination = destinations['noChoose'];
+      this._editForm.destination = destinations[`noChoose`]; // !!!!
 
       this._editForm.offers = offers[(this._editForm.type).toLowerCase()];
       this.rerender();

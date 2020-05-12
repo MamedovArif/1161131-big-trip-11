@@ -4,8 +4,8 @@ import {pointsModel} from "../main.js";
 
 // import {encode} from "he";
 
-const typesTransfer = ["taxi", "bus", "train", "ship", "transport", "drive", "flight"];
-const typesActivity = ["check-in", "sightseeing", "restaurant"];
+const typesTransfer = [`taxi`, `bus`, `train`, `ship`, `transport`, `drive`, `flight`];
+const typesActivity = [`check-in`, `sightseeing`, `restaurant`];
 
 const generateTransfer = (typeMove) => {
   return (
@@ -14,7 +14,7 @@ const generateTransfer = (typeMove) => {
       <label class="event__type-label  event__type-label--${typeMove}" for="event-type-${typeMove}-1">${upperFirstElement(typeMove)}</label>
     </div>`
   );
-}
+};
 
 const generateActivity = (typePlace) => {
   return (
@@ -22,15 +22,15 @@ const generateActivity = (typePlace) => {
       <input id="event-type-${typePlace}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${typePlace}">
       <label class="event__type-label  event__type-label--${typePlace}" for="event-type-${typePlace}-1">${upperFirstElement(typePlace)}</label>
     </div>`
-  )
-}
+  );
+};
 
 const generateCities = (object, city) => {
   const {name} = object;
   return (
     `<option value="${name}" ${(city === name) ? `selected` : ``}>${name}</option>`
-  )
-}
+  );
+};
 
 const createHeaderEditingForm = (object, dataAboutDestinations) => {
   const {type, destination, dateFrom, dateTo, basePrice, isFavorite} = object;

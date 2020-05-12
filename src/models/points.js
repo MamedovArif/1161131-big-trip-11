@@ -89,7 +89,6 @@ export default class Points {
       this._callHandlers(this._sortChangeHandlers);
       foundYourHome = true;
     }
-    console.log(this._points);
   }
 
   updatePoint(id, newPoint) {

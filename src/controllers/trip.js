@@ -14,7 +14,7 @@ const noPointsComponent = new NoPointsComponent();
 const renderPoints = (parent, points, onDataChange, onViewChange, dataAboutDestinations, dataAboutOffers) => {
   return points.map((point) => {
     const pointController = new PointController(parent, onDataChange,
-      onViewChange, dataAboutDestinations, dataAboutOffers);
+        onViewChange, dataAboutDestinations, dataAboutOffers);
     pointController.render(point, PointControllerMode.DEFAULT);
     return pointController;
   });
@@ -62,7 +62,7 @@ export default class TripController {
     this._sortController = new SortController(this._container, pointsModel, this._filterController);
     this._sortController.render();
 
-    this._renderPoints(fullDataPoints, this._dataAboutDestinations, this._dataAboutOffers); /////console.log(dataAboutDestinations);
+    this._renderPoints(fullDataPoints, this._dataAboutDestinations, this._dataAboutOffers);
 
     render(header, new RouteComponent(routeOfCities, fullDataPoints), RenderPosition.AFTERBEGIN); // a1
     const tripInfo = header.querySelector(`.trip-info`); // a2
@@ -73,8 +73,8 @@ export default class TripController {
     if (this._creatingPoint) {
       return;
     }
-    buttonEvent.setAttribute('disabled', 'disabled');
-    //сбросить сортировку и фильтрацию
+    buttonEvent.setAttribute(`disabled`, `disabled`);
+    // сбросить сортировку и фильтрацию
     this._sortController.throwSort();
     this._pointsModel._activeSortType = SortType.EVENT;
     this._onSortChange();
@@ -130,13 +130,13 @@ export default class TripController {
   _onDataChange(pointController, oldPoint, newPoint) {
     if (oldPoint === EmptyPoint) {
       this._creatingPoint = null; // обнуляем значение creatingPoint
-      buttonEvent.removeAttribute('disabled');
+      buttonEvent.removeAttribute(`disabled`);
 
       if (newPoint === null) {
         pointController.destroy();
         this._updatePoints();
       } else {
-        this._pointsModel.addPoint(newPoint);  ////////////
+        this._pointsModel.addPoint(newPoint);
         pointController.render(newPoint, PointControllerMode.DEFAULT);
       }
       this._showedPointControllers = [].concat(pointController, this._showedPointControllers);
@@ -150,7 +150,7 @@ export default class TripController {
           if (isSuccess) {
             pointController.render(pointModel, PointControllerMode.DEFAULT);
           }
-        })
+        });
     }
   }
 
