@@ -20,6 +20,12 @@ export const SortType = {
   PRICE: `price`,
 };
 
+export const FilterType = {
+  EVERYTHING: `everything`,
+  FUTURE: `future`,
+  PAST: `past`,
+};
+
 export const pretext = {
   "taxi": `to`,
   "bus": `to`,
@@ -31,4 +37,4 @@ export const pretext = {
   "check-in": `in`,
   "sightseeing": `in`,
   "restaurant": `in`,
-}
+};

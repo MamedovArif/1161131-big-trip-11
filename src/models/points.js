@@ -1,18 +1,25 @@
 import {getPointsBySort} from "../utils/sort.js";
-import {SortType} from "../const.js";
+import {SortType, FilterType} from "../const.js";
+import {getFilteredPoints} from "../utils/filter.js";
 
 export default class Points {
   constructor() {
     this._activeSortType = SortType.EVENT;
+    this._activeFilterType = FilterType.EVERYTHING;
     this._points = [];
 
 
-    this._dataChangeHandlers = []; // хранение обработчиков точек
+    this._dataChangeHandlers = []; // хранение обработчиков renderFilter
     this._sortChangeHandlers = []; // хранение обработчиков сорта
+    this._filterChangeHandlers = [];
+
+    this._dataAboutDestinations = null;
+    this._dataAboutOffers = null;
   }
 
   getPoints() {
-    return getPointsBySort(this._points, this._activeSortType);
+    const filteredPoints = getFilteredPoints(this._points, this._activeFilterType);
+    return getPointsBySort(filteredPoints, this._activeSortType);
   }
 
   getPointsAll() {
@@ -27,6 +34,11 @@ export default class Points {
   setSort(sortType) {
     this._activeSortType = sortType;
     this._callHandlers(this._sortChangeHandlers);
+  }
+
+  setFilter(filterType) {
+    this._activeFilterType = filterType;
+    this._callHandlers(this._filterChangeHandlers);
   }
 
   removePoint(id) {
@@ -61,21 +73,14 @@ export default class Points {
     if (foundYourHome === false) {
       const newArray = [];
       newArray.push(point);
-      // if (this._points[0][0].dateFrom > newPointDate) {
-      //   this._points.unshift(newArray);
-      //   this._callHandlers(this._sortChangeHandlers);
-      //   foundYourHome = true;
-      // } else {
-
-        for (let j = 0; j < this._points.length; j++) {
-          if (this._points[j][0].dateFrom > newPointDate) {
-            this._points.splice(j, 0, newArray); ///
-            this._callHandlers(this._sortChangeHandlers);
-            foundYourHome = true;
-            break;
-          }
+      for (let j = 0; j < this._points.length; j++) {
+        if (this._points[j][0].dateFrom > newPointDate) {
+          this._points.splice(j, 0, newArray);
+          this._callHandlers(this._sortChangeHandlers);
+          foundYourHome = true;
+          break;
         }
-      // }
+      }
     }
     if (foundYourHome === false) {
       const newArray = [];
@@ -84,7 +89,6 @@ export default class Points {
       this._callHandlers(this._sortChangeHandlers);
       foundYourHome = true;
     }
-    console.log(this._points);
   }
 
   updatePoint(id, newPoint) {
@@ -99,7 +103,6 @@ export default class Points {
       littleArray = [].concat(littleArray.slice(0, index),
           newPoint, littleArray.slice(index + 1));
       return littleArray;
-      // this._callHandlers(this._dataChangeHandlers); // нужен ли он если сортировка не обновл?
     });
     return isSuccess;
   }
@@ -114,5 +117,24 @@ export default class Points {
 
   setSortChangeHandler(handler) {
     this._sortChangeHandlers.push(handler);
+  }
+
+  setFilterChangeHandler(handler) {
+    this._filterChangeHandlers.push(handler);
+  }
+
+
+  setDataAboutDestinations(dataOfArray) {
+    this._dataAboutDestinations = dataOfArray;
+  }
+  getDataAboutDestinations() {
+    return this._dataAboutDestinations;
+  }
+
+  setDataAboutOffers(dataAboutOffers) {
+    this._dataAboutOffers = dataAboutOffers;
+  }
+  getDataAboutOffers() {
+    return this._dataAboutOffers;
   }
 }

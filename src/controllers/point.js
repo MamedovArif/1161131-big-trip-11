@@ -1,9 +1,9 @@
 import PointOfRouteComponent from '../components/route-point.js';
 import FormForEditComponent from '../components/editing-form.js';
+import PointModel from '../models/point.js';
 import {render, RenderPosition, remove, replace} from '../utils/render.js';
-import {upperFirstElement} from '../utils/common.js';
-import {option} from "../mock/route-point.js";
-import {cloneDeep} from 'lodash';
+
+// import {cloneDeep} from 'lodash';
 
 export const Mode = {
   ADDING: `adding`,
@@ -16,38 +16,96 @@ export const EmptyPoint = {
   "dateFrom": new Date(),
   "dateTo": new Date(),
   "destination": {
-      "description": "London exerts a considerable impact upon the arts, " +
-          "commerce, education, entertainment, fashion, finance, healthcare, " +
-          "media, professional services, research and development, tourism and " +
-          "transportation.London ranks 26th out of 300 major cities for economic performance.",
-      "name": `London`,
-      "pictures": [
-          {
-            "src": `http://picsum.photos/248/152?r=${Math.random()}`,
-            "description": "London parliament building"
-          },
-        ]
+    "description": `London exerts a considerable impact upon the arts`,
+    "name": `London`,
+    "pictures": [
+      {
+        "src": `http://picsum.photos/248/152?r=${Math.random()}`,
+        "description": `London parliament building`
       },
+    ]
+  },
   "id": String(new Date() + Math.random()),
   "isFavorite": false,
-  "type": "taxi",
+  "type": `taxi`,
   "offers": [
-      {
-        "title": "Choose meal",
-        "price": 180
-      }, {
-        "title": "Upgrade to comfort class",
-        "price": 50
-      },
+    {
+      "title": `Choose meal`,
+      "price": 180
+    }, {
+      "title": `Upgrade to comfort class`,
+      "price": 50
+    },
   ]
-}
+};
+
+const stringToDate = (string) => { // для flatpickr другая функция
+  const dates = string.split(` `);
+  const date = dates[0].split(`.`);
+  const time = dates[1].split(`:`);
+
+  date[2] = Number(`20` + date[2]);
+  date[1] = Number(date[1]) - 1;
+  date[0] = Number(date[0]);
+  time[0] = Number(time[0]);
+  time[1] = Number(time[1]);
+  return new Date(date[2], date[1], date[0], time[0], time[1]);
+};
+
+const parseFormData = (formData, form, id, dataAboutDestinations, dataAboutOffers) => {
+  const definitionFavorite = (bool) => {
+    if (bool) {
+      return true;
+    }
+    return false;
+  };
+  const transferText = form.querySelector(`.event__label`).textContent.trim().split(` `);
+  const type = transferText[0].toLowerCase();
+  const destination = dataAboutDestinations.find((item) => {
+    return item.name === formData.get(`event-destination`);
+  });
+  const formObject = {
+    "id": id,
+    "base_price": Math.abs(parseInt(formData.get(`event-price`)), 10),
+    "date_from": stringToDate(formData.get(`event-start-time`)),
+    "date_to": stringToDate(formData.get(`event-end-time`)),
+    "destination": destination,
+    "is_favorite": definitionFavorite(formData.get(`event-favorite`)),
+    "type": type,
+  };
+  const containerOfCheckbox = form.querySelector(`.event__available-offers`);
+  const offers = Array.from(containerOfCheckbox.querySelectorAll(`.event__offer-checkbox`));
+  const markerOffers = offers.filter((input) => {
+    return input.getAttribute(`value`) === `true`;
+  });
+  const arrayOfIdies = markerOffers.map((input) => {
+    return input.getAttribute(`id`);
+  });
+  const titles = arrayOfIdies.map((iden) => {
+    let arr = iden.split(`-`);
+    arr.splice(0, 2);
+    arr.pop();
+    const title = arr.join(` `);
+    return title;
+  });
+  const ourOffers = dataAboutOffers.find((it) => {
+    return it.type === type;
+  });
+  formObject.offers = ourOffers.offers.filter((obj) => {
+    return titles.includes(obj.title);
+  });
+  return new PointModel(formObject);
+};
+
 
 export default class PointController {
-  constructor(container, onDataChange, onViewChange) {
+  constructor(container, onDataChange, onViewChange, dataAboutDestinations, dataAboutOffers) {
     this._container = container;
     this._pointOfRouteComponent = null;
     this._formForEditComponent = null;
     this._onDataChange = onDataChange;
+    this._dataAboutDestinations = dataAboutDestinations;
+    this._dataAboutOffers = dataAboutOffers;
 
     this._onViewChange = onViewChange;
     this._mode = Mode.DEFAULT;
@@ -60,20 +118,23 @@ export default class PointController {
     this._mode = mode;
 
     this._pointOfRouteComponent = new PointOfRouteComponent(dataOfRoute);
-    this._formForEditComponent = new FormForEditComponent(dataOfRoute);
+    this._formForEditComponent = new FormForEditComponent(dataOfRoute,
+        this._dataAboutDestinations, this._dataAboutOffers);
 
     this._pointOfRouteComponent.setClickHandler(() => {
       this._replacePointToForm();
       document.addEventListener(`keydown`, this._onEscKeyDown);
     });
 
-    this._formForEditComponent.setCloseHandler(() => { //сброс значений
+    this._formForEditComponent.setCloseHandler(() => { // сброс значений
       this._replaceFormToPoint();
     });
 
     this._formForEditComponent.setSubmitHandler((evt) => {
       evt.preventDefault();
-      const data = this._formForEditComponent.getData(dataOfRoute.id);
+      const obj = this._formForEditComponent.getData();
+      const data = parseFormData(obj.formData, obj.form, dataOfRoute.id,
+          this._dataAboutDestinations, this._dataAboutOffers);
       this._onDataChange(this, dataOfRoute, data);
       this._replaceFormToPoint();
     });
@@ -81,28 +142,40 @@ export default class PointController {
         dataOfRoute, null));
 
     this._formForEditComponent.setFavoriteChangeHandler(() => {
-      this._onDataChange(this, dataOfRoute, Object.assign({}, dataOfRoute, {
-        isFavorite: !dataOfRoute.isFavorite,
-      }));
+      const newPoint = PointModel.clone(dataOfRoute);
+      newPoint.isFavorite = !newPoint.isFavorite;
+      this._onDataChange(this, dataOfRoute, newPoint);
     });
 
-    this._formForEditComponent.setOfferChangeHandler((evt) => {  ///!!!
+    this._formForEditComponent.setOfferChangeHandler((evt) => {
       const id = evt.target.id;
       const arr = id.split(`-`);
       arr.splice(0, 2);
       arr.pop();
-      const title = upperFirstElement(arr.join(` `));
-      const deepClone = _.cloneDeep(dataOfRoute);
-      const markerObject = deepClone.offers.filter((offer) => {
-        return offer.title === title;
+      const title = arr.join(` `);
+      const object = this._dataAboutOffers.find((item) => {
+        return item.type === dataOfRoute.type;
       });
-      markerObject[0].isChecked = !markerObject[0].isChecked;
+      const deepClone = _.cloneDeep(dataOfRoute);
+      const isSuccess = dataOfRoute.offers.find((obj) => {
+        return obj.title === title;
+      });
+      if (isSuccess) {
+        deepClone.offers = deepClone.offers.filter((offer) => {
+          return offer.title !== title;
+        });
+      } else {
+        const offer = object.offers.find((offerOne) => {
+          return offerOne.title === title;
+        });
+        deepClone.offers.push(offer);
+      }
       this._onDataChange(this, dataOfRoute, deepClone);
     });
 
     this._formForEditComponent.setBasePriceChangeHandler((evt) => {
       this._onDataChange(this, dataOfRoute, Object.assign({}, dataOfRoute, {
-        basePrice: Math.abs(parseInt(evt.target.value)),
+        basePrice: Math.abs(parseInt(evt.target.value), 10),
       }));
     });
 

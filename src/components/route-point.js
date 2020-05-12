@@ -1,5 +1,4 @@
 import {formatTime, diffTime, upperFirstElement} from "../utils/common.js";
-import {getRandomArrayItem, getRandomIntegerNumber} from "../mock/route-point.js";
 import AbstractComponent from "./abstract-component.js";
 import {pretext} from "../const.js";
 

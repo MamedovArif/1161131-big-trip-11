@@ -1,10 +1,11 @@
 import {formatTime, formatTimeDate, upperFirstElement} from '../utils/common.js';
 import {pretext} from "../const.js";
+import {pointsModel} from "../main.js";
 
 // import {encode} from "he";
 
-const typesTransfer = ["taxi", "bus", "train", "ship", "transport", "drive", "flight"];
-const typesActivity = ["check-in", "sightseeing", "restaurant"];
+const typesTransfer = [`taxi`, `bus`, `train`, `ship`, `transport`, `drive`, `flight`];
+const typesActivity = [`check-in`, `sightseeing`, `restaurant`];
 
 const generateTransfer = (typeMove) => {
   return (
@@ -13,7 +14,7 @@ const generateTransfer = (typeMove) => {
       <label class="event__type-label  event__type-label--${typeMove}" for="event-type-${typeMove}-1">${upperFirstElement(typeMove)}</label>
     </div>`
   );
-}
+};
 
 const generateActivity = (typePlace) => {
   return (
@@ -21,14 +22,19 @@ const generateActivity = (typePlace) => {
       <input id="event-type-${typePlace}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${typePlace}">
       <label class="event__type-label  event__type-label--${typePlace}" for="event-type-${typePlace}-1">${upperFirstElement(typePlace)}</label>
     </div>`
-  )
-}
+  );
+};
 
-const createHeaderEditingForm = (object) => {
+const generateCities = (object, city) => {
+  const {name} = object;
+  return (
+    `<option value="${name}" ${(city === name) ? `selected` : ``}>${name}</option>`
+  );
+};
+
+const createHeaderEditingForm = (object, dataAboutDestinations) => {
   const {type, destination, dateFrom, dateTo, basePrice, isFavorite} = object;
-  const placeholder = ``;
   const city = destination.name;
-  //upperFirstElement
 
   // const timeStart = encode(timeBegin);
   // const timeFinish = encode(timeEnd);
@@ -49,6 +55,11 @@ const createHeaderEditingForm = (object) => {
   let activity = [];
   for (let j = 0; j < typesActivity.length; j++) {
     activity.push(generateActivity(typesActivity[j]));
+  }
+
+  let cities = [];
+  for (let w = 0; w < dataAboutDestinations.length; w++) {
+    cities.push(generateCities(dataAboutDestinations[w], city));
   }
 
   return (
@@ -80,10 +91,7 @@ const createHeaderEditingForm = (object) => {
         <select class="event__input event__input--destination"
         name="event-destination" id="destination-list-1">
           <option disabled ${(city === ``) ? `selected` : ``}></option>
-          <option value="Amsterdam" ${(city === `Amsterdam`) ? `selected` : ``}>Amsterdam</option>
-          <option value="London" ${(city === `London`) ? `selected` : ``}>London</option>
-          <option value="Brussel" ${(city === `Brussel`) ? `selected` : ``}>Brussel</option>
-          <option value="Saint Petersburg" ${(city === `Saint Petersburg`) ? `selected` : ``}>Saint Petersburg</option>
+          ${cities.join(`\n`)}
         </select>
 
       </div>
