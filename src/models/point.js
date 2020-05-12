@@ -32,6 +32,7 @@ export default class Point {
   }
 
   static clone(data) {
+    console.log(data);
     return new Point(data.toRAW());
   }
 }

@@ -42,13 +42,14 @@ const API = class {
   }
 
   updatePoint(id, data) {
+    console.log(data);
     const headers = new Headers();
     headers.append(`Authorization`, this._authorization);
     headers.append(`Content-Type`, `application/json`);
 
     return fetch(`https://11.ecmascript.pages.academy/big-trip/points/${id}`, {
       method: `PUT`,
-      body: JSON.stringify(data), //.toRaw()),
+      body: JSON.stringify(data.toRAW()),
       headers,
     })
       .then(checkStatus)

@@ -144,18 +144,14 @@ export default class TripController {
       this._pointsModel.removePoint(oldPoint.id);
       this._updatePoints();
     } else {
-      const isSuccess = this._pointsModel.updatePoint(oldPoint.id, newPoint);
-      if (isSuccess) {
-        pointController.render(newPoint, PointControllerMode.DEFAULT);
-      }
-      // this._api.updatePoint(oldPoint.id, newPoint)
-      //   .then((pointModel) => {
-      //     const isSuccess = this._pointsModel.updatePoint(oldPoint.id, pointModel);
+      this._api.updatePoint(oldPoint.id, newPoint)
+        .then((pointModel) => {
+          const isSuccess = this._pointsModel.updatePoint(oldPoint.id, pointModel);
 
-      //     if (isSuccess) {
-      //       pointController.render(pointModel, PointControllerMode.DEFAULT);
-      //     }
-      //   })
+          if (isSuccess) {
+            pointController.render(pointModel, PointControllerMode.DEFAULT);
+          }
+        })
     }
   }
 

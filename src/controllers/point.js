@@ -43,6 +43,65 @@ export const EmptyPoint = {
   ]
 }
 
+const stringToDate = (string) => { // для flatpickr другая функция
+  const dates = string.split(` `);
+  const date = dates[0].split(`.`);
+  const time = dates[1].split(`:`);
+
+  date[2] = Number(`20` + date[2]);
+  date[1] = Number(date[1]) - 1;
+  date[0] = Number(date[0]);
+  time[0] = Number(time[0]);
+  time[1] = Number(time[1]);
+  return new Date(date[2], date[1], date[0], time[0], time[1]);
+};
+
+const parseFormData = (formData, form, id, dataAboutDestinations, dataAboutOffers) => {
+  const definitionFavorite = (bool) => {
+    if (bool) {
+      return true;
+    }
+    return false;
+  }
+  const transferText = form.querySelector(`.event__label`).textContent.trim().split(` `);
+  const type = transferText[0].toLowerCase();
+  const destination = dataAboutDestinations.find((item) => {
+    return item.name === formData.get(`event-destination`)
+  });
+  const formObject = {
+    "id": id,
+    "base_price": Math.abs(parseInt(formData.get(`event-price`))),
+    "date_from": stringToDate(formData.get(`event-start-time`)),
+    "date_to": stringToDate(formData.get(`event-end-time`)),
+    "destination": destination,
+    "is_favorite": definitionFavorite(formData.get(`event-favorite`)),
+    "type": type,
+  };
+  const containerOfCheckbox = form.querySelector(`.event__available-offers`);
+  const offers = Array.from(containerOfCheckbox.querySelectorAll(`.event__offer-checkbox`));
+  const markerOffers = offers.filter((input) => {
+    return input.getAttribute(`value`) === `true`;
+  });
+  const arrayOfIdies = markerOffers.map((input) => {
+    return input.getAttribute(`id`);
+  });
+  const titles = arrayOfIdies.map((id) => {
+    let arr = id.split(`-`);
+    arr.splice(0, 2);
+    arr.pop();
+    const title = arr.join(` `);
+    return title;
+  });
+  const ourOffers = dataAboutOffers.find((it) => {
+    return it.type === type;
+  });
+  formObject.offers = ourOffers.offers.filter((obj) => {
+    return titles.includes(obj.title);
+  })
+  return formObject;
+};
+
+
 export default class PointController {
   constructor(container, onDataChange, onViewChange, dataAboutDestinations, dataAboutOffers) {
     this._container = container;
@@ -77,7 +136,10 @@ export default class PointController {
 
     this._formForEditComponent.setSubmitHandler((evt) => {
       evt.preventDefault();
-      const data = this._formForEditComponent.getData(dataOfRoute.id);
+      const obj = this._formForEditComponent.getData();
+      const data = parseFormData(obj.formData, obj.form, dataOfRoute.id,
+        this._dataAboutDestinations, this._dataAboutOffers);
+      console.log(data);
       this._onDataChange(this, dataOfRoute, data);
       this._replaceFormToPoint();
     });
@@ -85,22 +147,18 @@ export default class PointController {
         dataOfRoute, null));
 
     this._formForEditComponent.setFavoriteChangeHandler(() => {
-      this._onDataChange(this, dataOfRoute, Object.assign({}, dataOfRoute, {
-        isFavorite: !dataOfRoute.isFavorite,
-      }));
+      const newPoint = PointModel.clone(dataOfRoute);
+      console.log(newPoint);
+      newPoint.isFavorite = !newPoint.isFavorite;
+      this._onDataChange(this, dataOfRoute, newPoint);
     });
 
     this._formForEditComponent.setOfferChangeHandler((evt) => {  ///!!!
       const id = evt.target.id;
-      console.log(id);
-      const arr = id.split(`-`); //Choose comfort class
-      console.log(arr);
+      const arr = id.split(`-`);
       arr.splice(0, 2);
-      console.log(arr);
       arr.pop();
-      console.log(arr);
       const title = arr.join(` `);
-      console.log(title);
       const object = this._dataAboutOffers.find((item) => {
         return item.type === dataOfRoute.type;
       });

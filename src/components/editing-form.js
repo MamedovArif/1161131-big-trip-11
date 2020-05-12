@@ -23,44 +23,44 @@ const createEditingFormTemplate = (object, dataAboutDestinations, dataAboutOffer
   );
 };
 
-const stringToDate = (string) => { // для flatpickr другая функция
-  const dates = string.split(` `);
-  const date = dates[0].split(`.`);
-  const time = dates[1].split(`:`);
+// const stringToDate = (string) => { // для flatpickr другая функция
+//   const dates = string.split(` `);
+//   const date = dates[0].split(`.`);
+//   const time = dates[1].split(`:`);
 
-  date[2] = Number(`20` + date[2]);
-  date[1] = Number(date[1]) - 1;
-  date[0] = Number(date[0]);
-  time[0] = Number(time[0]);
-  time[1] = Number(time[1]);
-  return new Date(date[2], date[1], date[0], time[0], time[1]);
-};
+//   date[2] = Number(`20` + date[2]);
+//   date[1] = Number(date[1]) - 1;
+//   date[0] = Number(date[0]);
+//   time[0] = Number(time[0]);
+//   time[1] = Number(time[1]);
+//   return new Date(date[2], date[1], date[0], time[0], time[1]);
+// };
 
-const parseFormData = (formData, form, id) => {
-  const definitionFavorite = (bool) => {
-    if (bool) {
-      return true;
-    }
-    return false;
-  }
-  const transferText = form.querySelector(`.event__label`).textContent.trim().split(` `);
-  const type = transferText[0].toLowerCase();
-  const formObject = {
-    "id": id,
-    "basePrice": Math.abs(parseInt(formData.get(`event-price`))),
-    "dateFrom": stringToDate(formData.get(`event-start-time`)),
-    "dateTo": stringToDate(formData.get(`event-end-time`)),
-    "destination": destinations[formData.get(`event-destination`)],
-    "isFavorite": definitionFavorite(formData.get(`event-favorite`)),
-    "type": type,
-  };
-  formObject.offers = offers[formObject.type];
-  for (let offer of formObject.offers) {
-    offer.isChecked =
-      formData.get(`event-offer-${offer.title.toLowerCase().split(` `).join(`-`)}`);
-  }
-  return formObject;
-};
+// const parseFormData = (formData, form, id) => {
+//   const definitionFavorite = (bool) => {
+//     if (bool) {
+//       return true;
+//     }
+//     return false;
+//   }
+//   const transferText = form.querySelector(`.event__label`).textContent.trim().split(` `);
+//   const type = transferText[0].toLowerCase();
+//   const formObject = {
+//     "id": id,
+//     "basePrice": Math.abs(parseInt(formData.get(`event-price`))),
+//     "dateFrom": stringToDate(formData.get(`event-start-time`)),
+//     "dateTo": stringToDate(formData.get(`event-end-time`)),
+//     "destination": destinations[formData.get(`event-destination`)],
+//     "isFavorite": definitionFavorite(formData.get(`event-favorite`)),
+//     "type": type,
+//   };
+//   formObject.offers = offers[formObject.type];
+//   for (let offer of formObject.offers) {
+//     offer.isChecked =
+//       formData.get(`event-offer-${offer.title.toLowerCase().split(` `).join(`-`)}`);
+//   }
+//   return formObject;
+// };
 
 export default class FormForEdit extends AbstractSmartComponent {
   constructor(editForm, destinations, dataAboutOffers) {
@@ -113,11 +113,12 @@ export default class FormForEdit extends AbstractSmartComponent {
     this.rerender();
   }
 
-  getData(id) {
+  getData() {
     const form = this.getElement().parentElement.querySelector(`.trip-events__item`);
-    formData = new FormData(form);
-
-    return parseFormData(formData, form, id);
+    return {
+      formData: new FormData(form),
+      form: form,
+    };
   }
 
   setDeleteButtonClickHandler(handler) {
