@@ -3,7 +3,9 @@ import FormForEditComponent from '../components/editing-form.js';
 import PointModel from '../models/point.js';
 import {render, RenderPosition, remove, replace} from '../utils/render.js';
 
-// import {cloneDeep} from 'lodash';
+import {cloneDeep} from 'lodash';
+
+const SHAKE_ANIMATION_TIMEOUT = 600;
 
 export const Mode = {
   ADDING: `adding`,
@@ -135,11 +137,18 @@ export default class PointController {
       const obj = this._formForEditComponent.getData();
       const data = parseFormData(obj.formData, obj.form, dataOfRoute.id,
           this._dataAboutDestinations, this._dataAboutOffers);
+      this._formForEditComponent.setData({
+        saveButtonText: `Saving...`,
+      });
       this._onDataChange(this, dataOfRoute, data);
-      this._replaceFormToPoint();
+      this._replaceFormToPoint(); // !!!!!!
     });
-    this._formForEditComponent.setDeleteButtonClickHandler(() => this._onDataChange(this,
-        dataOfRoute, null));
+    this._formForEditComponent.setDeleteButtonClickHandler(() => {
+      this._formForEditComponent.setData({
+        deleteButtonText: `Deleting...`,
+      });
+      this._onDataChange(this, dataOfRoute, null);
+    });
 
     this._formForEditComponent.setFavoriteChangeHandler(() => {
       const newPoint = PointModel.clone(dataOfRoute);
@@ -209,6 +218,22 @@ export default class PointController {
     remove(this._pointOfRouteComponent);
     remove(this._formForEditComponent);
     document.removeEventListener(`keydown`, this._onEscKeyDown);
+  }
+
+  shake() {
+    this._formForEditComponent.getElement().style.animation =
+        `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
+    this._pointOfRouteComponent.getElement().style.animation =
+        `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
+
+    setTimeout(() => {
+      this._formForEditComponent.getElement().style.animation = ``;
+      this._pointOfRouteComponent.getElement().style.animation = ``;
+      this._formForEditComponent.setData({
+        saveButtonText: `Save`,
+        deleteButtonText: `Delete`,
+      })
+    }, SHAKE_ANIMATION_TIMEOUT);
   }
 
   _replacePointToForm() {
