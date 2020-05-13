@@ -7,14 +7,20 @@ import flatpickr from "flatpickr";
 
 import "flatpickr/dist/flatpickr.min.css";
 
-const createEditingFormTemplate = (object, dataAboutDestinations, dataAboutOffers) => {
+const DefaultData = {
+  deleteButtonText: `Delete`,
+  saveButtonText: `Save`,
+};
+
+const createEditingFormTemplate = (object, dataAboutDestinations, dataAboutOffers, externalData) => {
   const type = object.type;
   const allOffers = dataAboutOffers.find((item) => {
     return item.type === type;
   });
+
   return (
     `<form class="trip-events__item  event  event--edit" action="#" method="post">
-      ${createHeaderEditingForm(object, dataAboutDestinations)}
+      ${createHeaderEditingForm(object, dataAboutDestinations, externalData)}
       <section class="event__details">
         ${(allOffers.offers.length === 0) ? `` : createOffersEditingForm(object, dataAboutOffers)}
         ${(object.destination) ? createDestinationEditingForm(object) : ``}
@@ -69,6 +75,7 @@ export default class FormForEdit extends AbstractSmartComponent {
     this._defaultEditForm = editForm;
     this._destinations = destinations;
     this._dataAboutOffers = dataAboutOffers;
+    this._externalData = DefaultData;
 
     this._flatpickr = null;
     this._submitHandler = null;
@@ -79,7 +86,8 @@ export default class FormForEdit extends AbstractSmartComponent {
   }
 
   getTemplate() {
-    return createEditingFormTemplate(this._editForm, this._destinations, this._dataAboutOffers);
+    return createEditingFormTemplate(this._editForm,
+      this._destinations, this._dataAboutOffers, this._externalData);
   }
 
   removeElement() {
@@ -126,6 +134,11 @@ export default class FormForEdit extends AbstractSmartComponent {
       .addEventListener(`click`, handler);
 
     this._deleteButtonClickHandler = handler;
+  }
+
+  setData(data) {
+    this._externalData = Object.assign({}, DefaultData, data);
+    this.rerender();
   }
 
   setSubmitHandler(handler) {

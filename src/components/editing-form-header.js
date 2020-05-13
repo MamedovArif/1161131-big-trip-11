@@ -32,9 +32,13 @@ const generateCities = (object, city) => {
   );
 };
 
-const createHeaderEditingForm = (object, dataAboutDestinations) => {
+const createHeaderEditingForm = (object, dataAboutDestinations, externalData) => {
   const {type, destination, dateFrom, dateTo, basePrice, isFavorite} = object;
   const city = destination.name;
+
+
+  const deleteButtonText = externalData.deleteButtonText;
+  const saveButtonText = externalData.saveButtonText;
 
   // const timeStart = encode(timeBegin);
   // const timeFinish = encode(timeEnd);
@@ -119,8 +123,8 @@ const createHeaderEditingForm = (object, dataAboutDestinations) => {
         name="event-price" value="${basePrice}">
       </div>
 
-      <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-      <button class="event__reset-btn" type="reset">Delete</button>
+      <button class="event__save-btn  btn  btn--blue" type="submit">${saveButtonText}</button>
+      <button class="event__reset-btn" type="reset">${deleteButtonText}</button>
 
       <input id="event-favorite-1" class="event__favorite-checkbox  visually-hidden"
           type="checkbox" name="event-favorite" ${isChecked} value="${isFavorite}">
