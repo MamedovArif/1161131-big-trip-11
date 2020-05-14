@@ -75,6 +75,7 @@ const parseFormData = (formData, form, id, dataAboutDestinations, dataAboutOffer
     "is_favorite": definitionFavorite(formData.get(`event-favorite`)),
     "type": type,
   };
+  console.log(form);
   const containerOfCheckbox = form.querySelector(`.event__available-offers`);
   const offers = Array.from(containerOfCheckbox.querySelectorAll(`.event__offer-checkbox`));
   const markerOffers = offers.filter((input) => {
@@ -255,7 +256,7 @@ export default class PointController {
 
     if (isEscKey) {
       if (this._mode === Mode.ADDING) {
-        this._onDataChange(this, EmptyPoint, null); // 12
+        this._onDataChange(this, EmptyPoint, null);
       }
       this._replaceFormToPoint();
       document.removeEventListener(`keydown`, this._onEscKeyDown);

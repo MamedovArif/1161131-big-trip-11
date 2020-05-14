@@ -23,6 +23,7 @@ const renderPoints = (parent, points, onDataChange, onViewChange, dataAboutDesti
 export default class TripController {
   constructor(container, model, api) {
     this._container = container;
+
     this._showedPointControllers = [];
     this._pointsModel = model;
     this._api = api;
@@ -46,6 +47,21 @@ export default class TripController {
     this._dataAboutOffers = null;
   }
 
+  hide() {
+    this._sortController.throwSort();
+    this._pointsModel._activeSortType = SortType.EVENT;
+    this._onSortChange();
+    this._filterController.throwFilter();
+    this._pointsModel._activeFilterType = FilterType.EVERYTHING;
+    this._handlerFilter();
+
+    this._container.hide();
+  }
+
+  show() {
+    this._container.show();
+  }
+
   render(totalCosts, routeOfCities, header) {
     this._filterController.render();
 
@@ -55,11 +71,11 @@ export default class TripController {
 
     const isAllPointsAbsence = fullDataPoints.length === 0;
     if (isAllPointsAbsence) {
-      render(this._container, noPointsComponent, RenderPosition.BEFOREEND);
+      render(this._container.getElement(), noPointsComponent, RenderPosition.BEFOREEND);
       return;
     }
 
-    this._sortController = new SortController(this._container, pointsModel, this._filterController);
+    this._sortController = new SortController(this._container.getElement(), pointsModel, this._filterController);
     this._sortController.render();
 
     this._renderPoints(fullDataPoints, this._dataAboutDestinations, this._dataAboutOffers);
@@ -82,7 +98,7 @@ export default class TripController {
     this._pointsModel._activeFilterType = FilterType.EVERYTHING;
     this._handlerFilter();
 
-    const tripListElement = this._container.querySelector(`.trip-days`);
+    const tripListElement = this._container.getElement().querySelector(`.trip-days`);
     tripListElement.insertAdjacentHTML(`afterbegin`, generateDays(new Date(), -1));
     tripListElement.querySelector(`.day__counter`).textContent = ``;
     tripListElement.querySelector(`.day__date`).textContent = ``;
@@ -93,8 +109,8 @@ export default class TripController {
   }
 
   _renderPoints(points, dataAboutDestinations, dataAboutOffers) {
-    render(this._container, new ListOfDaysComponent(points), RenderPosition.BEFOREEND);
-    this._listDays = this._container.querySelectorAll(`.trip-events__list`);
+    render(this._container.getElement(), new ListOfDaysComponent(points), RenderPosition.BEFOREEND);
+    this._listDays = this._container.getElement().querySelectorAll(`.trip-events__list`);
 
     for (let x = 0; x < points.length; x++) {
       const newPoints = renderPoints(this._listDays[x], points[x],
@@ -106,18 +122,18 @@ export default class TripController {
   _removePoints() {
     this._showedPointControllers.forEach((pointController) => pointController.destroy());
     this._showedPointControllers = [];
-    const days = this._container.querySelectorAll(`.trip-days__item`);
+    const days = this._container.getElement().querySelectorAll(`.trip-days__item`);
     days.forEach((day) => {
       day.remove();
     });
-    this._container.querySelector(`.trip-days`).remove(); // sin
+    this._container.getElement().querySelector(`.trip-days`).remove(); // sin
   }
 
   _updatePoints() {
     this._removePoints();
     this._renderPoints(this._pointsModel.getPoints(), this._dataAboutDestinations, this._dataAboutOffers);
     if (this._pointsModel._activeSortType !== `event`) {
-      const parentList = this._container.querySelector(`.trip-days`);
+      const parentList = this._container.getElement().querySelector(`.trip-days`);
       parentList.querySelector(`.day__counter`).textContent = ``;
       parentList.querySelector(`.day__date`).textContent = ``; // sin
     }
@@ -163,6 +179,7 @@ export default class TripController {
             pointController.render(pointModel, PointControllerMode.DEFAULT);
           }
         })
+
         .catch(() => {
           pointController.shake();
         });
@@ -175,7 +192,7 @@ export default class TripController {
 
   _handlerFilter(filterType) {
     const filteredPoints = this._pointsModel.getPoints();
-    const parentList = this._container.querySelector(`.trip-days`);
+    const parentList = this._container.getElement().querySelector(`.trip-days`);
     this._removePoints();
     parentList.remove();
     this._renderPoints(filteredPoints, this._dataAboutDestinations, this._dataAboutOffers);
