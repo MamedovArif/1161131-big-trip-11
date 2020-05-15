@@ -12,9 +12,7 @@ const END_POINT = `https://11.ecmascript.pages.academy/big-trip`;
 
 const tripControls = document.querySelector(`.trip-controls`);
 const pageBody = document.querySelector(`.page-body__page-main`);
-const pageBodyContainer = pageBody.querySelector(`.page-body__container`)
-
-//const tripEvents = document.querySelector(`.trip-events`);
+const pageBodyContainer = pageBody.querySelector(`.page-body__container`);
 
 const tripMain = document.querySelector(`.trip-main`);
 
@@ -38,7 +36,7 @@ const dateFrom = (() => {
   return correctDay;
 })();
 
-const statisticsComponent = new StatisticsComponent({points: pointsModel, dateFrom, dateTo});
+const statisticsComponent = new StatisticsComponent(pointsModel);
 const tripComponent = new TripComponent();
 const tripController = new TripController(tripComponent, pointsModel, api);
 render(pageBodyContainer, tripComponent, RenderPosition.BEFOREEND);

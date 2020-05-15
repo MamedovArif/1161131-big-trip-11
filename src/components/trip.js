@@ -1,6 +1,5 @@
 import AbstractComponent from "./abstract-component.js";
 
-
 const createTripTemplate = () => {
   return (
     `<section class="trip-events">
@@ -9,7 +8,6 @@ const createTripTemplate = () => {
     </section>`
   );
 };
-
 
 export default class Trip extends AbstractComponent {
   getTemplate() {
