@@ -63,7 +63,7 @@ const API = class {
     return this._load({
       url: `points/${id}`,
       method: Method.DELETE,
-    })
+    });
   }
 
   _load({url, method = Method.GET, body = null, headers = new Headers()}) {
