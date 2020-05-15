@@ -126,7 +126,7 @@ export default class TripController {
     days.forEach((day) => {
       day.remove();
     });
-    this._container.getElement().querySelector(`.trip-days`).remove(); // sin
+    this._container.getElement().querySelector(`.trip-days`).remove();
   }
 
   _updatePoints() {
@@ -190,10 +190,10 @@ export default class TripController {
     this._showedPointControllers.forEach((it) => it.setDefaultView());
   }
 
-  _handlerFilter(filterType) {
+  _handlerFilter() {
     const filteredPoints = this._pointsModel.getPoints();
-    const parentList = this._container.getElement().querySelector(`.trip-days`);
     this._removePoints();
+    const parentList = this._container.getElement().querySelector(`.trip-days`);
     parentList.remove();
     this._renderPoints(filteredPoints, this._dataAboutDestinations, this._dataAboutOffers);
 

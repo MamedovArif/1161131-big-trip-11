@@ -17,7 +17,7 @@ export const renderTransportChart = (transportCtx, points) => {
         object.count = 1;
         transportForCanvas.push(object);
       }
-    })
+    });
   });
 
   transportForCanvas.sort((a, b) => {
@@ -33,67 +33,67 @@ export const renderTransportChart = (transportCtx, points) => {
 
   transportCtx.height = BAR_HEIGHT * typeForCanvas.length * 0.8;
   return new Chart(transportCtx, {
-      plugins: [ChartDataLabels],
-      type: `horizontalBar`,
-      data: {
-          labels: typeForCanvas,
-          datasets: [{
-              data: counts,
-              backgroundColor: `#ffffff`,
-              hoverBackgroundColor: `tomato`,
-              anchor: `start`
-          }]
+    plugins: [ChartDataLabels],
+    type: `horizontalBar`,
+    data: {
+      labels: typeForCanvas,
+      datasets: [{
+        data: counts,
+        backgroundColor: `#ffffff`,
+        hoverBackgroundColor: `tomato`,
+        anchor: `start`
+      }]
+    },
+    options: {
+      plugins: {
+        datalabels: {
+          font: {
+            size: 13
+          },
+          color: `#000000`,
+          anchor: `end`,
+          align: `start`,
+          formatter: (val) => `${val}x`
+        }
       },
-      options: {
-          plugins: {
-              datalabels: {
-                  font: {
-                      size: 13
-                  },
-                  color: `#000000`,
-                  anchor: 'end',
-                  align: 'start',
-                  formatter: (val) => `${val}x`
-              }
+      title: {
+        display: true,
+        text: `TRANSPORT`,
+        fontColor: `#000000`,
+        fontSize: 23,
+        position: `left`
+      },
+      scales: {
+        yAxes: [{
+          ticks: {
+            fontColor: `#000000`,
+            padding: 5,
+            fontSize: 13,
           },
-          title: {
-              display: true,
-              text: `TRANSPORT`,
-              fontColor: `#000000`,
-              fontSize: 23,
-              position: `left`
+          gridLines: {
+            display: false,
+            drawBorder: false
           },
-          scales: {
-              yAxes: [{
-                  ticks: {
-                      fontColor: `#000000`,
-                      padding: 5,
-                      fontSize: 13,
-                  },
-                  gridLines: {
-                      display: false,
-                      drawBorder: false
-                  },
-                  barThickness: 44,
-              }],
-              xAxes: [{
-                  ticks: {
-                      display: false,
-                      beginAtZero: true,
-                  },
-                  gridLines: {
-                      display: false,
-                      drawBorder: false
-                  },
-                  minBarLength: 50
-              }],
+          barThickness: 44,
+        }],
+        xAxes: [{
+          ticks: {
+            display: false,
+            beginAtZero: true,
           },
-          legend: {
-              display: false
+          gridLines: {
+            display: false,
+            drawBorder: false
           },
-          tooltips: {
-              enabled: false,
-          }
+          minBarLength: 50
+        }],
+      },
+      legend: {
+        display: false
+      },
+      tooltips: {
+        enabled: false,
       }
+    }
   });
-}
+};

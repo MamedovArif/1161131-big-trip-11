@@ -2,8 +2,8 @@ import PointOfRouteComponent from '../components/route-point.js';
 import FormForEditComponent from '../components/editing-form.js';
 import PointModel from '../models/point.js';
 import {render, RenderPosition, remove, replace} from '../utils/render.js';
-
-import {cloneDeep} from 'lodash';
+import * as _ from 'lodash';
+// import {cloneDeep} from 'lodash';
 
 const SHAKE_ANIMATION_TIMEOUT = 600;
 
@@ -68,14 +68,14 @@ const parseFormData = (formData, form, id, dataAboutDestinations, dataAboutOffer
   });
   const formObject = {
     "id": id,
-    "base_price": Math.abs(parseInt(formData.get(`event-price`)), 10),
+    "base_price": Math.abs(parseInt(formData.get(`event-price`), 10)),
     "date_from": stringToDate(formData.get(`event-start-time`)),
     "date_to": stringToDate(formData.get(`event-end-time`)),
     "destination": destination,
     "is_favorite": definitionFavorite(formData.get(`event-favorite`)),
     "type": type,
   };
-  console.log(form);
+
   const containerOfCheckbox = form.querySelector(`.event__available-offers`);
   const offers = Array.from(containerOfCheckbox.querySelectorAll(`.event__offer-checkbox`));
   const markerOffers = offers.filter((input) => {
@@ -185,7 +185,7 @@ export default class PointController {
 
     this._formForEditComponent.setBasePriceChangeHandler((evt) => {
       this._onDataChange(this, dataOfRoute, Object.assign({}, dataOfRoute, {
-        basePrice: Math.abs(parseInt(evt.target.value), 10),
+        basePrice: Math.abs(parseInt(evt.target.value, 10)),
       }));
     });
 
@@ -233,7 +233,7 @@ export default class PointController {
       this._formForEditComponent.setData({
         saveButtonText: `Save`,
         deleteButtonText: `Delete`,
-      })
+      });
     }, SHAKE_ANIMATION_TIMEOUT);
   }
 

@@ -3,7 +3,7 @@ import AbstractComponent from "./abstract-component.js";
 export const MenuItem = {
   STATS: `Stats`,
   TABLE: `Table`,
-}
+};
 
 const createMenuTemplate = () => {
   return (
@@ -29,11 +29,11 @@ export default class Menu extends AbstractComponent {
       }
       const links = this.getElement().querySelectorAll(`.trip-tabs__btn`);
       for (let i = 0; i < links.length; i++) {
-        links[i].classList.remove(`trip-tabs__btn--active`)
+        links[i].classList.remove(`trip-tabs__btn--active`);
       }
       evt.target.classList.add(`trip-tabs__btn--active`);
       const menuItem = evt.target.textContent;
       handler(menuItem);
-    })
+    });
   }
 }

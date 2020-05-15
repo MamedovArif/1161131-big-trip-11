@@ -54,7 +54,7 @@ export default class Statistics extends AbstcractSmartComponent {
     this._renderCharts();
   }
 
-   _renderCharts() {
+  _renderCharts() {
     const element = this.getElement();
 
     const moneyCtx = element.querySelector(`.statistics__chart--money`);
@@ -68,7 +68,7 @@ export default class Statistics extends AbstcractSmartComponent {
     this._timeSpent = renderTimeSpentChart(timeSpentCtx, this._points.getPointsAll());
   }
 
-   _resetCharts() {
+  _resetCharts() {
     if (this._money) {
       this._money.destroy();
       this._money = null;
@@ -85,13 +85,9 @@ export default class Statistics extends AbstcractSmartComponent {
     }
   }
 
-  destroy() {
-    remove(this._money);
-    remove(this._transport);
-    remove(this._timeSpent);
-  }
+  // destroy() {
+  //   remove(this._money);
+  //   remove(this._transport);
+  //   remove(this._timeSpent);
+  // }
 }
-
-
-
-

@@ -1,6 +1,5 @@
 import {formatTime, formatTimeDate, upperFirstElement} from '../utils/common.js';
 import {pretext} from "../const.js";
-import {pointsModel} from "../main.js";
 
 // import {encode} from "he";
 

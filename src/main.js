@@ -29,13 +29,6 @@ export const pointsModel = new PointsModel();
 
 export const filterController = new FilterController(tripControls, pointsModel);
 
-const dateTo = new Date();
-const dateFrom = (() => {
-  let correctDay = new Date(dateTo);
-  correctDay.setDate(correctDay.getDate() - 7);
-  return correctDay;
-})();
-
 const statisticsComponent = new StatisticsComponent(pointsModel);
 const tripComponent = new TripComponent();
 const tripController = new TripController(tripComponent, pointsModel, api);
@@ -43,7 +36,7 @@ render(pageBodyContainer, tripComponent, RenderPosition.BEFOREEND);
 render(pageBodyContainer, statisticsComponent, RenderPosition.BEFOREEND);
 statisticsComponent.hide();
 
-menuComponent.setOnChange((menuItem) => {  ///// 12 stats
+menuComponent.setOnChange((menuItem) => {
   switch (menuItem) {
     case MenuItem.STATS:
       tripController.hide();
@@ -53,7 +46,7 @@ menuComponent.setOnChange((menuItem) => {  ///// 12 stats
       statisticsComponent.hide();
       tripController.show();
       break;
-   }
+  }
 });
 
 const getFullPoints = function (allDataPoints) {
@@ -91,9 +84,9 @@ api.getAddOffers()
       api.getPoints()
         .then((allDataPoints) => {
           const fullDataPoints = getFullPoints(allDataPoints);
-          console.log(allDataPoints);
-          console.log(destinations);
-          console.log(offers);
+          // console.log(allDataPoints);
+          // console.log(destinations);
+          // console.log(offers);
           pointsModel.setDataAboutOffers(offers);
           pointsModel.setDataAboutDestinations(destinations);
           pointsModel.setPoints(fullDataPoints);
@@ -101,4 +94,3 @@ api.getAddOffers()
         });
     });
   });
-
