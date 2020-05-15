@@ -33,8 +33,12 @@ const generateCities = (object, city) => {
 
 const createHeaderEditingForm = (object, dataAboutDestinations, externalData) => {
   const {type, destination, dateFrom, dateTo, basePrice, isFavorite} = object;
-  const city = destination.name;
-
+  let city;
+  if (!destination || !destination.name) {
+    city = ``;
+  } else {
+    city = destination.name;
+  }
 
   const deleteButtonText = externalData.deleteButtonText;
   const saveButtonText = externalData.saveButtonText;

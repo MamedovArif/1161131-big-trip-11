@@ -12,7 +12,14 @@ const generateOptions = (offer, cost) => {
   );
 };
 
-const createRoutePointTemplate = (object) => {
+const createRoutePointTemplate = (object, dataAboutDestinations, dataAboutOffers) => {
+  const cities = dataAboutDestinations.map((obj) => {
+    return obj.name;
+  });
+  if (!object.destination || !cities.includes(object.destination.name)) {
+    object.destination = dataAboutDestinations[0];
+  }
+
   const {type, destination, dateFrom, dateTo, basePrice, offers} = object;
   const options = [];
 
@@ -55,13 +62,15 @@ const createRoutePointTemplate = (object) => {
 };
 
 export default class PointOfRoute extends AbstractComponent {
-  constructor(data) {
+  constructor(data, dataAboutDestinations, dataAboutOffers) {
     super();
     this._data = data;
+    this._dataAboutDestinations = dataAboutDestinations;
+    this._dataAboutOffers = dataAboutOffers;
   }
 
   getTemplate() {
-    return createRoutePointTemplate(this._data);
+    return createRoutePointTemplate(this._data, this._dataAboutDestinations, this._dataAboutOffers);
   }
 
   setClickHandler(handler) {

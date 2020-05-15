@@ -104,7 +104,8 @@ export default class TripController {
     tripListElement.querySelector(`.day__date`).textContent = ``;
     const parentAdd = tripListElement.querySelector(`.trip-days__item`);
     this._creatingPoint = new PointController(parentAdd,
-        this._onDataChange, this._onViewChange);
+        this._onDataChange, this._onViewChange,
+        this._dataAboutDestinations, this._dataAboutOffers);
     this._creatingPoint.render(EmptyPoint, PointControllerMode.ADDING);
   }
 
@@ -192,8 +193,8 @@ export default class TripController {
 
   _handlerFilter() {
     const filteredPoints = this._pointsModel.getPoints();
-    this._removePoints();
     const parentList = this._container.getElement().querySelector(`.trip-days`);
+    this._removePoints();
     parentList.remove();
     this._renderPoints(filteredPoints, this._dataAboutDestinations, this._dataAboutOffers);
 

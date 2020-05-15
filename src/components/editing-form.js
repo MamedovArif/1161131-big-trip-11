@@ -12,6 +12,13 @@ const DefaultData = {
 };
 
 const createEditingFormTemplate = (object, dataAboutDestinations, dataAboutOffers, externalData) => {
+  const cities = dataAboutDestinations.map((obj) => {
+    return obj.name;
+  });
+  if (!object.destination || !cities.includes(object.destination.name)) {
+    object.destination = dataAboutDestinations[0];
+  }
+
   const type = object.type;
   const allOffers = dataAboutOffers.find((item) => {
     return item.type === type;
@@ -133,20 +140,20 @@ export default class FormForEdit extends AbstractSmartComponent {
       this._flatpickr.destroy();
       this._flatpickr = null;
     }
-    //                НЕ УДАЛЯТЬ!!!
-    const dateBegin = this.getElement()
-        .querySelector(`input[name = event-start-time]`);
-    this._flatpickr = flatpickr(dateBegin, {
-      altInput: true,
-      allowInput: true,
-      defaultDate: this._editForm.timeBegin || `today`,
-    });
+    //               НЕ УДАЛЯТЬ!!!
+    // const dateBegin = this.getElement()
+    //     .querySelector(`input[name = event-start-time]`);
+    // this._flatpickr = flatpickr(dateBegin, {
+    //   altInput: true,
+    //   allowInput: true,
+    //   defaultDate: this._editForm.dateFrom || `today`,
+    // });
     // const dateEnd = this.getElement()
     //     .querySelector(`input[name = event-end-time]`);
     // this._flatpickr = flatpickr(dateEnd, {
     //   altInput: true,
     //   allowInput: true,
-    //   defaultDate: this._editForm.timeEnd || `today`,
+    //   defaultDate: this._editForm.dateTo || `today`,
     // });
   }
 

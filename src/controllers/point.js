@@ -17,28 +17,11 @@ export const EmptyPoint = {
   "basePrice": 222,
   "dateFrom": new Date(),
   "dateTo": new Date(),
-  "destination": {
-    "description": `London exerts a considerable impact upon the arts`,
-    "name": `London`,
-    "pictures": [
-      {
-        "src": `http://picsum.photos/248/152?r=${Math.random()}`,
-        "description": `London parliament building`
-      },
-    ]
-  },
+  "destination": null,
   "id": String(new Date() + Math.random()),
   "isFavorite": false,
   "type": `taxi`,
-  "offers": [
-    {
-      "title": `Choose meal`,
-      "price": 180
-    }, {
-      "title": `Upgrade to comfort class`,
-      "price": 50
-    },
-  ]
+  "offers": []
 };
 
 const stringToDate = (string) => { // для flatpickr другая функция
@@ -120,7 +103,8 @@ export default class PointController {
     const oldPointEditComponent = this._formForEditComponent;
     this._mode = mode;
 
-    this._pointOfRouteComponent = new PointOfRouteComponent(dataOfRoute);
+    this._pointOfRouteComponent = new PointOfRouteComponent(dataOfRoute,
+        this._dataAboutDestinations, this._dataAboutOffers);
     this._formForEditComponent = new FormForEditComponent(dataOfRoute,
         this._dataAboutDestinations, this._dataAboutOffers);
 
