@@ -13,13 +13,6 @@ const generateOptions = (offer, cost) => {
 };
 
 const createRoutePointTemplate = (object, dataAboutDestinations, dataAboutOffers) => {
-  const cities = dataAboutDestinations.map((obj) => {
-    return obj.name;
-  });
-  if (!object.destination || !cities.includes(object.destination.name)) {
-    object.destination = dataAboutDestinations[0];
-  }
-
   const {type, destination, dateFrom, dateTo, basePrice, offers} = object;
   const options = [];
 

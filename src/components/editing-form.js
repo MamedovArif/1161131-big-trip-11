@@ -12,13 +12,6 @@ const DefaultData = {
 };
 
 const createEditingFormTemplate = (object, dataAboutDestinations, dataAboutOffers, externalData) => {
-  const cities = dataAboutDestinations.map((obj) => {
-    return obj.name;
-  });
-  if (!object.destination || !cities.includes(object.destination.name)) {
-    object.destination = dataAboutDestinations[0];
-  }
-
   const type = object.type;
   const allOffers = dataAboutOffers.find((item) => {
     return item.type === type;
@@ -66,7 +59,7 @@ export default class FormForEdit extends AbstractSmartComponent {
     super.removeElement();
   }
 
-  recoveryListeners() {
+  recoveryListeners() { // восстанавливаем
     this.setSubmitHandler(this._submitHandler);
     this.setCloseHandler(this._closeHandler);
     this.setDeleteButtonClickHandler(this._deleteButtonClickHandler);
@@ -89,7 +82,7 @@ export default class FormForEdit extends AbstractSmartComponent {
   }
 
   getData() {
-    const form = this.getElement().parentElement.querySelector(`.trip-events__item`);
+    const form = this.getElement();
     return {
       formData: new FormData(form),
       form,
@@ -171,12 +164,12 @@ export default class FormForEdit extends AbstractSmartComponent {
         return;
       }
       this._editForm.type = evt.target.textContent.toLowerCase();
-      this._editForm.destination = {}; // !!!!
+      this._editForm.destination = null;
 
       const actualOfferObject = this._dataAboutOffers.find((object) => {
         return object.type === this._editForm.type;
       });
-      this._editForm.offers = actualOfferObject.offres;
+      this._editForm.offers = [];
       this.rerender();
     });
   }

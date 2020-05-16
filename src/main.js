@@ -86,7 +86,7 @@ api.getAddOffers()
           const fullDataPoints = getFullPoints(allDataPoints);
           // console.log(allDataPoints);
           // console.log(destinations);
-          // console.log(offers);
+          console.log(offers);
           pointsModel.setDataAboutOffers(offers);
           pointsModel.setDataAboutDestinations(destinations);
           pointsModel.setPoints(fullDataPoints);

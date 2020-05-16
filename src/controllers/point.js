@@ -46,9 +46,12 @@ const parseFormData = (formData, form, id, dataAboutDestinations, dataAboutOffer
   };
   const transferText = form.querySelector(`.event__label`).textContent.trim().split(` `);
   const type = transferText[0].toLowerCase();
-  const destination = dataAboutDestinations.find((item) => {
+  let destination = dataAboutDestinations.find((item) => {
     return item.name === formData.get(`event-destination`);
   });
+  if (!destination) {
+    destination = dataAboutDestinations[0];
+  }
   const formObject = {
     "id": id,
     "base_price": Math.abs(parseInt(formData.get(`event-price`), 10)),
@@ -125,8 +128,10 @@ export default class PointController {
       this._formForEditComponent.setData({
         saveButtonText: `Saving...`,
       });
+      console.log(data);
+      let stateGet = false;
       this._onDataChange(this, dataOfRoute, data);
-      this._replaceFormToPoint(); // !!!!!!
+      this._replaceFormToPoint();
     });
     this._formForEditComponent.setDeleteButtonClickHandler(() => {
       this._formForEditComponent.setData({
@@ -168,9 +173,9 @@ export default class PointController {
     });
 
     this._formForEditComponent.setBasePriceChangeHandler((evt) => {
-      this._onDataChange(this, dataOfRoute, Object.assign({}, dataOfRoute, {
-        basePrice: Math.abs(parseInt(evt.target.value, 10)),
-      }));
+      const newPoint = PointModel.clone(dataOfRoute);
+      newPoint.basePrice = Math.abs(parseInt(evt.target.value, 10))
+      this._onDataChange(this, dataOfRoute, newPoint);
     });
 
     switch (mode) {
