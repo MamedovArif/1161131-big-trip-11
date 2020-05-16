@@ -187,6 +187,8 @@ export default class FormForEdit extends AbstractSmartComponent {
       });
       this._editForm.offers = [];
       this.rerender();
+
+      // возможно сюда надо добавить фаворит и его друзей
     });
   }
 }

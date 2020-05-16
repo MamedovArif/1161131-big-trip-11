@@ -110,6 +110,7 @@ export default class TripController {
   }
 
   _renderPoints(points, dataAboutDestinations, dataAboutOffers) {
+
     render(this._container.getElement(), new ListOfDaysComponent(points), RenderPosition.BEFOREEND);
     this._listDays = this._container.getElement().querySelectorAll(`.trip-events__list`);
 
@@ -136,7 +137,7 @@ export default class TripController {
     if (this._pointsModel._activeSortType !== `event`) {
       const parentList = this._container.getElement().querySelector(`.trip-days`);
       parentList.querySelector(`.day__counter`).textContent = ``;
-      parentList.querySelector(`.day__date`).textContent = ``; // sin
+      parentList.querySelector(`.day__date`).textContent = ``;
     }
   }
 
@@ -151,7 +152,7 @@ export default class TripController {
 
       if (newPoint === null) {
         pointController.destroy();
-        this._updatePoints();
+        this._updatePoints(); // .............????????
       } else {
         this._api.createPoint(newPoint)
           .then((pointModel) => {
@@ -178,6 +179,7 @@ export default class TripController {
           const isSuccess = this._pointsModel.updatePoint(oldPoint.id, pointModel);
           if (isSuccess) {
             pointController.render(pointModel, PointControllerMode.DEFAULT);
+            this._updatePoints(); /// ?????????? save favorite
           }
         })
 
@@ -188,6 +190,7 @@ export default class TripController {
   }
 
   _onViewChange() {
+    console.log(this._showedPointControllers);
     this._showedPointControllers.forEach((it) => it.setDefaultView());
   }
 

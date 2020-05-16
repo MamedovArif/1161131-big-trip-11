@@ -50,26 +50,31 @@ const parseFormData = (formData, form, id, dataAboutDestinations, dataAboutOffer
   };
 
   const containerOfCheckbox = form.querySelector(`.event__available-offers`);
-  const offers = Array.from(containerOfCheckbox.querySelectorAll(`.event__offer-checkbox`));
-  const markerOffers = offers.filter((input) => {
-    return input.getAttribute(`value`) === `true`;
-  });
-  const arrayOfIdies = markerOffers.map((input) => {
-    return input.getAttribute(`id`);
-  });
-  const titles = arrayOfIdies.map((iden) => {
-    let arr = iden.split(`-`);
-    arr.splice(0, 2);
-    arr.pop();
-    const title = arr.join(` `);
-    return title;
-  });
-  const ourOffers = dataAboutOffers.find((it) => {
-    return it.type === type;
-  });
-  formObject.offers = ourOffers.offers.filter((obj) => {
-    return titles.includes(obj.title);
-  });
+  if (containerOfCheckbox) {
+    const offers = Array.from(containerOfCheckbox.querySelectorAll(`.event__offer-checkbox`)); // empty offers
+    const markerOffers = offers.filter((input) => {
+      return input.getAttribute(`value`) === `true`;
+    });
+    const arrayOfIdies = markerOffers.map((input) => {
+      return input.getAttribute(`id`);
+    });
+    const titles = arrayOfIdies.map((iden) => {
+      let arr = iden.split(`-`);
+      arr.splice(0, 2);
+      arr.pop();
+      const title = arr.join(` `);
+      return title;
+    });
+    const ourOffers = dataAboutOffers.find((it) => {
+      return it.type === type;
+    });
+    formObject.offers = ourOffers.offers.filter((obj) => {
+      return titles.includes(obj.title);
+    });
+  } else {
+    formObject.offers = [];
+  }
+
   return new PointModel(formObject);
 };
 
@@ -136,8 +141,7 @@ export default class PointController {
           saveButtonText: `Saving...`,
         });
         this._onDataChange(this, dataOfRoute, data);
-        this._replaceFormToPoint();
-
+        //this._replaceFormToPoint();
       }
     });
 
@@ -194,11 +198,9 @@ export default class PointController {
 
     this._formForEditComponent.setDateToChangeHandler((evt) => {
       const newPoint = PointModel.clone(dataOfRoute);
-      newPoint.dateFrom = new Date(evt.target.value)
+      newPoint.dateTo = new Date(evt.target.value)
       this._onDataChange(this, dataOfRoute, newPoint);
     });
-
-
 
     switch (mode) {
       case Mode.DEFAULT:
