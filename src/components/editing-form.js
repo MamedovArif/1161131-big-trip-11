@@ -59,7 +59,7 @@ export default class FormForEdit extends AbstractSmartComponent {
     super.removeElement();
   }
 
-  recoveryListeners() { // восстанавливаем
+  recoveryListeners() { // восстанавливаем !!!!
     this.setSubmitHandler(this._submitHandler);
     this.setCloseHandler(this._closeHandler);
     this.setDeleteButtonClickHandler(this._deleteButtonClickHandler);
@@ -111,11 +111,6 @@ export default class FormForEdit extends AbstractSmartComponent {
     this._closeHandler = handler;
   }
 
-  setFavoriteChangeHandler(handler) {
-    this.getElement().querySelector(`input[name = event-favorite]`)
-        .addEventListener(`change`, handler);
-  }
-
   setOfferChangeHandler(handler) {
     const element = this.getElement().querySelector(`.event__available-offers`);
     if (element) {
@@ -123,20 +118,25 @@ export default class FormForEdit extends AbstractSmartComponent {
     }
   }
 
-  setBasePriceChangeHandler(handler) {
-    this.getElement().querySelector(`input[name = event-price]`)
-        .addEventListener(`blur`, handler);
-  }
+  // setFavoriteChangeHandler(handler) {
+  //   this.getElement().querySelector(`input[name = event-favorite]`)
+  //       .addEventListener(`change`, handler);
+  // }
 
-  setDateFromChangeHandler(handler) {
-    this.getElement().querySelector(`input[type = datetime-local]`)
-        .addEventListener(`blur`, handler);
-  }
+  // setBasePriceChangeHandler(handler) {
+  //   this.getElement().querySelector(`input[name = event-price]`)
+  //       .addEventListener(`blur`, handler);
+  // }
 
-  setDateToChangeHandler(handler) {
-    const elem = this.getElement().querySelectorAll(`input[type = datetime-local]`);
-    elem[elem.length - 1].addEventListener(`blur`, handler);
-  }
+  // setDateFromChangeHandler(handler) {
+  //   this.getElement().querySelector(`input[type = datetime-local]`)
+  //       .addEventListener(`blur`, handler);
+  // }
+
+  // setDateToChangeHandler(handler) {
+  //   const elem = this.getElement().querySelectorAll(`input[type = datetime-local]`);
+  //   elem[elem.length - 1].addEventListener(`blur`, handler);
+  // }
 
   _applyFlatpickr() {
     if (this._flatpickr) {
@@ -187,8 +187,29 @@ export default class FormForEdit extends AbstractSmartComponent {
       });
       this._editForm.offers = [];
       this.rerender();
+    });
 
-      // возможно сюда надо добавить фаворит и его друзей
+    // возможно сюда надо добавить фаворит и его друзей
+
+    element.querySelector(`input[name = event-favorite]`).addEventListener(`change`, () => {
+      this._editForm.isFavorite = !this._editForm.isFavorite;
+      this.rerender();
+    });
+
+    element.querySelector(`input[name = event-price]`).addEventListener(`blur`, (evt) => {
+      this._editForm.basePrice = Math.abs(parseInt(evt.target.value, 10));
+      this.rerender();
+    });
+
+    element.querySelector(`input[type = datetime-local]`).addEventListener(`blur`, (evt) => {
+      this._editForm.dateFrom = new Date(evt.target.value);
+      this.rerender();
+    });
+
+    const elem = element.querySelectorAll(`input[type = datetime-local]`);
+    elem[elem.length - 1].addEventListener(`blur`, (evt) => {
+      this._editForm.dateTo = new Date(evt.target.value);
+      this.rerender(); //отваливается flatpickr recovery
     });
   }
 }

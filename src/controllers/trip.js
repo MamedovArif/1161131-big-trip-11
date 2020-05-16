@@ -179,7 +179,7 @@ export default class TripController {
           const isSuccess = this._pointsModel.updatePoint(oldPoint.id, pointModel);
           if (isSuccess) {
             pointController.render(pointModel, PointControllerMode.DEFAULT);
-            this._updatePoints(); /// ?????????? save favorite
+            this._updatePoints(); /// ?????????? save favorite(date)
           }
         })
 

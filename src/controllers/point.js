@@ -51,7 +51,7 @@ const parseFormData = (formData, form, id, dataAboutDestinations, dataAboutOffer
 
   const containerOfCheckbox = form.querySelector(`.event__available-offers`);
   if (containerOfCheckbox) {
-    const offers = Array.from(containerOfCheckbox.querySelectorAll(`.event__offer-checkbox`)); // empty offers
+    const offers = Array.from(containerOfCheckbox.querySelectorAll(`.event__offer-checkbox`));
     const markerOffers = offers.filter((input) => {
       return input.getAttribute(`value`) === `true`;
     });
@@ -152,11 +152,11 @@ export default class PointController {
       this._onDataChange(this, dataOfRoute, null);
     });
 
-    this._formForEditComponent.setFavoriteChangeHandler(() => {
-      const newPoint = PointModel.clone(dataOfRoute);
-      newPoint.isFavorite = !newPoint.isFavorite;
-      this._onDataChange(this, dataOfRoute, newPoint);
-    });
+    // this._formForEditComponent.setFavoriteChangeHandler(() => {
+    //   const newPoint = PointModel.clone(dataOfRoute);
+    //   newPoint.isFavorite = !newPoint.isFavorite;
+    //   this._onDataChange(this, dataOfRoute, newPoint);
+    // });
 
     this._formForEditComponent.setOfferChangeHandler((evt) => {
       const id = evt.target.id;
@@ -184,23 +184,23 @@ export default class PointController {
       this._onDataChange(this, dataOfRoute, deepClone);
     });
 
-    this._formForEditComponent.setBasePriceChangeHandler((evt) => {
-      const newPoint = PointModel.clone(dataOfRoute);
-      newPoint.basePrice = Math.abs(parseInt(evt.target.value, 10))
-      this._onDataChange(this, dataOfRoute, newPoint);
-    });
+    // this._formForEditComponent.setBasePriceChangeHandler((evt) => {
+    //   const newPoint = PointModel.clone(dataOfRoute);
+    //   newPoint.basePrice = Math.abs(parseInt(evt.target.value, 10))
+    //   this._onDataChange(this, dataOfRoute, newPoint);
+    // });
 
-    this._formForEditComponent.setDateFromChangeHandler((evt) => {
-      const newPoint = PointModel.clone(dataOfRoute);
-      newPoint.dateFrom = new Date(evt.target.value)
-      this._onDataChange(this, dataOfRoute, newPoint);
-    });
+    // this._formForEditComponent.setDateFromChangeHandler((evt) => {
+    //   const newPoint = PointModel.clone(dataOfRoute);
+    //   newPoint.dateFrom = new Date(evt.target.value)
+    //   this._onDataChange(this, dataOfRoute, newPoint);
+    // });
 
-    this._formForEditComponent.setDateToChangeHandler((evt) => {
-      const newPoint = PointModel.clone(dataOfRoute);
-      newPoint.dateTo = new Date(evt.target.value)
-      this._onDataChange(this, dataOfRoute, newPoint);
-    });
+    // this._formForEditComponent.setDateToChangeHandler((evt) => {
+    //   const newPoint = PointModel.clone(dataOfRoute);
+    //   newPoint.dateTo = new Date(evt.target.value)
+    //   this._onDataChange(this, dataOfRoute, newPoint);
+    // });
 
     switch (mode) {
       case Mode.DEFAULT:
