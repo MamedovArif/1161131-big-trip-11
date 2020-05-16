@@ -128,26 +128,42 @@ export default class FormForEdit extends AbstractSmartComponent {
         .addEventListener(`blur`, handler);
   }
 
+  setDateFromChangeHandler(handler) {
+    this.getElement().querySelector(`input[type = datetime-local]`)
+        .addEventListener(`blur`, handler);
+  }
+
+  setDateToChangeHandler(handler) {
+    const elem = this.getElement().querySelectorAll(`input[type = datetime-local]`);
+    elem[elem.length - 1].addEventListener(`blur`, handler);
+  }
+
   _applyFlatpickr() {
     if (this._flatpickr) {
       this._flatpickr.destroy();
       this._flatpickr = null;
     }
     //               НЕ УДАЛЯТЬ!!!
-    // const dateBegin = this.getElement()
-    //     .querySelector(`input[name = event-start-time]`);
-    // this._flatpickr = flatpickr(dateBegin, {
-    //   altInput: true,
-    //   allowInput: true,
-    //   defaultDate: this._editForm.dateFrom || `today`,
-    // });
-    // const dateEnd = this.getElement()
-    //     .querySelector(`input[name = event-end-time]`);
-    // this._flatpickr = flatpickr(dateEnd, {
-    //   altInput: true,
-    //   allowInput: true,
-    //   defaultDate: this._editForm.dateTo || `today`,
-    // });
+    const dateBegin = this.getElement()
+        .querySelector(`input[name = event-start-time]`);
+    this._flatpickr = flatpickr(dateBegin, {
+      altInput: true,
+      allowInput: false,
+      altFormat: `d.m.y H:i`,
+      dateFormat: `Z`,
+      enableTime: true,
+      defaultDate: this._editForm.dateFrom || `today`,
+    });
+    const dateEnd = this.getElement()
+        .querySelector(`input[name = event-end-time]`);
+    this._flatpickr = flatpickr(dateEnd, {
+      altInput: true,
+      allowInput: false,
+      altFormat: `d.m.y H:i`,
+      dateFormat: `Z`,
+      enableTime: true,
+      defaultDate: this._editForm.dateTo || `today`,
+    });
   }
 
   _subscribeOnEvents() {

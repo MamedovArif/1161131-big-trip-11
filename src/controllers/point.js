@@ -24,19 +24,6 @@ export const EmptyPoint = {
   "offers": []
 };
 
-const stringToDate = (string) => { // для flatpickr другая функция
-  const dates = string.split(` `);
-  const date = dates[0].split(`.`);
-  const time = dates[1].split(`:`);
-
-  date[2] = Number(`20` + date[2]);
-  date[1] = Number(date[1]) - 1;
-  date[0] = Number(date[0]);
-  time[0] = Number(time[0]);
-  time[1] = Number(time[1]);
-  return new Date(date[2], date[1], date[0], time[0], time[1]);
-};
-
 const parseFormData = (formData, form, id, dataAboutDestinations, dataAboutOffers) => {
   const definitionFavorite = (bool) => {
     if (bool) {
@@ -55,8 +42,8 @@ const parseFormData = (formData, form, id, dataAboutDestinations, dataAboutOffer
   const formObject = {
     "id": id,
     "base_price": Math.abs(parseInt(formData.get(`event-price`), 10)),
-    "date_from": stringToDate(formData.get(`event-start-time`)),
-    "date_to": stringToDate(formData.get(`event-end-time`)),
+    "date_from": formData.get(`event-start-time`),
+    "date_to": formData.get(`event-end-time`),
     "destination": destination,
     "is_favorite": definitionFavorite(formData.get(`event-favorite`)),
     "type": type,
@@ -122,17 +109,38 @@ export default class PointController {
 
     this._formForEditComponent.setSubmitHandler((evt) => {
       evt.preventDefault();
+
       const obj = this._formForEditComponent.getData();
-      const data = parseFormData(obj.formData, obj.form, dataOfRoute.id,
-          this._dataAboutDestinations, this._dataAboutOffers);
-      this._formForEditComponent.setData({
-        saveButtonText: `Saving...`,
-      });
-      console.log(data);
-      let stateGet = false;
-      this._onDataChange(this, dataOfRoute, data);
-      this._replaceFormToPoint();
+
+      const forma = obj.form;
+      const start = forma.querySelector(`input[name = event-start-time]`);
+      const end = forma.querySelector(`input[name = event-end-time]`);
+
+      let startTime = new Date(start.getAttribute(`value`));
+      let endTime = new Date(end.getAttribute(`value`));
+
+      if (startTime > endTime) {
+        forma.querySelector(`input[type = datetime-local]`)
+            .setCustomValidity('Дата начала должна наступать раньше даты окончания');
+        forma.querySelector(`input[type = datetime-local]`).style = 'border: 2px solid tomato;';
+
+        startTime = new Date(start.getAttribute(`value`));
+        endTime = new Date(end.getAttribute(`value`));
+      } else {
+        forma.querySelector(`select[name = event-destination]`).setCustomValidity('');
+        forma.querySelector(`select[name = event-destination]`).style = 'border: none;';
+
+        const data = parseFormData(obj.formData, obj.form, dataOfRoute.id,
+            this._dataAboutDestinations, this._dataAboutOffers);
+        this._formForEditComponent.setData({
+          saveButtonText: `Saving...`,
+        });
+        this._onDataChange(this, dataOfRoute, data);
+        this._replaceFormToPoint();
+
+      }
     });
+
     this._formForEditComponent.setDeleteButtonClickHandler(() => {
       this._formForEditComponent.setData({
         deleteButtonText: `Deleting...`,
@@ -177,6 +185,20 @@ export default class PointController {
       newPoint.basePrice = Math.abs(parseInt(evt.target.value, 10))
       this._onDataChange(this, dataOfRoute, newPoint);
     });
+
+    this._formForEditComponent.setDateFromChangeHandler((evt) => {
+      const newPoint = PointModel.clone(dataOfRoute);
+      newPoint.dateFrom = new Date(evt.target.value)
+      this._onDataChange(this, dataOfRoute, newPoint);
+    });
+
+    this._formForEditComponent.setDateToChangeHandler((evt) => {
+      const newPoint = PointModel.clone(dataOfRoute);
+      newPoint.dateFrom = new Date(evt.target.value)
+      this._onDataChange(this, dataOfRoute, newPoint);
+    });
+
+
 
     switch (mode) {
       case Mode.DEFAULT:
