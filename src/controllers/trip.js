@@ -190,7 +190,6 @@ export default class TripController {
   }
 
   _onViewChange() {
-    console.log(this._showedPointControllers);
     this._showedPointControllers.forEach((it) => it.setDefaultView());
   }
 

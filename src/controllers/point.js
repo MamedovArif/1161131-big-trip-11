@@ -117,23 +117,25 @@ export default class PointController {
 
       const obj = this._formForEditComponent.getData();
 
-      const forma = obj.form;
-      const start = forma.querySelector(`input[name = event-start-time]`);
-      const end = forma.querySelector(`input[name = event-end-time]`);
+      // const forma = obj.form;
+      // const start = forma.querySelector(`input[name = event-start-time]`);
+      // const end = forma.querySelector(`input[name = event-end-time]`);
 
-      let startTime = new Date(start.getAttribute(`value`));
-      let endTime = new Date(end.getAttribute(`value`));
+      // let startTime = new Date(start.getAttribute(`value`));
+      // let endTime = new Date(end.getAttribute(`value`));
+      // console.log(endTime);
 
-      if (startTime > endTime) {
-        forma.querySelector(`input[type = datetime-local]`)
-            .setCustomValidity('Дата начала должна наступать раньше даты окончания');
-        forma.querySelector(`input[type = datetime-local]`).style = 'border: 2px solid tomato;';
+      // if (startTime > endTime) {
+      //   console.log(endTime);
+      //   forma.querySelector(`input[type = datetime-local]`)
+      //       .setCustomValidity('Дата начала должна наступать раньше даты окончания');
+      //   forma.querySelector(`input[type = datetime-local]`).style = 'border: 2px solid tomato;';
 
-        startTime = new Date(start.getAttribute(`value`));
-        endTime = new Date(end.getAttribute(`value`));
-      } else {
-        forma.querySelector(`select[name = event-destination]`).setCustomValidity('');
-        forma.querySelector(`select[name = event-destination]`).style = 'border: none;';
+        // startTime = new Date(start.getAttribute(`value`));
+        // endTime = new Date(end.getAttribute(`value`));
+      // } else {
+      //   forma.querySelector(`input[type = datetime-local]`).setCustomValidity('');
+      //   forma.querySelector(`input[type = datetime-local]`).style = 'border: none;';
 
         const data = parseFormData(obj.formData, obj.form, dataOfRoute.id,
             this._dataAboutDestinations, this._dataAboutOffers);
@@ -141,8 +143,7 @@ export default class PointController {
           saveButtonText: `Saving...`,
         });
         this._onDataChange(this, dataOfRoute, data);
-        //this._replaceFormToPoint();
-      }
+      //}
     });
 
     this._formForEditComponent.setDeleteButtonClickHandler(() => {

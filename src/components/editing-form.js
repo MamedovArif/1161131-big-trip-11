@@ -167,6 +167,8 @@ export default class FormForEdit extends AbstractSmartComponent {
   }
 
   _subscribeOnEvents() {
+    //this._applyFlatpickr();
+
     const element = this.getElement();
     element.querySelector(`select[name = event-destination]`)
         .addEventListener(`change`, (evt) => {
@@ -201,15 +203,25 @@ export default class FormForEdit extends AbstractSmartComponent {
       this.rerender();
     });
 
-    element.querySelector(`input[type = datetime-local]`).addEventListener(`blur`, (evt) => {
+    element.querySelector(`input[name = event-start-time]`).addEventListener(`blur`, (evt) => {
       this._editForm.dateFrom = new Date(evt.target.value);
       this.rerender();
     });
 
-    const elem = element.querySelectorAll(`input[type = datetime-local]`);
-    elem[elem.length - 1].addEventListener(`blur`, (evt) => {
+    element.querySelector(`input[name = event-end-time]`).addEventListener(`blur`, (evt) => {
       this._editForm.dateTo = new Date(evt.target.value);
-      this.rerender(); //отваливается flatpickr recovery
+      this.rerender();
     });
+
+    // element.querySelector(`input[type = datetime-local]`).addEventListener(`blur`, (evt) => {
+    //   this._editForm.dateFrom = new Date(evt.target.value);
+    //   this.rerender();
+    // });
+
+    // const elem = element.querySelectorAll(`input[type = datetime-local]`);
+    // elem[elem.length - 1].addEventListener(`blur`, (evt) => {
+    //   this._editForm.dateTo = new Date(evt.target.value);
+    //   this.rerender(); //отваливается flatpickr recovery
+    // });
   }
 }
