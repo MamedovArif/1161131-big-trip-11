@@ -2,8 +2,6 @@ import PointOfRouteComponent from '../components/route-point.js';
 import FormForEditComponent from '../components/editing-form.js';
 import PointModel from '../models/point.js';
 import {render, RenderPosition, remove, replace} from '../utils/render.js';
-import * as _ from 'lodash';
-// import {cloneDeep} from 'lodash';
 
 const SHAKE_ANIMATION_TIMEOUT = 600;
 
@@ -108,7 +106,7 @@ export default class PointController {
       document.addEventListener(`keydown`, this._onEscKeyDown);
     });
 
-    this._formForEditComponent.setCloseHandler(() => { // сброс значений
+    this._formForEditComponent.setCloseHandler(() => {
       this._replaceFormToPoint();
     });
 
@@ -129,32 +127,6 @@ export default class PointController {
         deleteButtonText: `Deleting...`,
       });
       this._onDataChange(this, dataOfRoute, null);
-    });
-
-    this._formForEditComponent.setOfferChangeHandler((evt) => { //вставить в subscribe
-      const id = evt.target.id;
-      const arr = id.split(`-`);
-      arr.splice(0, 2);
-      arr.pop();
-      const title = arr.join(` `);
-      const object = this._dataAboutOffers.find((item) => {
-        return item.type === dataOfRoute.type;
-      });
-      const deepClone = _.cloneDeep(dataOfRoute);
-      const isSuccess = dataOfRoute.offers.find((obj) => {
-        return obj.title === title;
-      });
-      if (isSuccess) {
-        deepClone.offers = deepClone.offers.filter((offer) => {
-          return offer.title !== title;
-        });
-      } else {
-        const offer = object.offers.find((offerOne) => {
-          return offerOne.title === title;
-        });
-        deepClone.offers.push(offer);
-      }
-      this._onDataChange(this, dataOfRoute, deepClone);
     });
 
     switch (mode) {
@@ -179,7 +151,6 @@ export default class PointController {
 
   setDefaultView() {
     if (this._mode !== Mode.DEFAULT) {
-      // сброс значений
       this._replaceFormToPoint();
     }
   }

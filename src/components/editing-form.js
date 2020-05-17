@@ -2,6 +2,8 @@ import {createHeaderEditingForm} from './editing-form-header.js';
 import {createOffersEditingForm} from './editing-form-offers.js';
 import {createDestinationEditingForm} from './editing-form-destination.js';
 import AbstractSmartComponent from "./abstract-smart-component.js";
+import * as _ from 'lodash';
+// import {cloneDeep} from 'lodash';
 import flatpickr from "flatpickr";
 
 import "flatpickr/dist/flatpickr.min.css";
@@ -85,8 +87,7 @@ export default class FormForEdit extends AbstractSmartComponent {
     this._editForm.isFavorite = this._defaultEditForm.isFavorite;
     this._editForm.dateFrom = this._defaultEditForm.dateFrom;
     this._editForm.dateTo = this._defaultEditForm.dateTo;
-
-    // this._editForm.options = option[(this._defaultEditForm.type).toLowerCase()]; // !!!
+    this._editForm.offers = this._defaultEditForm.offers;
     this.rerender();
   }
 
@@ -118,13 +119,6 @@ export default class FormForEdit extends AbstractSmartComponent {
     this.getElement().querySelector(`.event__rollup-btn`)
         .addEventListener(`click`, handler);
     this._closeHandler = handler;
-  }
-
-  setOfferChangeHandler(handler) { //вставить в subscribe
-    const element = this.getElement().querySelector(`.event__available-offers`);
-    if (element) {
-      element.addEventListener(`change`, handler);
-    }
   }
 
   _applyFlatpickr() {
@@ -211,5 +205,37 @@ export default class FormForEdit extends AbstractSmartComponent {
         saveButton.removeAttribute(`disabled`);
       }
     });
+
+    const offersContainer = element.querySelector(`.event__available-offers`);
+    if (offersContainer) {
+      offersContainer.addEventListener(`change`, (evt) => {
+        const id = evt.target.id;
+        const label = element.querySelector(`label[for = ${id}`);
+        const title = label.querySelector(`span`).textContent; // не сохраняет чек ин
+
+        const actualOffers = this._dataAboutOffers.find((item) => {
+          return item.type === this._editForm.type;
+        });
+
+        const currentOffer = actualOffers.offers.find((obj) => {
+          return obj.title === title
+        })
+
+        let isAddOffer = false;
+        this._editForm.offers.forEach((object) => {
+          if (object.title === title) {
+            isAddOffer = true;
+          }
+        })
+        if (isAddOffer) {
+          this._editForm.offers = this._editForm.offers.filter((offer) => {
+            return offer.title !== title;
+          });
+        } else {
+          this._editForm.offers = [].concat(this._editForm.offers, currentOffer);
+        }
+        this.rerender();
+      });
+    }
   }
 }
