@@ -114,36 +114,14 @@ export default class PointController {
 
     this._formForEditComponent.setSubmitHandler((evt) => {
       evt.preventDefault();
-
       const obj = this._formForEditComponent.getData();
 
-      // const forma = obj.form;
-      // const start = forma.querySelector(`input[name = event-start-time]`);
-      // const end = forma.querySelector(`input[name = event-end-time]`);
-
-      // let startTime = new Date(start.getAttribute(`value`));
-      // let endTime = new Date(end.getAttribute(`value`));
-      // console.log(endTime);
-
-      // if (startTime > endTime) {
-      //   console.log(endTime);
-      //   forma.querySelector(`input[type = datetime-local]`)
-      //       .setCustomValidity('Дата начала должна наступать раньше даты окончания');
-      //   forma.querySelector(`input[type = datetime-local]`).style = 'border: 2px solid tomato;';
-
-        // startTime = new Date(start.getAttribute(`value`));
-        // endTime = new Date(end.getAttribute(`value`));
-      // } else {
-      //   forma.querySelector(`input[type = datetime-local]`).setCustomValidity('');
-      //   forma.querySelector(`input[type = datetime-local]`).style = 'border: none;';
-
-        const data = parseFormData(obj.formData, obj.form, dataOfRoute.id,
-            this._dataAboutDestinations, this._dataAboutOffers);
-        this._formForEditComponent.setData({
-          saveButtonText: `Saving...`,
-        });
-        this._onDataChange(this, dataOfRoute, data);
-      //}
+      const data = parseFormData(obj.formData, obj.form, dataOfRoute.id,
+          this._dataAboutDestinations, this._dataAboutOffers);
+      this._formForEditComponent.setData({
+        saveButtonText: `Saving...`,
+      });
+      this._onDataChange(this, dataOfRoute, data);
     });
 
     this._formForEditComponent.setDeleteButtonClickHandler(() => {
@@ -153,13 +131,7 @@ export default class PointController {
       this._onDataChange(this, dataOfRoute, null);
     });
 
-    // this._formForEditComponent.setFavoriteChangeHandler(() => {
-    //   const newPoint = PointModel.clone(dataOfRoute);
-    //   newPoint.isFavorite = !newPoint.isFavorite;
-    //   this._onDataChange(this, dataOfRoute, newPoint);
-    // });
-
-    this._formForEditComponent.setOfferChangeHandler((evt) => {
+    this._formForEditComponent.setOfferChangeHandler((evt) => { //вставить в subscribe
       const id = evt.target.id;
       const arr = id.split(`-`);
       arr.splice(0, 2);
@@ -185,24 +157,6 @@ export default class PointController {
       this._onDataChange(this, dataOfRoute, deepClone);
     });
 
-    // this._formForEditComponent.setBasePriceChangeHandler((evt) => {
-    //   const newPoint = PointModel.clone(dataOfRoute);
-    //   newPoint.basePrice = Math.abs(parseInt(evt.target.value, 10))
-    //   this._onDataChange(this, dataOfRoute, newPoint);
-    // });
-
-    // this._formForEditComponent.setDateFromChangeHandler((evt) => {
-    //   const newPoint = PointModel.clone(dataOfRoute);
-    //   newPoint.dateFrom = new Date(evt.target.value)
-    //   this._onDataChange(this, dataOfRoute, newPoint);
-    // });
-
-    // this._formForEditComponent.setDateToChangeHandler((evt) => {
-    //   const newPoint = PointModel.clone(dataOfRoute);
-    //   newPoint.dateTo = new Date(evt.target.value)
-    //   this._onDataChange(this, dataOfRoute, newPoint);
-    // });
-
     switch (mode) {
       case Mode.DEFAULT:
         if (oldPointComponent && oldPointEditComponent) {
@@ -225,6 +179,7 @@ export default class PointController {
 
   setDefaultView() {
     if (this._mode !== Mode.DEFAULT) {
+      // сброс значений
       this._replaceFormToPoint();
     }
   }
@@ -259,6 +214,7 @@ export default class PointController {
 
   _replaceFormToPoint() {
     document.removeEventListener(`keydown`, this._onEscKeyDown);
+    this._formForEditComponent.reset();
     if (document.contains(this._formForEditComponent.getElement())) {
       replace(this._pointOfRouteComponent, this._formForEditComponent);
     }

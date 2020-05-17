@@ -6,6 +6,13 @@ import flatpickr from "flatpickr";
 
 import "flatpickr/dist/flatpickr.min.css";
 
+// const isCorrectDate = (dateFrom, dateTo) => {
+//   if (dateFrom > dateTo) {
+//     return false;
+//   }
+//   return true;
+// }
+
 const DefaultData = {
   deleteButtonText: `Delete`,
   saveButtonText: `Save`,
@@ -72,11 +79,13 @@ export default class FormForEdit extends AbstractSmartComponent {
   }
 
   reset() { // сброс данных при не сохранении
-    this._editForm.city = this._defaultEditForm.city;
-
     this._editForm.destination = this._defaultEditForm.destination;
     this._editForm.type = this._defaultEditForm.type;
-    this._editForm.placeholder = this._defaultEditForm.placeholder;
+    this._editForm.basePrice = this._defaultEditForm.basePrice;
+    this._editForm.isFavorite = this._defaultEditForm.isFavorite;
+    this._editForm.dateFrom = this._defaultEditForm.dateFrom;
+    this._editForm.dateTo = this._defaultEditForm.dateTo;
+
     // this._editForm.options = option[(this._defaultEditForm.type).toLowerCase()]; // !!!
     this.rerender();
   }
@@ -111,39 +120,19 @@ export default class FormForEdit extends AbstractSmartComponent {
     this._closeHandler = handler;
   }
 
-  setOfferChangeHandler(handler) {
+  setOfferChangeHandler(handler) { //вставить в subscribe
     const element = this.getElement().querySelector(`.event__available-offers`);
     if (element) {
       element.addEventListener(`change`, handler);
     }
   }
 
-  // setFavoriteChangeHandler(handler) {
-  //   this.getElement().querySelector(`input[name = event-favorite]`)
-  //       .addEventListener(`change`, handler);
-  // }
-
-  // setBasePriceChangeHandler(handler) {
-  //   this.getElement().querySelector(`input[name = event-price]`)
-  //       .addEventListener(`blur`, handler);
-  // }
-
-  // setDateFromChangeHandler(handler) {
-  //   this.getElement().querySelector(`input[type = datetime-local]`)
-  //       .addEventListener(`blur`, handler);
-  // }
-
-  // setDateToChangeHandler(handler) {
-  //   const elem = this.getElement().querySelectorAll(`input[type = datetime-local]`);
-  //   elem[elem.length - 1].addEventListener(`blur`, handler);
-  // }
-
   _applyFlatpickr() {
     if (this._flatpickr) {
       this._flatpickr.destroy();
       this._flatpickr = null;
     }
-    //               НЕ УДАЛЯТЬ!!!
+
     const dateBegin = this.getElement()
         .querySelector(`input[name = event-start-time]`);
     this._flatpickr = flatpickr(dateBegin, {
@@ -167,7 +156,7 @@ export default class FormForEdit extends AbstractSmartComponent {
   }
 
   _subscribeOnEvents() {
-    //this._applyFlatpickr();
+    this._applyFlatpickr();
 
     const element = this.getElement();
     element.querySelector(`select[name = event-destination]`)
@@ -191,7 +180,6 @@ export default class FormForEdit extends AbstractSmartComponent {
       this.rerender();
     });
 
-    // возможно сюда надо добавить фаворит и его друзей
 
     element.querySelector(`input[name = event-favorite]`).addEventListener(`change`, () => {
       this._editForm.isFavorite = !this._editForm.isFavorite;
@@ -203,25 +191,25 @@ export default class FormForEdit extends AbstractSmartComponent {
       this.rerender();
     });
 
-    element.querySelector(`input[name = event-start-time]`).addEventListener(`blur`, (evt) => {
+    const saveButton = element.querySelector(`.event__save-btn`);
+
+    element.querySelector(`input[type = datetime-local]`).addEventListener(`blur`, (evt) => {
       this._editForm.dateFrom = new Date(evt.target.value);
-      this.rerender();
+      if (this._editForm.dateFrom > this._editForm.dateTo) {
+        saveButton.setAttribute(`disabled`, `disabled`);
+      } else {
+        saveButton.removeAttribute(`disabled`);
+      }
     });
 
-    element.querySelector(`input[name = event-end-time]`).addEventListener(`blur`, (evt) => {
+    const elem = element.querySelectorAll(`input[type = datetime-local]`);
+    elem[elem.length - 1].addEventListener(`blur`, (evt) => {
       this._editForm.dateTo = new Date(evt.target.value);
-      this.rerender();
+      if (this._editForm.dateFrom > this._editForm.dateTo) {
+        saveButton.setAttribute(`disabled`, `disabled`);
+      } else {
+        saveButton.removeAttribute(`disabled`);
+      }
     });
-
-    // element.querySelector(`input[type = datetime-local]`).addEventListener(`blur`, (evt) => {
-    //   this._editForm.dateFrom = new Date(evt.target.value);
-    //   this.rerender();
-    // });
-
-    // const elem = element.querySelectorAll(`input[type = datetime-local]`);
-    // elem[elem.length - 1].addEventListener(`blur`, (evt) => {
-    //   this._editForm.dateTo = new Date(evt.target.value);
-    //   this.rerender(); //отваливается flatpickr recovery
-    // });
   }
 }
