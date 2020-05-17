@@ -2,7 +2,7 @@ import {createHeaderEditingForm} from './editing-form-header.js';
 import {createOffersEditingForm} from './editing-form-offers.js';
 import {createDestinationEditingForm} from './editing-form-destination.js';
 import AbstractSmartComponent from "./abstract-smart-component.js";
-import * as _ from 'lodash';
+// import * as _ from 'lodash';
 // import {cloneDeep} from 'lodash';
 import flatpickr from "flatpickr";
 
@@ -160,6 +160,7 @@ export default class FormForEdit extends AbstractSmartComponent {
           });
           this.rerender();
         });
+
     element.querySelector(`.event__type-list`).addEventListener(`click`, (evt) => {
       if (evt.target.tagName !== `LABEL`) {
         return;
@@ -167,9 +168,6 @@ export default class FormForEdit extends AbstractSmartComponent {
       this._editForm.type = evt.target.textContent.toLowerCase();
       this._editForm.destination = null;
 
-      const actualOfferObject = this._dataAboutOffers.find((object) => {
-        return object.type === this._editForm.type;
-      });
       this._editForm.offers = [];
       this.rerender();
     });
@@ -210,23 +208,22 @@ export default class FormForEdit extends AbstractSmartComponent {
     if (offersContainer) {
       offersContainer.addEventListener(`change`, (evt) => {
         const id = evt.target.id;
-        const label = element.querySelector(`label[for = ${id}`);
-        const title = label.querySelector(`span`).textContent; // не сохраняет чек ин
-
+        const label = element.querySelector(`label[for = ${id}]`);
+        const title = label.querySelector(`span`).textContent;
         const actualOffers = this._dataAboutOffers.find((item) => {
           return item.type === this._editForm.type;
         });
 
         const currentOffer = actualOffers.offers.find((obj) => {
-          return obj.title === title
-        })
+          return obj.title === title;
+        });
 
         let isAddOffer = false;
         this._editForm.offers.forEach((object) => {
           if (object.title === title) {
             isAddOffer = true;
           }
-        })
+        });
         if (isAddOffer) {
           this._editForm.offers = this._editForm.offers.filter((offer) => {
             return offer.title !== title;

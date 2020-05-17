@@ -57,10 +57,8 @@ const parseFormData = (formData, form, id, dataAboutDestinations, dataAboutOffer
       return input.getAttribute(`id`);
     });
     const titles = arrayOfIdies.map((iden) => {
-      let arr = iden.split(`-`);
-      arr.splice(0, 2);
-      arr.pop();
-      const title = arr.join(` `);
+      const label = form.querySelector(`label[for = ${iden}]`);
+      const title = label.querySelector(`span`).textContent;
       return title;
     });
     const ourOffers = dataAboutOffers.find((it) => {
@@ -96,8 +94,7 @@ export default class PointController {
     const oldPointEditComponent = this._formForEditComponent;
     this._mode = mode;
 
-    this._pointOfRouteComponent = new PointOfRouteComponent(dataOfRoute,
-        this._dataAboutDestinations, this._dataAboutOffers);
+    this._pointOfRouteComponent = new PointOfRouteComponent(dataOfRoute);
     this._formForEditComponent = new FormForEditComponent(dataOfRoute,
         this._dataAboutDestinations, this._dataAboutOffers);
 

@@ -152,7 +152,7 @@ export default class TripController {
 
       if (newPoint === null) {
         pointController.destroy();
-        this._updatePoints(); // .............????????
+        this._updatePoints(); // после добав надо удалить все точки и добав снова
       } else {
         this._api.createPoint(newPoint)
           .then((pointModel) => {
@@ -179,7 +179,7 @@ export default class TripController {
           const isSuccess = this._pointsModel.updatePoint(oldPoint.id, pointModel);
           if (isSuccess) {
             pointController.render(pointModel, PointControllerMode.DEFAULT);
-            this._updatePoints(); /// ?????????? save favorite(date)
+            this._updatePoints();
           }
         })
 

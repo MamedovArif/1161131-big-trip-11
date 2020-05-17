@@ -26,7 +26,7 @@ export const createOffersEditingForm = (object, dataAboutOffers) => {
   if (offers.length === 0) {
     selected = new Array(actualOffers.offers.length).fill(false);
   } else {
-    let titles = offers.map((it) => it.title); //а что если ничего не выбрано?
+    let titles = offers.map((it) => it.title);
     for (let i = 0; i < allTitles.length; i++) {
       selected.push(titles.includes(allTitles[i]));
     }
