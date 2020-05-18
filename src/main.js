@@ -7,7 +7,7 @@ import TripController from './controllers/trip.js';
 import PointsModel from './models/points.js';
 import FilterController from './controllers/filter.js';
 
-const AUTHORIZATION = `Basic YWxhZGRp7jhoojp96ngio4r66yj5ht7u1`;
+const AUTHORIZATION = `Basic YWxhZGRp7jhoojp96ngio4r66yj5ht7u4`;
 const END_POINT = `https://11.ecmascript.pages.academy/big-trip`;
 
 const tripControls = document.querySelector(`.trip-controls`);
@@ -15,6 +15,7 @@ const pageBody = document.querySelector(`.page-body__page-main`);
 const pageBodyContainer = pageBody.querySelector(`.page-body__container`);
 
 const tripMain = document.querySelector(`.trip-main`);
+const tripInfo = tripMain.querySelector(`.trip-info`);
 
 const menuComponent = new MenuComponent();
 render(tripControls.children[0], menuComponent, RenderPosition.AFTEREND);
@@ -31,7 +32,7 @@ export const filterController = new FilterController(tripControls, pointsModel);
 
 const statisticsComponent = new StatisticsComponent(pointsModel);
 const tripComponent = new TripComponent();
-const tripController = new TripController(tripComponent, pointsModel, api);
+export const tripController = new TripController(tripComponent, pointsModel, api);
 render(pageBodyContainer, tripComponent, RenderPosition.BEFOREEND);
 render(pageBodyContainer, statisticsComponent, RenderPosition.BEFOREEND);
 statisticsComponent.hide();
@@ -90,7 +91,7 @@ api.getAddOffers()
           pointsModel.setDataAboutOffers(offers);
           pointsModel.setDataAboutDestinations(destinations);
           pointsModel.setPoints(fullDataPoints);
-          tripController.render(totalCosts, routeOfCities, tripMain);
+          tripController.render(totalCosts, routeOfCities, tripInfo);
         });
     });
   });

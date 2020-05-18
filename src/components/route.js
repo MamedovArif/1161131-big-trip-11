@@ -21,13 +21,11 @@ const createAboutRouteTemplate = (array, fullDataPoints) => {
   const dayEnd = days[days.length - 1].getDate();
 
   return (
-    `<section class="trip-main__trip-info  trip-info">
-      <div class="trip-info__main">
-        <h1 class="trip-info__title">${citiesString.slice(0, citiesString.length - 2)}</h1>
+    `<div class="trip-info__main">
+      <h1 class="trip-info__title">${citiesString.slice(0, citiesString.length - 2)}</h1>
 
-        <p class="trip-info__dates">${monthBegin} ${dayBegin} &nbsp;&mdash;&nbsp; ${monthEnd} ${dayEnd}</p>
-      </div>
-    </section>`
+      <p class="trip-info__dates">${monthBegin} ${dayBegin} &nbsp;&mdash;&nbsp; ${monthEnd} ${dayEnd}</p>
+    </div>`
   );
 };
 
