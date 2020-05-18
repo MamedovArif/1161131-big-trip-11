@@ -16,7 +16,7 @@ const getSortOnTime = (allPoints) => {
     const durationB = durationOfPoint(b.dateFrom, b.dateTo);
     return durationA - durationB;
   });
-  wrapperPoints.push(points); // !sin
+  wrapperPoints.push(points);
   return wrapperPoints;
 };
 
@@ -29,7 +29,7 @@ const getSortOnPrice = (allPoints) => {
   points.sort((a, b) => {
     return b.basePrice - a.basePrice;
   });
-  wrapperPoints.push(points); // !sin
+  wrapperPoints.push(points);
   return wrapperPoints;
 };
 

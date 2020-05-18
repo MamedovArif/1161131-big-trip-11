@@ -2,18 +2,9 @@ import {createHeaderEditingForm} from './editing-form-header.js';
 import {createOffersEditingForm} from './editing-form-offers.js';
 import {createDestinationEditingForm} from './editing-form-destination.js';
 import AbstractSmartComponent from "./abstract-smart-component.js";
-// import * as _ from 'lodash';
-// import {cloneDeep} from 'lodash';
 import flatpickr from "flatpickr";
 
 import "flatpickr/dist/flatpickr.min.css";
-
-// const isCorrectDate = (dateFrom, dateTo) => {
-//   if (dateFrom > dateTo) {
-//     return false;
-//   }
-//   return true;
-// }
 
 const DefaultData = {
   deleteButtonText: `Delete`,
@@ -68,7 +59,7 @@ export default class FormForEdit extends AbstractSmartComponent {
     super.removeElement();
   }
 
-  recoveryListeners() { // восстанавливаем !!!!
+  recoveryListeners() {
     this.setSubmitHandler(this._submitHandler);
     this.setCloseHandler(this._closeHandler);
     this.setDeleteButtonClickHandler(this._deleteButtonClickHandler);
@@ -80,7 +71,7 @@ export default class FormForEdit extends AbstractSmartComponent {
     this._applyFlatpickr();
   }
 
-  reset() { // сброс данных при не сохранении
+  reset() {
     this._editForm.destination = this._defaultEditForm.destination;
     this._editForm.type = this._defaultEditForm.type;
     this._editForm.basePrice = this._defaultEditForm.basePrice;

@@ -19,7 +19,7 @@ export const formatTime = (date) => {
   // const hours = castTimeFormat(date.getHours());
   // const minutes = castTimeFormat(date.getMinutes());
   // return `${hours}:${minutes}`;
-  return moment(date).format(`hh:mm`);
+  return moment(date).format(`HH:mm`);
 };
 
 export const formatTimeDate = (date) => {

@@ -45,14 +45,18 @@ export default class TripController {
 
     this._dataAboutDestinations = null;
     this._dataAboutOffers = null;
+
+    this._totalCosts = null;
+    this._routeOfCities = null;
+    this._header = null;
   }
 
   hide() {
     this._sortController.throwSort();
-    this._pointsModel._activeSortType = SortType.EVENT;
+    this._pointsModel.activeSortType = SortType.EVENT;
     this._onSortChange();
     this._filterController.throwFilter();
-    this._pointsModel._activeFilterType = FilterType.EVERYTHING;
+    this._pointsModel.activeFilterType = FilterType.EVERYTHING;
     this._handlerFilter();
 
     this._container.hide();
@@ -63,6 +67,10 @@ export default class TripController {
   }
 
   render(totalCosts, routeOfCities, header) {
+    this._totalCosts = totalCosts;
+    this._routeOfCities = routeOfCities;
+    this._header = header;
+
     this._filterController.render();
 
     const fullDataPoints = this._pointsModel.getPoints();
@@ -80,9 +88,17 @@ export default class TripController {
 
     this._renderPoints(fullDataPoints, this._dataAboutDestinations, this._dataAboutOffers);
 
-    render(header, new RouteComponent(routeOfCities, fullDataPoints), RenderPosition.AFTERBEGIN); // a1
-    const tripInfo = header.querySelector(`.trip-info`); // a2
-    render(tripInfo, new CostComponent(totalCosts), RenderPosition.BEFOREEND); // a3
+
+
+    render(this._header, new RouteComponent(this._routeOfCities, fullDataPoints), RenderPosition.AFTERBEGIN); // a1
+    const tripInfo = this._header.querySelector(`.trip-info`); // a2
+    render(tripInfo, new CostComponent(this._totalCosts), RenderPosition.BEFOREEND); // a3
+
+    //  if (oldComponent) {
+    //   replace(this._filterComponent, oldComponent);
+    // } else {
+    //   render(container, this._filterComponent, RenderPosition.BEFOREEND);
+    // }
   }
 
   createPoint() {
@@ -90,12 +106,11 @@ export default class TripController {
       return;
     }
     buttonEvent.setAttribute(`disabled`, `disabled`);
-    // сбросить сортировку и фильтрацию
     this._sortController.throwSort();
-    this._pointsModel._activeSortType = SortType.EVENT;
+    this._pointsModel.activeSortType = SortType.EVENT;
     this._onSortChange();
     this._filterController.throwFilter();
-    this._pointsModel._activeFilterType = FilterType.EVERYTHING;
+    this._pointsModel.activeFilterType = FilterType.EVERYTHING;
     this._handlerFilter();
 
     const tripListElement = this._container.getElement().querySelector(`.trip-days`);
@@ -134,25 +149,31 @@ export default class TripController {
   _updatePoints() {
     this._removePoints();
     this._renderPoints(this._pointsModel.getPoints(), this._dataAboutDestinations, this._dataAboutOffers);
-    if (this._pointsModel._activeSortType !== `event`) {
+    if (this._pointsModel.activeSortType !== `event`) {
       const parentList = this._container.getElement().querySelector(`.trip-days`);
       parentList.querySelector(`.day__counter`).textContent = ``;
       parentList.querySelector(`.day__date`).textContent = ``;
     }
   }
 
-  _onSortChange() { // название не совсем корректное
+  _updateTrip() {
+    // не обновляется сортировка и мы никогда не доходим до положения no-points
+    // при удалении обновляется fullDataPoints? pointmodel
+    this.render(this._totalCosts, this._routeOfCities, this._header);
+  }
+
+  _onSortChange() {
     this._updatePoints();
   }
 
   _onDataChange(pointController, oldPoint, newPoint) {
     if (oldPoint === EmptyPoint) {
-      this._creatingPoint = null; // обнуляем значение creatingPoint
+      this._creatingPoint = null;
       buttonEvent.removeAttribute(`disabled`);
 
       if (newPoint === null) {
         pointController.destroy();
-        this._updatePoints(); // после добав надо удалить все точки и добав снова
+        this._updatePoints();
       } else {
         this._api.createPoint(newPoint)
           .then((pointModel) => {

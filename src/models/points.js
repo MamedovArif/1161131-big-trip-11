@@ -4,8 +4,8 @@ import {getFilteredPoints} from "../utils/filter.js";
 
 export default class Points {
   constructor() {
-    this._activeSortType = SortType.EVENT;
-    this._activeFilterType = FilterType.EVERYTHING;
+    this.activeSortType = SortType.EVENT;
+    this.activeFilterType = FilterType.EVERYTHING;
     this._points = [];
 
 
@@ -18,8 +18,8 @@ export default class Points {
   }
 
   getPoints() {
-    const filteredPoints = getFilteredPoints(this._points, this._activeFilterType);
-    return getPointsBySort(filteredPoints, this._activeSortType);
+    const filteredPoints = getFilteredPoints(this._points, this.activeFilterType);
+    return getPointsBySort(filteredPoints, this.activeSortType);
   }
 
   getPointsAll() {
@@ -32,12 +32,12 @@ export default class Points {
   }
 
   setSort(sortType) {
-    this._activeSortType = sortType;
+    this.activeSortType = sortType;
     this._callHandlers(this._sortChangeHandlers);
   }
 
   setFilter(filterType) {
-    this._activeFilterType = filterType;
+    this.activeFilterType = filterType;
     this._callHandlers(this._filterChangeHandlers);
   }
 
