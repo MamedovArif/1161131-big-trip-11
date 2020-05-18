@@ -19,7 +19,7 @@ export const formatTime = (date) => {
   // const hours = castTimeFormat(date.getHours());
   // const minutes = castTimeFormat(date.getMinutes());
   // return `${hours}:${minutes}`;
-  return moment(date).format(`hh:mm`);
+  return moment(date).format(`HH:mm`);
 };
 
 export const formatTimeDate = (date) => {
@@ -45,7 +45,7 @@ export const diffTime = (begin, end) => {
     minutes = minutes % 60;
     result += `${hours}H `;
   }
-  minutes = castTimeFormat(minutes);
+  minutes = parseInt(castTimeFormat(minutes), 10);
   result += `${minutes}M`;
   return result;
   // const dateEnd = moment(end);

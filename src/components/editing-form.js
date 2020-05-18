@@ -71,18 +71,19 @@ export default class FormForEdit extends AbstractSmartComponent {
     this._applyFlatpickr();
   }
 
-  reset() { // сброс данных при не сохранении
-    this._editForm.city = this._defaultEditForm.city;
-
+  reset() {
     this._editForm.destination = this._defaultEditForm.destination;
     this._editForm.type = this._defaultEditForm.type;
-    this._editForm.placeholder = this._defaultEditForm.placeholder;
-    // this._editForm.options = option[(this._defaultEditForm.type).toLowerCase()]; // !!!
+    this._editForm.basePrice = this._defaultEditForm.basePrice;
+    this._editForm.isFavorite = this._defaultEditForm.isFavorite;
+    this._editForm.dateFrom = this._defaultEditForm.dateFrom;
+    this._editForm.dateTo = this._defaultEditForm.dateTo;
+    this._editForm.offers = this._defaultEditForm.offers;
     this.rerender();
   }
 
   getData() {
-    const form = this.getElement().parentElement.querySelector(`.trip-events__item`);
+    const form = this.getElement();
     return {
       formData: new FormData(form),
       form,
@@ -111,46 +112,37 @@ export default class FormForEdit extends AbstractSmartComponent {
     this._closeHandler = handler;
   }
 
-  setFavoriteChangeHandler(handler) {
-    this.getElement().querySelector(`input[name = event-favorite]`)
-        .addEventListener(`change`, handler);
-  }
-
-  setOfferChangeHandler(handler) {
-    const element = this.getElement().querySelector(`.event__available-offers`);
-    if (element) {
-      element.addEventListener(`change`, handler);
-    }
-  }
-
-  setBasePriceChangeHandler(handler) {
-    this.getElement().querySelector(`input[name = event-price]`)
-        .addEventListener(`blur`, handler);
-  }
-
   _applyFlatpickr() {
     if (this._flatpickr) {
       this._flatpickr.destroy();
       this._flatpickr = null;
     }
-    //                НЕ УДАЛЯТЬ!!!
+
     const dateBegin = this.getElement()
         .querySelector(`input[name = event-start-time]`);
     this._flatpickr = flatpickr(dateBegin, {
       altInput: true,
-      allowInput: true,
-      defaultDate: this._editForm.timeBegin || `today`,
+      allowInput: false,
+      altFormat: `d.m.y H:i`,
+      dateFormat: `Z`,
+      enableTime: true,
+      defaultDate: this._editForm.dateFrom || `today`,
     });
-    // const dateEnd = this.getElement()
-    //     .querySelector(`input[name = event-end-time]`);
-    // this._flatpickr = flatpickr(dateEnd, {
-    //   altInput: true,
-    //   allowInput: true,
-    //   defaultDate: this._editForm.timeEnd || `today`,
-    // });
+    const dateEnd = this.getElement()
+        .querySelector(`input[name = event-end-time]`);
+    this._flatpickr = flatpickr(dateEnd, {
+      altInput: true,
+      allowInput: false,
+      altFormat: `d.m.y H:i`,
+      dateFormat: `Z`,
+      enableTime: true,
+      defaultDate: this._editForm.dateTo || `today`,
+    });
   }
 
   _subscribeOnEvents() {
+    this._applyFlatpickr();
+
     const element = this.getElement();
     element.querySelector(`select[name = event-destination]`)
         .addEventListener(`change`, (evt) => {
@@ -159,18 +151,79 @@ export default class FormForEdit extends AbstractSmartComponent {
           });
           this.rerender();
         });
+
     element.querySelector(`.event__type-list`).addEventListener(`click`, (evt) => {
       if (evt.target.tagName !== `LABEL`) {
         return;
       }
       this._editForm.type = evt.target.textContent.toLowerCase();
-      this._editForm.destination = {}; // !!!!
+      this._editForm.destination = null;
 
-      const actualOfferObject = this._dataAboutOffers.find((object) => {
-        return object.type === this._editForm.type;
-      });
-      this._editForm.offers = actualOfferObject.offres;
+      this._editForm.offers = [];
       this.rerender();
     });
+
+
+    element.querySelector(`input[name = event-favorite]`).addEventListener(`change`, () => {
+      this._editForm.isFavorite = !this._editForm.isFavorite;
+      this.rerender();
+    });
+
+    element.querySelector(`input[name = event-price]`).addEventListener(`blur`, (evt) => {
+      this._editForm.basePrice = Math.abs(parseInt(evt.target.value, 10));
+      this.rerender();
+    });
+
+    const saveButton = element.querySelector(`.event__save-btn`);
+
+    element.querySelector(`input[type = datetime-local]`).addEventListener(`blur`, (evt) => {
+      this._editForm.dateFrom = new Date(evt.target.value);
+      if (this._editForm.dateFrom > this._editForm.dateTo) {
+        saveButton.setAttribute(`disabled`, `disabled`);
+      } else {
+        saveButton.removeAttribute(`disabled`);
+      }
+    });
+
+    const elem = element.querySelectorAll(`input[type = datetime-local]`);
+    elem[elem.length - 1].addEventListener(`blur`, (evt) => {
+      this._editForm.dateTo = new Date(evt.target.value);
+      if (this._editForm.dateFrom > this._editForm.dateTo) {
+        saveButton.setAttribute(`disabled`, `disabled`);
+      } else {
+        saveButton.removeAttribute(`disabled`);
+      }
+    });
+
+    const offersContainer = element.querySelector(`.event__available-offers`);
+    if (offersContainer) {
+      offersContainer.addEventListener(`change`, (evt) => {
+        const id = evt.target.id;
+        const label = element.querySelector(`label[for = ${id}]`);
+        const title = label.querySelector(`span`).textContent;
+        const actualOffers = this._dataAboutOffers.find((item) => {
+          return item.type === this._editForm.type;
+        });
+
+        const currentOffer = actualOffers.offers.find((obj) => {
+          return obj.title === title;
+        });
+
+        let isAddOffer = false;
+        this._editForm.offers.forEach((object) => {
+          if (object.title === title) {
+            isAddOffer = true;
+          }
+        });
+        if (isAddOffer) {
+          this._editForm.offers = this._editForm.offers.filter((offer) => {
+            return offer.title !== title;
+          });
+        } else {
+          this._editForm.offers = [].concat(this._editForm.offers, currentOffer);
+        }
+        this.rerender();
+      });
+    }
   }
 }

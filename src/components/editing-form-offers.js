@@ -22,9 +22,14 @@ export const createOffersEditingForm = (object, dataAboutOffers) => {
   });
   let selected = [];
   let allTitles = actualOffers.offers.map((item) => item.title);
-  let titles = offers.map((it) => it.title);
-  for (let i = 0; i < allTitles.length; i++) {
-    selected.push(titles.includes(allTitles[i]));
+
+  if (offers.length === 0) {
+    selected = new Array(actualOffers.offers.length).fill(false);
+  } else {
+    let titles = offers.map((it) => it.title);
+    for (let i = 0; i < allTitles.length; i++) {
+      selected.push(titles.includes(allTitles[i]));
+    }
   }
   let offersList = [];
   for (let j = 0; j < actualOffers.offers.length; j++) {

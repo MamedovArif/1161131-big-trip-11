@@ -13,9 +13,15 @@ const generateOptions = (offer, cost) => {
 };
 
 const createRoutePointTemplate = (object) => {
-  const {type, destination, dateFrom, dateTo, basePrice, offers} = object;
-  const options = [];
+  const {type, dateFrom, dateTo, basePrice, offers} = object;
+  let destination = object.destination;
 
+  if (destination === null) {
+    destination = {};
+    destination.name = ``;
+  }
+
+  const options = [];
   for (let i = 0; i < Math.min(3, offers.length); i++) {
     options.push(generateOptions(offers[i].title, offers[i].price));
   }

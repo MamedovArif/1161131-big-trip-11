@@ -45,14 +45,18 @@ export default class TripController {
 
     this._dataAboutDestinations = null;
     this._dataAboutOffers = null;
+
+    this._totalCosts = null;
+    this._routeOfCities = null;
+    this._header = null;
   }
 
   hide() {
     this._sortController.throwSort();
-    this._pointsModel._activeSortType = SortType.EVENT;
+    this._pointsModel.activeSortType = SortType.EVENT;
     this._onSortChange();
     this._filterController.throwFilter();
-    this._pointsModel._activeFilterType = FilterType.EVERYTHING;
+    this._pointsModel.activeFilterType = FilterType.EVERYTHING;
     this._handlerFilter();
 
     this._container.hide();
@@ -63,6 +67,10 @@ export default class TripController {
   }
 
   render(totalCosts, routeOfCities, header) {
+    this._totalCosts = totalCosts;
+    this._routeOfCities = routeOfCities;
+    this._header = header;
+
     this._filterController.render();
 
     const fullDataPoints = this._pointsModel.getPoints();
@@ -80,9 +88,17 @@ export default class TripController {
 
     this._renderPoints(fullDataPoints, this._dataAboutDestinations, this._dataAboutOffers);
 
-    render(header, new RouteComponent(routeOfCities, fullDataPoints), RenderPosition.AFTERBEGIN); // a1
-    const tripInfo = header.querySelector(`.trip-info`); // a2
-    render(tripInfo, new CostComponent(totalCosts), RenderPosition.BEFOREEND); // a3
+
+
+    render(this._header, new RouteComponent(this._routeOfCities, fullDataPoints), RenderPosition.AFTERBEGIN); // a1
+    const tripInfo = this._header.querySelector(`.trip-info`); // a2
+    render(tripInfo, new CostComponent(this._totalCosts), RenderPosition.BEFOREEND); // a3
+
+    //  if (oldComponent) {
+    //   replace(this._filterComponent, oldComponent);
+    // } else {
+    //   render(container, this._filterComponent, RenderPosition.BEFOREEND);
+    // }
   }
 
   createPoint() {
@@ -90,12 +106,11 @@ export default class TripController {
       return;
     }
     buttonEvent.setAttribute(`disabled`, `disabled`);
-    // сбросить сортировку и фильтрацию
     this._sortController.throwSort();
-    this._pointsModel._activeSortType = SortType.EVENT;
+    this._pointsModel.activeSortType = SortType.EVENT;
     this._onSortChange();
     this._filterController.throwFilter();
-    this._pointsModel._activeFilterType = FilterType.EVERYTHING;
+    this._pointsModel.activeFilterType = FilterType.EVERYTHING;
     this._handlerFilter();
 
     const tripListElement = this._container.getElement().querySelector(`.trip-days`);
@@ -104,11 +119,13 @@ export default class TripController {
     tripListElement.querySelector(`.day__date`).textContent = ``;
     const parentAdd = tripListElement.querySelector(`.trip-days__item`);
     this._creatingPoint = new PointController(parentAdd,
-        this._onDataChange, this._onViewChange);
+        this._onDataChange, this._onViewChange,
+        this._dataAboutDestinations, this._dataAboutOffers);
     this._creatingPoint.render(EmptyPoint, PointControllerMode.ADDING);
   }
 
   _renderPoints(points, dataAboutDestinations, dataAboutOffers) {
+
     render(this._container.getElement(), new ListOfDaysComponent(points), RenderPosition.BEFOREEND);
     this._listDays = this._container.getElement().querySelectorAll(`.trip-events__list`);
 
@@ -132,20 +149,26 @@ export default class TripController {
   _updatePoints() {
     this._removePoints();
     this._renderPoints(this._pointsModel.getPoints(), this._dataAboutDestinations, this._dataAboutOffers);
-    if (this._pointsModel._activeSortType !== `event`) {
+    if (this._pointsModel.activeSortType !== `event`) {
       const parentList = this._container.getElement().querySelector(`.trip-days`);
       parentList.querySelector(`.day__counter`).textContent = ``;
-      parentList.querySelector(`.day__date`).textContent = ``; // sin
+      parentList.querySelector(`.day__date`).textContent = ``;
     }
   }
 
-  _onSortChange() { // название не совсем корректное
+  _updateTrip() {
+    // не обновляется сортировка и мы никогда не доходим до положения no-points
+    // при удалении обновляется fullDataPoints? pointmodel
+    this.render(this._totalCosts, this._routeOfCities, this._header);
+  }
+
+  _onSortChange() {
     this._updatePoints();
   }
 
   _onDataChange(pointController, oldPoint, newPoint) {
     if (oldPoint === EmptyPoint) {
-      this._creatingPoint = null; // обнуляем значение creatingPoint
+      this._creatingPoint = null;
       buttonEvent.removeAttribute(`disabled`);
 
       if (newPoint === null) {
@@ -177,6 +200,7 @@ export default class TripController {
           const isSuccess = this._pointsModel.updatePoint(oldPoint.id, pointModel);
           if (isSuccess) {
             pointController.render(pointModel, PointControllerMode.DEFAULT);
+            this._updatePoints();
           }
         })
 
@@ -192,8 +216,8 @@ export default class TripController {
 
   _handlerFilter() {
     const filteredPoints = this._pointsModel.getPoints();
-    this._removePoints();
     const parentList = this._container.getElement().querySelector(`.trip-days`);
+    this._removePoints();
     parentList.remove();
     this._renderPoints(filteredPoints, this._dataAboutDestinations, this._dataAboutOffers);
 

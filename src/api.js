@@ -42,7 +42,7 @@ const API = class {
       url: `points`,
       method: Method.POST,
       body: JSON.stringify(point.toRAW()),
-      headers: new Headers({"Contyent-Type": `application/json`})
+      headers: new Headers({"Content-Type": `application/json`})
     })
       .then((response) => response.json())
       .then(Point.parsePoint);
