@@ -82,6 +82,7 @@ export default class TripController {
     }
 
     const fullDataPoints = this._pointsModel.getPoints();
+    console.log(fullDataPoints);
 
     this._dataAboutDestinations = this._pointsModel.getDataAboutDestinations();
     this._dataAboutOffers = this._pointsModel.getDataAboutOffers();
@@ -103,7 +104,7 @@ export default class TripController {
       render(this._header, this._costComponent, RenderPosition.BEFOREEND);
     }
 
-    const isAllPointsAbsence = fullDataPoints.length === 4;
+    const isAllPointsAbsence = fullDataPoints.length === 0;
     console.log(isAllPointsAbsence);
     if (isAllPointsAbsence) {
       render(this._container.getElement(), noPointsComponent, RenderPosition.BEFOREEND);
@@ -123,12 +124,24 @@ export default class TripController {
       return;
     }
     buttonEvent.setAttribute(`disabled`, `disabled`);
-    this._sortController.throwSort();
-    this._pointsModel.activeSortType = SortType.EVENT;
-    this._onSortChange();
     this._filterController.throwFilter();
     this._pointsModel.activeFilterType = FilterType.EVERYTHING;
-    this._handlerFilter();
+
+    if (this._pointsModel.getPoints().length === 0) {
+      const tripMarkup = document.querySelector(`.trip-events`);
+      tripMarkup.innerHTML = ``;
+      this._sortController = new SortController(this._container.getElement(),
+        pointsModel, this._filterController); // !!!!
+      this._sortController.render();
+      render(this._container.getElement(), new ListOfDaysComponent(this._pointsModel.getPoints()),
+        RenderPosition.BEFOREEND);
+    } else {
+      this._sortController.throwSort();
+      this._pointsModel.activeSortType = SortType.EVENT;
+      this._onSortChange();
+
+      this._handlerFilter();
+    }
 
     const tripListElement = this._container.getElement().querySelector(`.trip-days`);
     tripListElement.insertAdjacentHTML(`afterbegin`, generateDays(new Date(), -1));
@@ -142,7 +155,6 @@ export default class TripController {
   }
 
   _renderPoints(points, dataAboutDestinations, dataAboutOffers) {
-
     render(this._container.getElement(), new ListOfDaysComponent(points), RenderPosition.BEFOREEND);
     this._listDays = this._container.getElement().querySelectorAll(`.trip-events__list`);
 

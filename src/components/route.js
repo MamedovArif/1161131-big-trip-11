@@ -8,17 +8,28 @@ const createAboutRouteTemplate = (array, fullDataPoints) => {
   for (let i = 0; i < cities.length; i++) {
     citiesString += `${cities[i]} — `;
   }
+  // а что если массив пустой
+  let monthBegin;
+  let dayBegin;
+  let monthEnd;
+  let dayEnd;
+  if (fullDataPoints.length !== 0) {
+    let days = fullDataPoints.map((littleArray) => {
+      return littleArray[0].dateFrom;
+    });
 
-  let days = fullDataPoints.map((littleArray) => {
-    return littleArray[0].dateFrom;
-  });
-
-  const monthBegin = MONTH_NAMES[days[0].getMonth()];
-  const dayBegin = days[0].getDate();
-  const monthEnd = (monthBegin ===
-    MONTH_NAMES[days[days.length - 1].getMonth()]) ? `` :
-    MONTH_NAMES[days[days.length - 1].getMonth()];
-  const dayEnd = days[days.length - 1].getDate();
+    monthBegin = MONTH_NAMES[days[0].getMonth()];
+    dayBegin = days[0].getDate();
+    monthEnd = (monthBegin ===
+      MONTH_NAMES[days[days.length - 1].getMonth()]) ? `` :
+      MONTH_NAMES[days[days.length - 1].getMonth()];
+    dayEnd = days[days.length - 1].getDate();
+  } else {
+    monthBegin = ``;
+    dayBegin = ``;
+    monthEnd = ``;
+    dayEnd = ``;
+  }
 
   return (
     `<div class="trip-info__main">

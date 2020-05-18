@@ -19,13 +19,20 @@ export const generateDays = (date, counter) => {
 };
 
 const listTrips = (fullPoints) => {
-  let array = fullPoints.map((dayArray, counter) => {
-    const date = dayArray[0].dateFrom;
-    return generateDays(date, counter);
-  });
+  let array;
+  if (fullPoints.length === 0) {
+    array = ``;
+  } else {
+    array = fullPoints.map((dayArray, counter) => {
+      const date = dayArray[0].dateFrom;
+      return generateDays(date, counter);
+    });
+    array = array.join(`\n`);
+  }
+
   return (
     `<ul class="trip-days">
-      ${array.join(`\n`)}
+      ${array}
     </ul> `
   );
 };
