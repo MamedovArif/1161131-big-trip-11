@@ -32,7 +32,6 @@ export default class TripController {
     this._onDataChange = this._onDataChange.bind(this);
     this._onViewChange = this._onViewChange.bind(this);
     this._onSortChange = this._onSortChange.bind(this);
-    //this._updateTrip = this._updateTrip.bind(this);
 
     this._pointController = null;
 
@@ -82,11 +81,8 @@ export default class TripController {
     }
 
     const fullDataPoints = this._pointsModel.getPoints();
-    console.log(fullDataPoints);
-
     this._dataAboutDestinations = this._pointsModel.getDataAboutDestinations();
     this._dataAboutOffers = this._pointsModel.getDataAboutOffers();
-    console.log(fullDataPoints.length);
 
     const oldRouteComponent = this._routeComponent;
     this._routeComponent = new RouteComponent(this._routeOfCities, fullDataPoints);
@@ -105,12 +101,11 @@ export default class TripController {
     }
 
     const isAllPointsAbsence = fullDataPoints.length === 0;
-    console.log(isAllPointsAbsence);
+
     if (isAllPointsAbsence) {
       render(this._container.getElement(), noPointsComponent, RenderPosition.BEFOREEND);
       return;
     }
-
 
     this._sortController = new SortController(this._container.getElement(),
         pointsModel, this._filterController); // !!!!
@@ -131,10 +126,10 @@ export default class TripController {
       const tripMarkup = document.querySelector(`.trip-events`);
       tripMarkup.innerHTML = ``;
       this._sortController = new SortController(this._container.getElement(),
-        pointsModel, this._filterController); // !!!!
+          pointsModel, this._filterController);
       this._sortController.render();
       render(this._container.getElement(), new ListOfDaysComponent(this._pointsModel.getPoints()),
-        RenderPosition.BEFOREEND);
+          RenderPosition.BEFOREEND);
     } else {
       this._sortController.throwSort();
       this._pointsModel.activeSortType = SortType.EVENT;
@@ -191,10 +186,9 @@ export default class TripController {
 
 
   _updateTrip() {
-    // не обновляется сортировка и мы никогда не доходим до положения no-points
     const tripMarkup = document.querySelector(`.trip-events`);
     tripMarkup.innerHTML = ``;
-    //this._sortController.remove(); //?????? tripController
+    // this._sortController.remove(); //?????? tripController
     this.render([1, 5, 6, 8, 1, 3], new Set(["апельсин", "яблоко", "банан"]), this._header);
   }
 
@@ -210,8 +204,8 @@ export default class TripController {
         this._api.createPoint(newPoint)
           .then((pointModel) => {
             this._pointsModel.addPoint(pointModel);
-            //this._updateTrip(); // !!!!!!
             pointController.render(pointModel, PointControllerMode.DEFAULT);
+            this._updateTrip();
           })
           .catch(() => {
             pointController.shake();
@@ -222,7 +216,7 @@ export default class TripController {
       this._api.deletePoint(oldPoint.id)
         .then(() => {
           this._pointsModel.removePoint(oldPoint.id);
-          //this._updatePoints();
+          // this._updatePoints();
           this._updateTrip();
         })
         .catch(() => {
@@ -234,7 +228,7 @@ export default class TripController {
           const isSuccess = this._pointsModel.updatePoint(oldPoint.id, pointModel);
           if (isSuccess) {
             pointController.render(pointModel, PointControllerMode.DEFAULT);
-            //this._updatePoints();
+            // this._updatePoints();
             this._updateTrip();
           }
         })
