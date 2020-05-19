@@ -75,12 +75,12 @@ export default class TripController {
     this._routeOfCities = routeOfCities;
     this._header = header;
 
-    if (!this._filterController) { // !!!!
+    if (!this._filterController) {
       this._filterController = filterController;
       this._filterController.render();
     }
 
-    const fullDataPoints = this._pointsModel.getPointsAll(); // что будет с сортировкой
+    const fullDataPoints = this._pointsModel.getPointsAll();
     this._dataAboutDestinations = this._pointsModel.getDataAboutDestinations();
     this._dataAboutOffers = this._pointsModel.getDataAboutOffers();
 
@@ -108,7 +108,7 @@ export default class TripController {
     }
 
     this._sortController = new SortController(this._container.getElement(),
-        pointsModel, this._filterController); // !!!!
+        pointsModel, this._filterController);
     this._sortController.render();
 
     this._renderPoints(fullDataPoints, this._dataAboutDestinations, this._dataAboutOffers);
@@ -188,7 +188,6 @@ export default class TripController {
   _updateTrip(totalAmount) {
     const tripMarkup = document.querySelector(`.trip-events`);
     tripMarkup.innerHTML = ``;
-    // this._sortController.remove(); //?????? tripController
     this.render(totalAmount, this._routeOfCities, this._header);
   }
 
@@ -220,7 +219,6 @@ export default class TripController {
       this._api.deletePoint(oldPoint.id)
         .then(() => {
           this._pointsModel.removePoint(oldPoint.id);
-          // this._updatePoints();
           this._totalAmount = this.calculateTotalAmount(this._totalAmount, oldPoint, null);
           this._routeOfCities = this.updateRouteOfCities(this._routeOfCities, this._pointsModel);
 
@@ -239,7 +237,6 @@ export default class TripController {
             this._totalAmount = this.calculateTotalAmount(this._totalAmount, oldPoint, pointModel);
             this._routeOfCities = this.updateRouteOfCities(this._routeOfCities, this._pointsModel);
 
-            // this._updatePoints();
             this._updateTrip(this._totalAmount, this._routeOfCities);
           }
         })

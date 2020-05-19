@@ -12,7 +12,6 @@ const createAboutRouteTemplate = (cities, fullDataPoints) => {
     }
   }
 
-  // а что если массив пустой
   let monthBegin;
   let dayBegin;
   let monthEnd;

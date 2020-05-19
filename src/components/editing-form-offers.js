@@ -1,12 +1,21 @@
 const generateOffers = (offer, isSelect) => {
   const {title, price} = offer;
-  const essence = title.split(` `).join(`-`);
+  const essence = title.split(` `);
+  const validWords = essence.map((word) => {
+    const speech = word.toLowerCase();
+    const validWord = speech.split(``).filter((letter) => {
+      return (letter !== `'` && letter !== `,`);
+    });
+    const validId = validWord.join(``);
+    return validId;
+  });
+  const finishSelector = validWords.join(`-`);
   const checked = (isSelect) ? `checked` : ``;
   return (
     `<div class="event__offer-selector">
-      <input class="event__offer-checkbox visually-hidden" id="event-offer-${essence}-1"
-      type="checkbox" name="event-offer-${essence}" ${checked} value="${isSelect}">
-      <label class="event__offer-label" for="event-offer-${essence}-1">
+      <input class="event__offer-checkbox visually-hidden" id="event-offer-${finishSelector}-1"
+      type="checkbox" name="event-offer-${finishSelector}" ${checked} value="${isSelect}">
+      <label class="event__offer-label" for="event-offer-${finishSelector}-1">
         <span class="event__offer-title">${title}</span>
         &plus;
         &euro;&nbsp;<span class="event__offer-price">${price}</span>

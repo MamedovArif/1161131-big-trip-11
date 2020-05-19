@@ -16,17 +16,10 @@ export const castTimeFormat = (value) => {
 };
 
 export const formatTime = (date) => {
-  // const hours = castTimeFormat(date.getHours());
-  // const minutes = castTimeFormat(date.getMinutes());
-  // return `${hours}:${minutes}`;
   return moment(date).format(`HH:mm`);
 };
 
 export const formatTimeDate = (date) => {
-  // const day = castTimeFormat(date.getDate());
-  // const month = castTimeFormat(date.getMonth() + 1);
-  // const year = String(date.getFullYear()).slice(-2);
-  // return `${day}/${month}/${year}`;
   return moment(date).format(`DD.MM.YY`);
 };
 
@@ -48,15 +41,4 @@ export const diffTime = (begin, end) => {
   minutes = parseInt(castTimeFormat(minutes), 10);
   result += `${minutes}M`;
   return result;
-  // const dateEnd = moment(end);
-  // const dateBegin = moment(begin);
-
-  // const diffDay = dateEnd.diff(dateBegin, `days`);
-  // const diffHours = dateEnd.diff(dateBegin, `hours`);
-  // const diffMinutes = dateEnd.diff(dateBegin, `minutes`);
-
-  // const diffDayString = (diffDay > 0) ? `${diffDay}D` : ``;
-  // const diffHoursString = (diffHours > 0) ? `${diffHours - diffDay * 24}H` : ``;
-  // const diffMinutesString = (diffMinutes > 0) ? `${diffMinutes - diffHours * 60}M` : ``;
-  // return `${diffDayString} ${diffHoursString} ${diffMinutesString}`;
 };

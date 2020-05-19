@@ -136,7 +136,7 @@ export default class PointController {
         }
         break;
       case Mode.ADDING:
-        if (oldPointComponent && oldPointEditComponent) { // в каком случае они возвращают правду
+        if (oldPointComponent && oldPointEditComponent) {
           remove(oldPointComponent);
           remove(oldPointEditComponent);
         }

@@ -7,7 +7,7 @@ import TripController from './controllers/trip.js';
 import PointsModel from './models/points.js';
 import FilterController from './controllers/filter.js';
 
-const AUTHORIZATION = `Basic YWxhZGRp7jhoojp96ngio4r66yj5ht7u7`;
+const AUTHORIZATION = `Basic YWxhZGRp7jhoojp96ngio4r66yj5ht7u8`;
 const END_POINT = `https://11.ecmascript.pages.academy/big-trip`;
 
 const tripControls = document.querySelector(`.trip-controls`);
@@ -98,9 +98,6 @@ api.getAddOffers()
       api.getPoints()
         .then((allDataPoints) => {
           const fullDataPoints = getFullPoints(allDataPoints);
-          // console.log(allDataPoints);
-          // console.log(destinations);
-          // console.log(offers);
           pointsModel.setDataAboutOffers(offers);
           pointsModel.setDataAboutDestinations(destinations);
           pointsModel.setPoints(fullDataPoints);

@@ -9,8 +9,8 @@ export default class Points {
     this._points = [];
 
 
-    this._dataChangeHandlers = []; // хранение обработчиков renderFilter
-    this._sortChangeHandlers = []; // хранение обработчиков сорта
+    this._dataChangeHandlers = [];
+    this._sortChangeHandlers = [];
     this._filterChangeHandlers = [];
 
     this._dataAboutDestinations = null;
@@ -58,7 +58,7 @@ export default class Points {
     this._points = pointsWithoutOne;
   }
 
-  addPoint(point) { // куда вставляем новую точку
+  addPoint(point) {
     const newPointDate = point.dateFrom;
     let foundYourHome = false;
     for (let i = 0; i < this._points.length; i++) {
