@@ -93,17 +93,26 @@ export default class Points {
 
   updatePoint(id, newPoint) {
     let isSuccess = false;
-    this._points = this._points.map((littleArray) => {
+    let updatePoints;
+    this._points = this._points.map((littleArray, count) => {
       const index = littleArray.findIndex((point) => point.id === id);
 
       if (index === -1) {
         return littleArray;
       }
       isSuccess = true;
-      littleArray = [].concat(littleArray.slice(0, index),
-          newPoint, littleArray.slice(index + 1));
+
+      littleArray = [].concat(littleArray.slice(0, index), littleArray.slice(index + 1));
+      if (littleArray.length === 0) {
+        updatePoints = [].concat(this._points.slice(0, count), this._points.slice(count + 1));
+      } else {
+        updatePoints = this._points;
+      }
       return littleArray;
     });
+
+    this._points = updatePoints;
+    this.addPoint(newPoint);
     return isSuccess;
   }
 
@@ -122,7 +131,6 @@ export default class Points {
   setFilterChangeHandler(handler) {
     this._filterChangeHandlers.push(handler);
   }
-
 
   setDataAboutDestinations(dataOfArray) {
     this._dataAboutDestinations = dataOfArray;

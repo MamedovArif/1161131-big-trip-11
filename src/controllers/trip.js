@@ -47,7 +47,7 @@ export default class TripController {
     this._dataAboutDestinations = null;
     this._dataAboutOffers = null;
 
-    this._totalCosts = null;
+    this._totalAmount = null;
     this._routeOfCities = null;
     this._header = null;
 
@@ -70,8 +70,8 @@ export default class TripController {
     this._container.show();
   }
 
-  render(totalCosts, routeOfCities, header) {
-    this._totalCosts = totalCosts;
+  render(totalAmount, routeOfCities, header) {
+    this._totalAmount = totalAmount;
     this._routeOfCities = routeOfCities;
     this._header = header;
 
@@ -80,7 +80,7 @@ export default class TripController {
       this._filterController.render();
     }
 
-    const fullDataPoints = this._pointsModel.getPoints();
+    const fullDataPoints = this._pointsModel.getPointsAll(); // что будет с сортировкой
     this._dataAboutDestinations = this._pointsModel.getDataAboutDestinations();
     this._dataAboutOffers = this._pointsModel.getDataAboutOffers();
 
@@ -93,7 +93,7 @@ export default class TripController {
     }
 
     const oldCostComponent = this._costComponent;
-    this._costComponent = new CostComponent(this._totalCosts);
+    this._costComponent = new CostComponent(this._totalAmount);
     if (oldCostComponent) {
       replace(this._costComponent, oldCostComponent);
     } else {
@@ -185,11 +185,11 @@ export default class TripController {
   }
 
 
-  _updateTrip() {
+  _updateTrip(totalAmount) {
     const tripMarkup = document.querySelector(`.trip-events`);
     tripMarkup.innerHTML = ``;
     // this._sortController.remove(); //?????? tripController
-    this.render([1, 5, 6, 8, 1, 3], new Set(["апельсин", "яблоко", "банан"]), this._header);
+    this.render(totalAmount, this._routeOfCities, this._header);
   }
 
   _onDataChange(pointController, oldPoint, newPoint) {
@@ -205,7 +205,11 @@ export default class TripController {
           .then((pointModel) => {
             this._pointsModel.addPoint(pointModel);
             pointController.render(pointModel, PointControllerMode.DEFAULT);
-            this._updateTrip();
+
+            this._totalAmount = this.calculateTotalAmount(this._totalAmount, null, pointModel);
+            this._routeOfCities = this.updateRouteOfCities(this._routeOfCities, this._pointsModel);
+
+            this._updateTrip(this._totalAmount, this._routeOfCities);
           })
           .catch(() => {
             pointController.shake();
@@ -217,7 +221,10 @@ export default class TripController {
         .then(() => {
           this._pointsModel.removePoint(oldPoint.id);
           // this._updatePoints();
-          this._updateTrip();
+          this._totalAmount = this.calculateTotalAmount(this._totalAmount, oldPoint, null);
+          this._routeOfCities = this.updateRouteOfCities(this._routeOfCities, this._pointsModel);
+
+          this._updateTrip(this._totalAmount, this._routeOfCities);
         })
         .catch(() => {
           pointController.shake();
@@ -228,8 +235,12 @@ export default class TripController {
           const isSuccess = this._pointsModel.updatePoint(oldPoint.id, pointModel);
           if (isSuccess) {
             pointController.render(pointModel, PointControllerMode.DEFAULT);
+
+            this._totalAmount = this.calculateTotalAmount(this._totalAmount, oldPoint, pointModel);
+            this._routeOfCities = this.updateRouteOfCities(this._routeOfCities, this._pointsModel);
+
             // this._updatePoints();
-            this._updateTrip();
+            this._updateTrip(this._totalAmount, this._routeOfCities);
           }
         })
 
@@ -237,6 +248,56 @@ export default class TripController {
           pointController.shake();
         });
     }
+  }
+
+  calculateTotalAmount(initialAmount, oldPoint, newPoint) {
+    let amountOldOffers;
+    let oldBasePrice;
+
+    if (oldPoint) {
+      const oldOffers = oldPoint.offers.map((offer) => {
+        return offer.price;
+      });
+      amountOldOffers = oldOffers.reduce((acc, item) => {
+        acc += item;
+        return acc;
+      }, 0);
+      oldBasePrice = oldPoint.basePrice;
+    } else {
+      amountOldOffers = 0;
+      oldBasePrice = 0;
+    }
+
+    let amountNewOffers;
+    let newBasePrice;
+
+    if (newPoint) {
+      const newOffers = newPoint.offers.map((offer) => {
+        return offer.price;
+      });
+      amountNewOffers = newOffers.reduce((acc, item) => {
+        acc += item;
+        return acc;
+      }, 0);
+      newBasePrice = newPoint.basePrice;
+    } else {
+      amountNewOffers = 0;
+      newBasePrice = 0;
+    }
+
+    const newInitialAmount = initialAmount - oldBasePrice +
+      newBasePrice - amountOldOffers + amountNewOffers;
+    return newInitialAmount;
+  }
+
+  updateRouteOfCities(routeOfCities, model) {
+    routeOfCities = [];
+    model.getPointsAll().forEach((littleArray) => {
+      littleArray.forEach((point) => {
+        routeOfCities.push(point.destination.name);
+      });
+    });
+    return routeOfCities;
   }
 
   _onViewChange() {

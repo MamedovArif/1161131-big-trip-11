@@ -1,13 +1,17 @@
 import {MONTH_NAMES} from '../const.js';
 import AbstractComponent from './abstract-component.js';
 
-const createAboutRouteTemplate = (array, fullDataPoints) => {
-  let cities = Array.from(array);
-
+const createAboutRouteTemplate = (cities, fullDataPoints) => {
   let citiesString = ``;
-  for (let i = 0; i < cities.length; i++) {
-    citiesString += `${cities[i]} — `;
+  if (cities.length > 3) {
+    citiesString += `${cities[0]} — … — ${cities[cities.length - 1]}`;
+  } else {
+    citiesString += `${cities[0]}`;
+    for (let i = 1; i < cities.length; i++) {
+      citiesString += ` — ${cities[i]}`;
+    }
   }
+
   // а что если массив пустой
   let monthBegin;
   let dayBegin;
@@ -33,7 +37,7 @@ const createAboutRouteTemplate = (array, fullDataPoints) => {
 
   return (
     `<div class="trip-info__main">
-      <h1 class="trip-info__title">${citiesString.slice(0, citiesString.length - 2)}</h1>
+      <h1 class="trip-info__title">${citiesString}</h1>
 
       <p class="trip-info__dates">${monthBegin} ${dayBegin} &nbsp;&mdash;&nbsp; ${monthEnd} ${dayEnd}</p>
     </div>`

@@ -22,7 +22,7 @@ render(tripControls.children[0], menuComponent, RenderPosition.AFTEREND);
 
 
 let totalCosts = [];
-let routeOfCities = new Set();
+let routeOfCities = [];
 
 const api = new API(END_POINT, AUTHORIZATION);
 
@@ -50,11 +50,24 @@ menuComponent.setOnChange((menuItem) => {
   }
 });
 
+const getTotalAmount = (costs) => {
+  let totalAmount = costs.reduce((acc, item) => {
+    acc += item;
+    return acc;
+  }, 0);
+  return totalAmount;
+};
+
 const getFullPoints = function (allDataPoints) {
   allDataPoints.sort((a, b) => a.dateFrom - b.dateFrom);
   allDataPoints.map((item) => {
     totalCosts.push(item.basePrice);
-    routeOfCities.add(item.destination.name);
+    const addPrices = item.offers.map((it) => {
+      return it.price;
+    });
+    totalCosts = [].concat(totalCosts, addPrices);
+
+    routeOfCities.push(item.destination.name);
   });
 
   let fullDataPoints = [[allDataPoints[0]]];
@@ -91,7 +104,8 @@ api.getAddOffers()
           pointsModel.setDataAboutOffers(offers);
           pointsModel.setDataAboutDestinations(destinations);
           pointsModel.setPoints(fullDataPoints);
-          tripController.render(totalCosts, routeOfCities, tripInfo);
+          const totalAmount = getTotalAmount(totalCosts);
+          tripController.render(totalAmount, routeOfCities, tripInfo);
         });
     });
   });
