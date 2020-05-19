@@ -7,7 +7,7 @@ import TripController from './controllers/trip.js';
 import PointsModel from './models/points.js';
 import FilterController from './controllers/filter.js';
 
-const AUTHORIZATION = `Basic YWxhZGRp7jhoojp96ngio4r66yj5ht7u8`;
+const AUTHORIZATION = `Basic YWxhZGRp7jhoojp96ngio4r66yj5ht7u9`;
 const END_POINT = `https://11.ecmascript.pages.academy/big-trip`;
 
 const tripControls = document.querySelector(`.trip-controls`);
