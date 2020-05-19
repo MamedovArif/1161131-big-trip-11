@@ -1,14 +1,9 @@
 import AbstractComponent from "./abstract-component.js";
 
-const createCostOfTripTemplate = (array) => {
-  let sum = array.reduce((acc, item) => {
-    acc += item;
-    return acc;
-  }, 0);
-
+const createCostOfTripTemplate = (totalAmount) => {
   return (
     `<p class="trip-info__cost">
-      Total: &euro;&nbsp;<span class="trip-info__cost-value">${sum}</span>
+      Total: &euro;&nbsp;<span class="trip-info__cost-value">${totalAmount}</span>
     </p>`
   );
 };

@@ -7,7 +7,7 @@ import TripController from './controllers/trip.js';
 import PointsModel from './models/points.js';
 import FilterController from './controllers/filter.js';
 
-const AUTHORIZATION = `Basic YWxhZGRp7jhoojp96ngio4r66yj5ht7u1`;
+const AUTHORIZATION = `Basic YWxhZGRp7jhoojp96ngio4r66yj5ht7u9`;
 const END_POINT = `https://11.ecmascript.pages.academy/big-trip`;
 
 const tripControls = document.querySelector(`.trip-controls`);
@@ -15,13 +15,14 @@ const pageBody = document.querySelector(`.page-body__page-main`);
 const pageBodyContainer = pageBody.querySelector(`.page-body__container`);
 
 const tripMain = document.querySelector(`.trip-main`);
+const tripInfo = tripMain.querySelector(`.trip-info`);
 
 const menuComponent = new MenuComponent();
 render(tripControls.children[0], menuComponent, RenderPosition.AFTEREND);
 
 
 let totalCosts = [];
-let routeOfCities = new Set();
+let routeOfCities = [];
 
 const api = new API(END_POINT, AUTHORIZATION);
 
@@ -31,7 +32,7 @@ export const filterController = new FilterController(tripControls, pointsModel);
 
 const statisticsComponent = new StatisticsComponent(pointsModel);
 const tripComponent = new TripComponent();
-const tripController = new TripController(tripComponent, pointsModel, api);
+export const tripController = new TripController(tripComponent, pointsModel, api);
 render(pageBodyContainer, tripComponent, RenderPosition.BEFOREEND);
 render(pageBodyContainer, statisticsComponent, RenderPosition.BEFOREEND);
 statisticsComponent.hide();
@@ -49,11 +50,24 @@ menuComponent.setOnChange((menuItem) => {
   }
 });
 
+const getTotalAmount = (costs) => {
+  let totalAmount = costs.reduce((acc, item) => {
+    acc += item;
+    return acc;
+  }, 0);
+  return totalAmount;
+};
+
 const getFullPoints = function (allDataPoints) {
   allDataPoints.sort((a, b) => a.dateFrom - b.dateFrom);
   allDataPoints.map((item) => {
     totalCosts.push(item.basePrice);
-    routeOfCities.add(item.destination.name);
+    const addPrices = item.offers.map((it) => {
+      return it.price;
+    });
+    totalCosts = [].concat(totalCosts, addPrices);
+
+    routeOfCities.push(item.destination.name);
   });
 
   let fullDataPoints = [[allDataPoints[0]]];
@@ -84,13 +98,11 @@ api.getAddOffers()
       api.getPoints()
         .then((allDataPoints) => {
           const fullDataPoints = getFullPoints(allDataPoints);
-          // console.log(allDataPoints);
-          // console.log(destinations);
-          // console.log(offers);
           pointsModel.setDataAboutOffers(offers);
           pointsModel.setDataAboutDestinations(destinations);
           pointsModel.setPoints(fullDataPoints);
-          tripController.render(totalCosts, routeOfCities, tripMain);
+          const totalAmount = getTotalAmount(totalCosts);
+          tripController.render(totalAmount, routeOfCities, tripInfo);
         });
     });
   });

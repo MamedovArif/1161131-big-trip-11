@@ -1,5 +1,5 @@
 export default class Point {
-  constructor(data) { // забираю с сервера
+  constructor(data) {
     this.id = data[`id`];
     this.destination = data[`destination`] || {};
     this.basePrice = data[`base_price`];
@@ -10,7 +10,7 @@ export default class Point {
     this.offers = data[`offers`] || [];
   }
 
-  toRAW() { // отдаю серверу
+  toRAW() {
     return {
       'id': this.id,
       'destination': this.destination,

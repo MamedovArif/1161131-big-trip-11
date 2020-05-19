@@ -1,8 +1,6 @@
 import {formatTime, formatTimeDate, upperFirstElement} from '../utils/common.js';
 import {pretext} from "../const.js";
 
-// import {encode} from "he";
-
 const typesTransfer = [`taxi`, `bus`, `train`, `ship`, `transport`, `drive`, `flight`];
 const typesActivity = [`check-in`, `sightseeing`, `restaurant`];
 
@@ -42,11 +40,6 @@ const createHeaderEditingForm = (object, dataAboutDestinations, externalData) =>
 
   const deleteButtonText = externalData.deleteButtonText;
   const saveButtonText = externalData.saveButtonText;
-
-  // const timeStart = encode(timeBegin);
-  // const timeFinish = encode(timeEnd);
-  // const safePrice = encode(price);
-  // const town = encode(city);
 
   const hoursBegin = formatTime(dateFrom);
   const dateBegin = formatTimeDate(dateFrom);

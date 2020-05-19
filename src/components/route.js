@@ -1,33 +1,45 @@
 import {MONTH_NAMES} from '../const.js';
 import AbstractComponent from './abstract-component.js';
 
-const createAboutRouteTemplate = (array, fullDataPoints) => {
-  let cities = Array.from(array);
-
+const createAboutRouteTemplate = (cities, fullDataPoints) => {
   let citiesString = ``;
-  for (let i = 0; i < cities.length; i++) {
-    citiesString += `${cities[i]} — `;
+  if (cities.length > 3) {
+    citiesString += `${cities[0]} — … — ${cities[cities.length - 1]}`;
+  } else {
+    citiesString += `${cities[0]}`;
+    for (let i = 1; i < cities.length; i++) {
+      citiesString += ` — ${cities[i]}`;
+    }
   }
 
-  let days = fullDataPoints.map((littleArray) => {
-    return littleArray[0].dateFrom;
-  });
+  let monthBegin;
+  let dayBegin;
+  let monthEnd;
+  let dayEnd;
+  if (fullDataPoints.length !== 0) {
+    let days = fullDataPoints.map((littleArray) => {
+      return littleArray[0].dateFrom;
+    });
 
-  const monthBegin = MONTH_NAMES[days[0].getMonth()];
-  const dayBegin = days[0].getDate();
-  const monthEnd = (monthBegin ===
-    MONTH_NAMES[days[days.length - 1].getMonth()]) ? `` :
-    MONTH_NAMES[days[days.length - 1].getMonth()];
-  const dayEnd = days[days.length - 1].getDate();
+    monthBegin = MONTH_NAMES[days[0].getMonth()];
+    dayBegin = days[0].getDate();
+    monthEnd = (monthBegin ===
+      MONTH_NAMES[days[days.length - 1].getMonth()]) ? `` :
+      MONTH_NAMES[days[days.length - 1].getMonth()];
+    dayEnd = days[days.length - 1].getDate();
+  } else {
+    monthBegin = ``;
+    dayBegin = ``;
+    monthEnd = ``;
+    dayEnd = ``;
+  }
 
   return (
-    `<section class="trip-main__trip-info  trip-info">
-      <div class="trip-info__main">
-        <h1 class="trip-info__title">${citiesString.slice(0, citiesString.length - 2)}</h1>
+    `<div class="trip-info__main">
+      <h1 class="trip-info__title">${citiesString}</h1>
 
-        <p class="trip-info__dates">${monthBegin} ${dayBegin} &nbsp;&mdash;&nbsp; ${monthEnd} ${dayEnd}</p>
-      </div>
-    </section>`
+      <p class="trip-info__dates">${monthBegin} ${dayBegin} &nbsp;&mdash;&nbsp; ${monthEnd} ${dayEnd}</p>
+    </div>`
   );
 };
 

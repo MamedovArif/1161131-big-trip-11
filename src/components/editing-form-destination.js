@@ -1,9 +1,5 @@
 export const createDestinationEditingForm = (object) => {
   const {destination} = object;
-
-  // if (!destination) {
-  //   return ``;
-  // }
   const photos = destination.pictures;
 
   let combinationPhotos = [];

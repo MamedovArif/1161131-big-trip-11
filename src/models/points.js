@@ -9,8 +9,8 @@ export default class Points {
     this._points = [];
 
 
-    this._dataChangeHandlers = []; // хранение обработчиков renderFilter
-    this._sortChangeHandlers = []; // хранение обработчиков сорта
+    this._dataChangeHandlers = [];
+    this._sortChangeHandlers = [];
     this._filterChangeHandlers = [];
 
     this._dataAboutDestinations = null;
@@ -58,7 +58,7 @@ export default class Points {
     this._points = pointsWithoutOne;
   }
 
-  addPoint(point) { // куда вставляем новую точку
+  addPoint(point) {
     const newPointDate = point.dateFrom;
     let foundYourHome = false;
     for (let i = 0; i < this._points.length; i++) {
@@ -93,17 +93,26 @@ export default class Points {
 
   updatePoint(id, newPoint) {
     let isSuccess = false;
-    this._points = this._points.map((littleArray) => {
+    let updatePoints;
+    this._points = this._points.map((littleArray, count) => {
       const index = littleArray.findIndex((point) => point.id === id);
 
       if (index === -1) {
         return littleArray;
       }
       isSuccess = true;
-      littleArray = [].concat(littleArray.slice(0, index),
-          newPoint, littleArray.slice(index + 1));
+
+      littleArray = [].concat(littleArray.slice(0, index), littleArray.slice(index + 1));
+      if (littleArray.length === 0) {
+        updatePoints = [].concat(this._points.slice(0, count), this._points.slice(count + 1));
+      } else {
+        updatePoints = this._points;
+      }
       return littleArray;
     });
+
+    this._points = updatePoints;
+    this.addPoint(newPoint);
     return isSuccess;
   }
 
@@ -122,7 +131,6 @@ export default class Points {
   setFilterChangeHandler(handler) {
     this._filterChangeHandlers.push(handler);
   }
-
 
   setDataAboutDestinations(dataOfArray) {
     this._dataAboutDestinations = dataOfArray;
