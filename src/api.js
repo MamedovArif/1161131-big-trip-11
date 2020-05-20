@@ -1,4 +1,5 @@
 import Point from "./models/point.js";
+import {StatusCode} from "./const.js";
 
 const Method = {
   GET: `GET`,
@@ -8,10 +9,10 @@ const Method = {
 };
 
 const checkStatus = (response) => {
-  if (response.status >= 200 && response.status < 300) {
+  if (response.status >= StatusCode[`OK`] && response.status < StatusCode[`MULTIPLE_CHOICE`]) {
     return response;
   } else {
-    throw new Error(`${response.status}: ${response.statusText} murdar`);
+    throw new Error(`${response.status}: ${response.statusText}`);
   }
 };
 

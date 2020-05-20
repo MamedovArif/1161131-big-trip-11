@@ -1,7 +1,7 @@
 const generateOffers = (offer, isSelect) => {
   const {title, price} = offer;
-  const essence = title.split(` `);
-  const validWords = essence.map((word) => {
+  const words = title.split(` `);
+  const validWords = words.map((word) => {
     const speech = word.toLowerCase();
     const validWord = speech.split(``).filter((letter) => {
       return (letter !== `'` && letter !== `,`);

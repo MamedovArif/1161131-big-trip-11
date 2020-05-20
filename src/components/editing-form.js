@@ -135,9 +135,10 @@ export default class FormForEdit extends AbstractSmartComponent {
       altInput: true,
       allowInput: false,
       altFormat: `d.m.y H:i`,
+      mode: `range`,
       dateFormat: `Z`,
       enableTime: true,
-      defaultDate: this._editForm.dateFrom || `today`,
+      defaultDate: [this._editForm.dateFrom, this._editForm.dateTo] || [`yesterday`, `today`],
     });
     const dateEnd = this.getElement()
         .querySelector(`input[name = event-end-time]`);
@@ -145,9 +146,10 @@ export default class FormForEdit extends AbstractSmartComponent {
       altInput: true,
       allowInput: false,
       altFormat: `d.m.y H:i`,
+      mode: `range`,
       dateFormat: `Z`,
       enableTime: true,
-      defaultDate: this._editForm.dateTo || `today`,
+      defaultDate: [this._editForm.dateFrom, this._editForm.dateTo] || [`yesterday`, `today`],
     });
   }
 
