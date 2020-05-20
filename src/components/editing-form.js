@@ -37,7 +37,8 @@ export default class FormForEdit extends AbstractSmartComponent {
     this._dataAboutOffers = dataAboutOffers;
     this._externalData = DefaultData;
 
-    this._flatpickr = null;
+    this._flatpickrStart = null;
+    this._flatpickrEnd = null;
     this._submitHandler = null;
     this._deleteButtonClickHandler = null;
 
@@ -51,9 +52,14 @@ export default class FormForEdit extends AbstractSmartComponent {
   }
 
   removeElement() {
-    if (this._flatpickr) {
-      this._flatpickr.destroy();
-      this._flatpickr = null;
+    if (this._flatpickrStart) {
+      this._flatpickrStart.destroy();
+      this._flatpickrStart = null;
+    }
+
+    if (this._flatpickrEnd) {
+      this._flatpickrEnd.destroy();
+      this._flatpickrEnd = null;
     }
 
     super.removeElement();
@@ -113,14 +119,19 @@ export default class FormForEdit extends AbstractSmartComponent {
   }
 
   _applyFlatpickr() {
-    if (this._flatpickr) {
-      this._flatpickr.destroy();
-      this._flatpickr = null;
+    if (this._flatpickrStart) {
+      this._flatpickrStart.destroy();
+      this._flatpickrStart = null;
+    }
+
+    if (this._flatpickrEnd) {
+      this._flatpickrEnd.destroy();
+      this._flatpickrEnd = null;
     }
 
     const dateBegin = this.getElement()
         .querySelector(`input[name = event-start-time]`);
-    this._flatpickr = flatpickr(dateBegin, {
+    this._flatpickrStart = flatpickr(dateBegin, {
       altInput: true,
       allowInput: false,
       altFormat: `d.m.y H:i`,
@@ -130,7 +141,7 @@ export default class FormForEdit extends AbstractSmartComponent {
     });
     const dateEnd = this.getElement()
         .querySelector(`input[name = event-end-time]`);
-    this._flatpickr = flatpickr(dateEnd, {
+    this._flatpickrEnd = flatpickr(dateEnd, {
       altInput: true,
       allowInput: false,
       altFormat: `d.m.y H:i`,
@@ -172,27 +183,6 @@ export default class FormForEdit extends AbstractSmartComponent {
     element.querySelector(`input[name = event-price]`).addEventListener(`blur`, (evt) => {
       this._editForm.basePrice = Math.abs(parseInt(evt.target.value, 10));
       this.rerender();
-    });
-
-    const saveButton = element.querySelector(`.event__save-btn`);
-
-    element.querySelector(`input[type = datetime-local]`).addEventListener(`blur`, (evt) => {
-      this._editForm.dateFrom = new Date(evt.target.value);
-      if (this._editForm.dateFrom > this._editForm.dateTo) {
-        saveButton.setAttribute(`disabled`, `disabled`);
-      } else {
-        saveButton.removeAttribute(`disabled`);
-      }
-    });
-
-    const elem = element.querySelectorAll(`input[type = datetime-local]`);
-    elem[elem.length - 1].addEventListener(`blur`, (evt) => {
-      this._editForm.dateTo = new Date(evt.target.value);
-      if (this._editForm.dateFrom > this._editForm.dateTo) {
-        saveButton.setAttribute(`disabled`, `disabled`);
-      } else {
-        saveButton.removeAttribute(`disabled`);
-      }
     });
 
     const offersContainer = element.querySelector(`.event__available-offers`);
