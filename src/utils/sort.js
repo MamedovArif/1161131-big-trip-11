@@ -8,8 +8,8 @@ const getSortOnEvent = (allPoints) => {
 const getSortOnTime = (allPoints) => {
   let points = [];
   let wrapperPoints = [];
-  allPoints.map((littleArray) => {
-    points = points.concat(littleArray);
+  allPoints.map((oneDayOfPoints) => {
+    points = points.concat(oneDayOfPoints);
   });
   points.sort((a, b) => {
     const durationA = durationOfPoint(a.dateFrom, a.dateTo);
@@ -23,8 +23,8 @@ const getSortOnTime = (allPoints) => {
 const getSortOnPrice = (allPoints) => {
   let points = [];
   let wrapperPoints = [];
-  allPoints.map((littleArray) => {
-    points = points.concat(littleArray);
+  allPoints.map((oneDayOfPoints) => {
+    points = points.concat(oneDayOfPoints);
   });
   points.sort((a, b) => {
     return b.basePrice - a.basePrice;

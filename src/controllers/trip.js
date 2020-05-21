@@ -289,8 +289,8 @@ export default class TripController {
 
   updateRouteOfCities(routeOfCities, model) {
     routeOfCities = [];
-    model.getPointsAll().forEach((littleArray) => {
-      littleArray.forEach((point) => {
+    model.getPointsAll().forEach((oneDayOfPoints) => {
+      oneDayOfPoints.forEach((point) => {
         routeOfCities.push(point.destination.name);
       });
     });

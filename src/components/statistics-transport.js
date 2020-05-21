@@ -4,18 +4,18 @@ import ChartDataLabels from "chartjs-plugin-datalabels";
 
 export const renderTransportChart = (transportCtx, points) => {
   const transportForCanvas = [];
-  points.map((littleArray) => {
-    littleArray.map((point) => {
-      const actualObject = transportForCanvas.find((obj) => {
-        return obj.type === point.type;
+  points.map((oneDayOfPoints) => {
+    oneDayOfPoints.map((point) => {
+      const matchingEvent = transportForCanvas.find((event) => {
+        return event.type === point.type;
       });
-      if (actualObject) {
-        actualObject.count += 1;
+      if (matchingEvent) {
+        matchingEvent.count += 1;
       } else {
-        const object = {};
-        object.type = point.type;
-        object.count = 1;
-        transportForCanvas.push(object);
+        const event = {};
+        event.type = point.type;
+        event.count = 1;
+        transportForCanvas.push(event);
       }
     });
   });

@@ -37,7 +37,7 @@ const parseFormData = (formData, form, id, dataAboutDestinations, dataAboutOffer
   if (!destination) {
     destination = dataAboutDestinations[0];
   }
-  const formObject = {
+  const dataFromEditForm = {
     "id": id,
     "base_price": Math.abs(parseInt(formData.get(`event-price`), 10)),
     "date_from": formData.get(`event-start-time`),
@@ -53,25 +53,25 @@ const parseFormData = (formData, form, id, dataAboutDestinations, dataAboutOffer
     const markerOffers = offers.filter((input) => {
       return input.getAttribute(`value`) === `true`;
     });
-    const arrayOfIdies = markerOffers.map((input) => {
+    const ids = markerOffers.map((input) => {
       return input.getAttribute(`id`);
     });
-    const titles = arrayOfIdies.map((iden) => {
+    const titles = ids.map((iden) => {
       const label = form.querySelector(`label[for = ${iden}]`);
       const title = label.querySelector(`span`).textContent;
       return title;
     });
-    const ourOffers = dataAboutOffers.find((it) => {
+    const allPossibleOurOffers = dataAboutOffers.find((it) => {
       return it.type === type;
     });
-    formObject.offers = ourOffers.offers.filter((obj) => {
-      return titles.includes(obj.title);
+    dataFromEditForm.offers = allPossibleOurOffers.offers.filter((offer) => {
+      return titles.includes(offer.title);
     });
   } else {
-    formObject.offers = [];
+    dataFromEditForm.offers = [];
   }
 
-  return new PointModel(formObject);
+  return new PointModel(dataFromEditForm);
 };
 
 
@@ -109,9 +109,9 @@ export default class PointController {
 
     this._formForEditComponent.setSubmitHandler((evt) => {
       evt.preventDefault();
-      const obj = this._formForEditComponent.getData();
+      const dataFromParseForm = this._formForEditComponent.getData();
 
-      const data = parseFormData(obj.formData, obj.form, dataOfRoute.id,
+      const data = parseFormData(dataFromParseForm.formData, dataFromParseForm.form, dataOfRoute.id,
           this._dataAboutDestinations, this._dataAboutOffers);
       this._formForEditComponent.setData({
         saveButtonText: `Saving...`,

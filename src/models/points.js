@@ -42,13 +42,13 @@ export default class Points {
   }
 
   removePoint(id) {
-    const pointsWithoutOne = this._points.map((littleArray) => {
-      const index = littleArray.findIndex((item) => item.id === id);
+    const pointsWithoutOne = this._points.map((oneDayOfPoints) => {
+      const index = oneDayOfPoints.findIndex((item) => item.id === id);
       if (index === -1) {
-        return littleArray;
+        return oneDayOfPoints;
       }
-      littleArray = [].concat(littleArray.slice(0, index), littleArray.slice(index + 1));
-      return littleArray;
+      oneDayOfPoints = [].concat(oneDayOfPoints.slice(0, index), oneDayOfPoints.slice(index + 1));
+      return oneDayOfPoints;
     });
     for (let i = 0; i < pointsWithoutOne.length; i++) {
       if (pointsWithoutOne[i].length === 0) {
@@ -71,11 +71,11 @@ export default class Points {
       }
     }
     if (foundYourHome === false) {
-      const newArray = [];
-      newArray.push(point);
+      const wrapperForNewPoints = [];
+      wrapperForNewPoints.push(point);
       for (let j = 0; j < this._points.length; j++) {
         if (this._points[j][0].dateFrom > newPointDate) {
-          this._points.splice(j, 0, newArray);
+          this._points.splice(j, 0, wrapperForNewPoints);
           this._callHandlers(this._sortChangeHandlers);
           foundYourHome = true;
           break;
@@ -83,9 +83,9 @@ export default class Points {
       }
     }
     if (foundYourHome === false) {
-      const newArray = [];
-      newArray.push(point);
-      this._points.push(newArray);
+      const wrapperForNewPoints = [];
+      wrapperForNewPoints.push(point);
+      this._points.push(wrapperForNewPoints);
       this._callHandlers(this._sortChangeHandlers);
       foundYourHome = true;
     }
@@ -94,21 +94,21 @@ export default class Points {
   updatePoint(id, newPoint) {
     let isSuccess = false;
     let updatePoints;
-    this._points = this._points.map((littleArray, count) => {
-      const index = littleArray.findIndex((point) => point.id === id);
+    this._points = this._points.map((oneDayOfPoints, count) => {
+      const index = oneDayOfPoints.findIndex((point) => point.id === id);
 
       if (index === -1) {
-        return littleArray;
+        return oneDayOfPoints;
       }
       isSuccess = true;
 
-      littleArray = [].concat(littleArray.slice(0, index), littleArray.slice(index + 1));
-      if (littleArray.length === 0) {
+      oneDayOfPoints = [].concat(oneDayOfPoints.slice(0, index), oneDayOfPoints.slice(index + 1));
+      if (oneDayOfPoints.length === 0) {
         updatePoints = [].concat(this._points.slice(0, count), this._points.slice(count + 1));
       } else {
         updatePoints = this._points;
       }
-      return littleArray;
+      return oneDayOfPoints;
     });
 
     this._points = updatePoints;
@@ -132,8 +132,8 @@ export default class Points {
     this._filterChangeHandlers.push(handler);
   }
 
-  setDataAboutDestinations(dataOfArray) {
-    this._dataAboutDestinations = dataOfArray;
+  setDataAboutDestinations(destinations) {
+    this._dataAboutDestinations = destinations;
   }
   getDataAboutDestinations() {
     return this._dataAboutDestinations;

@@ -1,7 +1,7 @@
 import AbstractComponent from "./abstract-component.js";
 
-const generateOneFilter = (object) => {
-  const {name, isChecked} = object;
+const generateOneFilter = (dataForPoint) => {
+  const {name, isChecked} = dataForPoint;
   return (
     `<div class="trip-filters__filter">
       <input id="filter-${name}" class="trip-filters__filter-input

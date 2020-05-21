@@ -5,19 +5,19 @@ export const getFilteredPoints = (points, filterType) => {
 
   switch (filterType) {
     case FilterType.FUTURE:
-      dataOfPoints = points.map((littleArray) => {
-        return littleArray.filter((item) => item.dateFrom > new Date());
+      dataOfPoints = points.map((oneDayOfPoints) => {
+        return oneDayOfPoints.filter((item) => item.dateFrom > new Date());
       });
-      dataOfPoints = dataOfPoints.filter((littleArray) => {
-        return littleArray.length !== 0;
+      dataOfPoints = dataOfPoints.filter((oneDayOfPoints) => {
+        return oneDayOfPoints.length !== 0;
       });
       break;
     case FilterType.PAST:
-      dataOfPoints = points.map((littleArray) => {
-        return littleArray.filter((item) => item.dateFrom < new Date());
+      dataOfPoints = points.map((oneDayOfPoints) => {
+        return oneDayOfPoints.filter((item) => item.dateFrom < new Date());
       });
-      dataOfPoints = dataOfPoints.filter((littleArray) => {
-        return littleArray.length !== 0;
+      dataOfPoints = dataOfPoints.filter((oneDayOfPoints) => {
+        return oneDayOfPoints.length !== 0;
       });
       break;
     case FilterType.EVERYTHING:

@@ -37,13 +37,27 @@ render(pageBodyContainer, tripComponent, RenderPosition.BEFOREEND);
 render(pageBodyContainer, statisticsComponent, RenderPosition.BEFOREEND);
 statisticsComponent.hide();
 
+export const buttonEvent = tripMain.querySelector(`.btn`);
+buttonEvent.addEventListener(`click`, () => {
+  tripController.createPoint();
+});
+
 menuComponent.setOnChange((menuItem) => {
   switch (menuItem) {
     case MenuItem.STATS:
+      if (!buttonEvent.hasAttribute(`disabled`)) {
+        buttonEvent.setAttribute(`disabled`, `disabled`);
+      }
       tripController.hide();
       statisticsComponent.show();
       break;
     case MenuItem.TABLE:
+      if (buttonEvent.hasAttribute(`disabled`)) {
+        buttonEvent.removeAttribute(`disabled`);
+        buttonEvent.addEventListener(`click`, () => {
+          tripController.createPoint();
+        });
+      }
       statisticsComponent.hide();
       tripController.show();
       break;
@@ -77,24 +91,19 @@ const getFullPoints = function (allDataPoints) {
         allDataPoints[i].dateFrom.getMonth() === allDataPoints[i + 1].dateFrom.getMonth()) {
       fullDataPoints[fullDataPoints.length - 1].push(allDataPoints[i + 1]);
     } else {
-      let littleArray = [];
-      littleArray.push(allDataPoints[i + 1]);
-      fullDataPoints.push(littleArray);
+      let oneDayOfPoints = [];
+      oneDayOfPoints.push(allDataPoints[i + 1]);
+      fullDataPoints.push(oneDayOfPoints);
     }
   }
   return fullDataPoints;
 };
 
-export const buttonEvent = tripMain.querySelector(`.btn`);
-buttonEvent.addEventListener(`click`, () => {
-  tripController.createPoint();
-});
-
 api.getAddOffers()
   .then((offers) => {
     api.getCities()
-    .then((array) => {
-      let destinations = [].concat(array);
+    .then((serverDestinations) => {
+      let destinations = [].concat(serverDestinations);
       api.getPoints()
         .then((allDataPoints) => {
           const fullDataPoints = getFullPoints(allDataPoints);

@@ -1,5 +1,5 @@
-export const createDestinationEditingForm = (object) => {
-  const {destination} = object;
+export const createDestinationEditingForm = (dataForPoint) => {
+  const {destination} = dataForPoint;
   const photos = destination.pictures;
 
   let combinationPhotos = [];

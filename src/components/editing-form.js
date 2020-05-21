@@ -11,18 +11,18 @@ const DefaultData = {
   saveButtonText: `Save`,
 };
 
-const createEditingFormTemplate = (object, dataAboutDestinations, dataAboutOffers, externalData) => {
-  const type = object.type;
+const createEditingFormTemplate = (dataForPoint, dataAboutDestinations, dataAboutOffers, externalData) => {
+  const type = dataForPoint.type;
   const allOffers = dataAboutOffers.find((item) => {
     return item.type === type;
   });
 
   return (
     `<form class="trip-events__item  event  event--edit" action="#" method="post">
-      ${createHeaderEditingForm(object, dataAboutDestinations, externalData)}
+      ${createHeaderEditingForm(dataForPoint, dataAboutDestinations, externalData)}
       <section class="event__details">
-        ${(allOffers.offers.length === 0) ? `` : createOffersEditingForm(object, dataAboutOffers)}
-        ${(object.destination) ? createDestinationEditingForm(object) : ``}
+        ${(allOffers.offers.length === 0) ? `` : createOffersEditingForm(dataForPoint, dataAboutOffers)}
+        ${(dataForPoint.destination) ? createDestinationEditingForm(dataForPoint) : ``}
       </section>
     </form>`
   );
@@ -129,6 +129,10 @@ export default class FormForEdit extends AbstractSmartComponent {
       this._flatpickrEnd = null;
     }
 
+    const dateFrom = new Date();
+    const dateTo = new Date();
+    dateTo.setDate(dateFrom.getDate() + 1);
+
     const dateBegin = this.getElement()
         .querySelector(`input[name = event-start-time]`);
     this._flatpickrStart = flatpickr(dateBegin, {
@@ -138,7 +142,7 @@ export default class FormForEdit extends AbstractSmartComponent {
       mode: `range`,
       dateFormat: `Z`,
       enableTime: true,
-      defaultDate: [this._editForm.dateFrom, this._editForm.dateTo] || [`yesterday`, `today`],
+      defaultDate: [this._editForm.dateFrom, this._editForm.dateTo] || [dateFrom, dateTo],
     });
     const dateEnd = this.getElement()
         .querySelector(`input[name = event-end-time]`);
@@ -149,7 +153,7 @@ export default class FormForEdit extends AbstractSmartComponent {
       mode: `range`,
       dateFormat: `Z`,
       enableTime: true,
-      defaultDate: [this._editForm.dateFrom, this._editForm.dateTo] || [`yesterday`, `today`],
+      defaultDate: [this._editForm.dateFrom, this._editForm.dateTo] || [dateFrom, dateTo],
     });
   }
 
@@ -197,13 +201,13 @@ export default class FormForEdit extends AbstractSmartComponent {
           return item.type === this._editForm.type;
         });
 
-        const currentOffer = actualOffers.offers.find((obj) => {
-          return obj.title === title;
+        const currentOffer = actualOffers.offers.find((offer) => {
+          return offer.title === title;
         });
 
         let isAddOffer = false;
-        this._editForm.offers.forEach((object) => {
-          if (object.title === title) {
+        this._editForm.offers.forEach((offer) => {
+          if (offer.title === title) {
             isAddOffer = true;
           }
         });

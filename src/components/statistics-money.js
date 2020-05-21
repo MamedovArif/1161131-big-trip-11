@@ -4,16 +4,16 @@ import ChartDataLabels from "chartjs-plugin-datalabels";
 
 export const renderMoneyChart = (moneyCtx, points) => {
   const dataForCanvas = [];
-  points.map((littleArray) => {
-    littleArray.map((point) => {
-      const types = dataForCanvas.map((object) => {
-        return object.type;
+  points.map((oneDayOfPoints) => {
+    oneDayOfPoints.map((point) => {
+      const types = dataForCanvas.map((event) => {
+        return event.type;
       });
       if (!types.includes(point.type)) {
-        const obj = {};
-        obj.type = point.type;
-        obj.price = point.basePrice;
-        dataForCanvas.push(obj);
+        const event = {};
+        event.type = point.type;
+        event.price = point.basePrice;
+        dataForCanvas.push(event);
       } else {
         const current = dataForCanvas.find((elem) => {
           return elem.type === point.type;
@@ -28,9 +28,9 @@ export const renderMoneyChart = (moneyCtx, points) => {
 
   const basePrice = [];
   const typeForCanvas = [];
-  dataForCanvas.forEach((objectSorted) =>{
-    basePrice.push(objectSorted.price);
-    typeForCanvas.push(objectSorted.type);
+  dataForCanvas.forEach((eventSorted) =>{
+    basePrice.push(eventSorted.price);
+    typeForCanvas.push(eventSorted.type);
   });
   const types = typeForCanvas.map((it) => {
     return it.toUpperCase();

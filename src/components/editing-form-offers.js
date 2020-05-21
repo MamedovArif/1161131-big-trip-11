@@ -24,8 +24,8 @@ const generateOffers = (offer, isSelect) => {
   );
 };
 
-export const createOffersEditingForm = (object, dataAboutOffers) => {
-  const {offers, type} = object;
+export const createOffersEditingForm = (dataForPoint, dataAboutOffers) => {
+  const {offers, type} = dataForPoint;
   const actualOffers = dataAboutOffers.find((item) => {
     return item.type === type;
   });
