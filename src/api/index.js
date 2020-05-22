@@ -1,5 +1,5 @@
-import Point from "./models/point.js";
-import {StatusCode} from "./const.js";
+import Point from "../models/point.js";
+import {StatusCode} from "../const.js";
 
 const Method = {
   GET: `GET`,
@@ -65,6 +65,16 @@ const API = class {
       url: `points/${id}`,
       method: Method.DELETE,
     });
+  }
+
+  sync(points) {
+    return this._load({
+      url: `points/sync`,
+      method: Method.POST,
+      body: JSON.stringify(points),
+      headers: new Headers({"Content-Type": `application/json`})
+    })
+      .then((response) => response.json());
   }
 
   _load({url, method = Method.GET, body = null, headers = new Headers()}) {
