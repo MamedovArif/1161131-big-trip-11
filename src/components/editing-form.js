@@ -8,11 +8,72 @@ import "flatpickr/dist/flatpickr.min.css";
 
 const getTime = (field) => {
   const stringDates = field.value.split(` `);
-  const dateValues = stringDates[0].split(`.`);
-  const timeValues = stringDates[1].split(`:`);
-  const currentDate = new Date('20' + dateValues[2], Number(dateValues[1]) - 1, dateValues[0],
-      timeValues[0], timeValues[1]);
+  let currentDate;
+  if (stringDates.length !== 1) {
+    const dateValues = stringDates[0].split(`.`);
+    const timeValues = stringDates[1].split(`:`);
+    currentDate = new Date('20' + dateValues[2], Number(dateValues[1]) - 1, dateValues[0],
+        timeValues[0], timeValues[1]);
+  } else {
+    currentDate = new Date(stringDates[0]);
+  }
   return currentDate;
+}
+
+const applyFlatpickrStart = (flatpickrStart, context, editForm, flatpickrEnd) => {
+  if (flatpickrStart) {
+    flatpickrStart.destroy();
+    flatpickrStart = null;
+  }
+
+  const dateBegin = context.querySelector(`input[name = event-start-time]`);
+  const dateEnd = context.querySelector(`input[name = event-end-time]`);
+
+  const currentTo = getTime(dateEnd);
+
+  flatpickrStart = flatpickr(dateBegin, {
+    altInput: true,
+    allowInput: false,
+    altFormat: `d.m.y H:i`,
+    maxDate: currentTo,
+    time_24hr: true,
+    disableMobile: true,
+    onClose: function() {
+      editForm['dateFrom'] = getTime(dateBegin);
+      applyFlatpickrEnd(flatpickrEnd, context, editForm);
+    },
+    dateFormat: `Z`,
+    enableTime: true,
+    defaultDate: editForm['dateFrom'] || `today`,
+  });
+}
+
+const applyFlatpickrEnd = (flatpickrEnd, context, editForm, flatpickrStart) => {
+  if (flatpickrEnd) {
+    flatpickrEnd.destroy();
+    flatpickrEnd = null;
+  }
+
+  const dateBegin = context.querySelector(`input[name = event-start-time]`);
+  const dateEnd = context.querySelector(`input[name = event-end-time]`);
+
+  const currentFrom = getTime(dateBegin);
+
+  flatpickrEnd = flatpickr(dateEnd, {
+    altInput: true,
+    allowInput: false,
+    altFormat: `d.m.y H:i`,
+    minDate: currentFrom,
+    time_24hr: true,
+    disableMobile: true,
+    onClose: function() {
+      editForm['dateTo'] = getTime(dateEnd);
+      applyFlatpickrStart(flatpickrStart, context, editForm);
+    },
+    dateFormat: `Z`,
+    enableTime: true,
+    defaultDate: editForm['dateTo'] || `today`,
+  });
 }
 
 const DefaultData = {
@@ -51,8 +112,9 @@ export default class FormForEdit extends AbstractSmartComponent {
     this._submitHandler = null;
     this._deleteButtonClickHandler = null;
 
-    this._applyFlatpickrStart();
-    this._applyFlatpickrEnd();
+    applyFlatpickrStart(this._flatpickrStart, this.getElement(), this._editForm, this._flatpickrEnd);
+    applyFlatpickrEnd(this._flatpickrEnd, this.getElement(), this._editForm, this._flatpickrStart);
+    //this._applyFlatpickrEnd();
     this._subscribeOnEvents();
   }
 
@@ -84,8 +146,9 @@ export default class FormForEdit extends AbstractSmartComponent {
 
   rerender() {
     super.rerender();
-    this._applyFlatpickrStart();
-    this._applyFlatpickrEnd();
+    applyFlatpickrStart(this._flatpickrStart, this.getElement(), this._editForm, this._flatpickrEnd);
+    applyFlatpickrEnd(this._flatpickrEnd, this.getElement(), this._editForm, this._flatpickrStart);
+    //this._applyFlatpickrEnd();
   }
 
   reset() {
@@ -127,83 +190,6 @@ export default class FormForEdit extends AbstractSmartComponent {
     this.getElement().querySelector(`.event__rollup-btn`)
         .addEventListener(`click`, handler);
     this._closeHandler = handler;
-  }
-
-  _applyFlatpickrStart() {
-    if (this._flatpickrStart) {
-      this._flatpickrStart.destroy();
-      this._flatpickrStart = null;
-    }
-
-    // if (this._flatpickrEnd) {
-    //   this._flatpickrEnd.destroy();
-    //   this._flatpickrEnd = null;
-    // }
-
-    const dateBegin = this.getElement()
-        .querySelector(`input[name = event-start-time]`);
-    const dateEnd = this.getElement()
-        .querySelector(`input[name = event-end-time]`);
-
-    const currentTo = getTime(dateEnd);
-    console.log(currentTo);
-
-    this._flatpickrStart = flatpickr(dateBegin, {
-      altInput: true,
-      allowInput: false,
-      altFormat: `d.m.y H:i`,
-      maxDate: currentTo,
-      time_24hr: true,
-      disableMobile: true,
-      dateFormat: `Z`,
-      enableTime: true,
-      defaultDate: this._editForm.dateFrom || `today`,
-    });
-
-    // this._flatpickrEnd = flatpickr(dateEnd, {
-    //   altInput: true,
-    //   allowInput: false,
-    //   altFormat: `d.m.y H:i`,
-    //   //minDate: dateBegin.value,
-    //   time_24hr: true,
-    //   disableMobile: true,
-    //   onClose: this._applyFlatpickrStart(selectedDates);
-    //   dateFormat: `Z`,
-    //   enableTime: true,
-    //   defaultDate: this._editForm.dateTo || `today`,
-    // });
-  }
-
-  _applyFlatpickrEnd() {
-    if (this._flatpickrEnd) {
-      this._flatpickrEnd.destroy();
-      this._flatpickrEnd = null;
-    }
-
-    const dateBegin = this.getElement()
-        .querySelector(`input[name = event-start-time]`);
-    const dateEnd = this.getElement()
-        .querySelector(`input[name = event-end-time]`);
-
-    // const currentFrom = getTime(dateBegin);
-
-    // console.log(dateBegin.value);
-
-    this._flatpickrEnd = flatpickr(dateEnd, {
-      altInput: true,
-      allowInput: false,
-      altFormat: `d.m.y H:i`,
-      //minDate: dateBegin.value,
-      time_24hr: true,
-      disableMobile: true,
-      onClose: function() {
-        console.log('fufuf');
-        this._applyFlatpickrStart();
-      },
-      dateFormat: `Z`,
-      enableTime: true,
-      defaultDate: this._editForm.dateTo || `today`,
-    });
   }
 
   _subscribeOnEvents() {
