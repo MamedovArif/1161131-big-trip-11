@@ -16,7 +16,6 @@ export const EmptyPoint = {
   "dateFrom": new Date(),
   "dateTo": new Date(),
   "destination": null,
-  "id": String(new Date() + Math.random()),
   "isFavorite": false,
   "type": `taxi`,
   "offers": []
@@ -38,7 +37,6 @@ const parseFormData = (formData, form, id, dataAboutDestinations, dataAboutOffer
     destination = dataAboutDestinations[0];
   }
   const dataFromEditForm = {
-    "id": id,
     "base_price": Math.abs(parseInt(formData.get(`event-price`), 10)),
     "date_from": formData.get(`event-start-time`),
     "date_to": formData.get(`event-end-time`),
@@ -46,6 +44,10 @@ const parseFormData = (formData, form, id, dataAboutDestinations, dataAboutOffer
     "is_favorite": definitionFavorite(formData.get(`event-favorite`)),
     "type": type,
   };
+
+  if (id) {
+    dataFromEditForm.id = id;
+  }
 
   const containerOfCheckbox = form.querySelector(`.event__available-offers`);
   if (containerOfCheckbox) {
@@ -111,7 +113,7 @@ export default class PointController {
       evt.preventDefault();
       const dataFromParseForm = this._formForEditComponent.getData();
 
-      const data = parseFormData(dataFromParseForm.formData, dataFromParseForm.form, dataOfRoute.id,
+      const data = parseFormData(dataFromParseForm.formData, dataFromParseForm.form, dataOfRoute.id || null,
           this._dataAboutDestinations, this._dataAboutOffers);
       this._formForEditComponent.setData({
         saveButtonText: `Saving...`,

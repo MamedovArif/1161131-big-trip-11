@@ -77,7 +77,7 @@ export default class Provider {
     }
 
     const localNewPointId = nanoid();
-    const localNewPoint = Point.clone(Object.assign(point, localNewPointId));
+    const localNewPoint = Point.clone(Object.assign(point, {id: localNewPointId}));
 
     this._storePoints.setItem(localNewPoint.id, localNewPoint.toRAW());
     return Promise.resolve(localNewPoint);
@@ -92,7 +92,7 @@ export default class Provider {
           return newPoint;
         });
     }
-    const localPoint = Point.clone(Object.assign(data, {id}));//double id
+    const localPoint = Point.clone(Object.assign(data, {id}));
     this._storePoints.setItem(id, localPoint.toRAW());
     return Promise.resolve(localPoint);
   }
@@ -109,7 +109,7 @@ export default class Provider {
 
   sync() {
     if (isOnline()) {
-      const storePoints = Object.values(this._store.getItems());
+      const storePoints = Object.values(this._storePoints.getItems());
 
       return this._api.sync(storePoints)
         .then((response) => {

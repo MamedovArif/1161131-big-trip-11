@@ -6,6 +6,15 @@ import flatpickr from "flatpickr";
 
 import "flatpickr/dist/flatpickr.min.css";
 
+const getTime = (field) => {
+  const stringDates = field.value.split(` `);
+  console.log(stringDates);
+  const dateValues = stringDates[0].split(`.`);
+
+  const currentDate = new Date('20' + dateValues[2], dateValues[1], dateValues[0]); //,timeValues[0], timeValues[1]);
+  return currentDate
+}
+
 const DefaultData = {
   deleteButtonText: `Delete`,
   saveButtonText: `Save`,
@@ -42,7 +51,8 @@ export default class FormForEdit extends AbstractSmartComponent {
     this._submitHandler = null;
     this._deleteButtonClickHandler = null;
 
-    this._applyFlatpickr();
+    this._applyFlatpickrStart();
+    //this._applyFlatpickrEnd();
     this._subscribeOnEvents();
   }
 
@@ -74,7 +84,8 @@ export default class FormForEdit extends AbstractSmartComponent {
 
   rerender() {
     super.rerender();
-    this._applyFlatpickr();
+    this._applyFlatpickrStart();
+    //this._applyFlatpickrEnd();
   }
 
   reset() {
@@ -118,48 +129,74 @@ export default class FormForEdit extends AbstractSmartComponent {
     this._closeHandler = handler;
   }
 
-  _applyFlatpickr() {
+  _applyFlatpickrStart() {
     if (this._flatpickrStart) {
       this._flatpickrStart.destroy();
       this._flatpickrStart = null;
     }
+
 
     if (this._flatpickrEnd) {
       this._flatpickrEnd.destroy();
       this._flatpickrEnd = null;
     }
 
-    const dateFrom = new Date();
-    const dateTo = new Date();
-    dateTo.setDate(dateFrom.getDate() + 1);
-
     const dateBegin = this.getElement()
         .querySelector(`input[name = event-start-time]`);
+    const dateEnd = this.getElement()
+        .querySelector(`input[name = event-end-time]`);
+
+    // const currentTo = getTime(dateEnd);
+    // console.log(currentTo);
+
     this._flatpickrStart = flatpickr(dateBegin, {
       altInput: true,
       allowInput: false,
       altFormat: `d.m.y H:i`,
-      mode: `range`,
+      //maxDate: currentTo,
       dateFormat: `Z`,
       enableTime: true,
-      defaultDate: [this._editForm.dateFrom, this._editForm.dateTo] || [dateFrom, dateTo],
+      defaultDate: this._editForm.dateFrom || `today`,
     });
-    const dateEnd = this.getElement()
-        .querySelector(`input[name = event-end-time]`);
+
     this._flatpickrEnd = flatpickr(dateEnd, {
       altInput: true,
       allowInput: false,
       altFormat: `d.m.y H:i`,
-      mode: `range`,
+      //minDate: dateBegin.value,
       dateFormat: `Z`,
       enableTime: true,
-      defaultDate: [this._editForm.dateFrom, this._editForm.dateTo] || [dateFrom, dateTo],
+      defaultDate: this._editForm.dateTo || `today`,
     });
   }
 
-  _subscribeOnEvents() {
-    this._applyFlatpickr();
+  // _applyFlatpickrEnd() {
+  //   if (this._flatpickrEnd) {
+  //     this._flatpickrEnd.destroy();
+  //     this._flatpickrEnd = null;
+  //   }
 
+  //   const dateBegin = this.getElement()
+  //       .querySelector(`input[name = event-start-time]`);
+  //   const dateEnd = this.getElement()
+  //       .querySelector(`input[name = event-end-time]`);
+
+  //   const currentFrom = getTime(dateBegin);
+
+  //   console.log(dateBegin.value);
+
+  //   this._flatpickrEnd = flatpickr(dateEnd, {
+  //     altInput: true,
+  //     allowInput: false,
+  //     altFormat: `d.m.y H:i`,
+  //     minDate: dateBegin.value,
+  //     dateFormat: `Z`,
+  //     enableTime: true,
+  //     defaultDate: this._editForm.dateTo || `today`,
+  //   });
+  // }
+
+  _subscribeOnEvents() {
     const element = this.getElement();
     element.querySelector(`select[name = event-destination]`)
         .addEventListener(`change`, (evt) => {
