@@ -5,7 +5,7 @@ const createAboutRouteTemplate = (cities, fullDataPoints) => {
   let stringVersionOfCities = ``;
   if (cities.length > 3) {
     stringVersionOfCities += `${cities[0]} — … — ${cities[cities.length - 1]}`;
-  } else  if (cities.length === 0) {
+  } else if (cities.length === 0) {
     stringVersionOfCities = ``;
   } else {
     stringVersionOfCities += `${cities[0]}`;

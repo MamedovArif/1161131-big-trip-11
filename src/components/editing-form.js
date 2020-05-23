@@ -12,13 +12,13 @@ const getTime = (field) => {
   if (stringDates.length !== 1) {
     const dateValues = stringDates[0].split(`.`);
     const timeValues = stringDates[1].split(`:`);
-    currentDate = new Date('20' + dateValues[2], Number(dateValues[1]) - 1, dateValues[0],
+    currentDate = new Date(`20` + dateValues[2], Number(dateValues[1]) - 1, dateValues[0],
         timeValues[0], timeValues[1]);
   } else {
     currentDate = new Date(stringDates[0]);
   }
   return currentDate;
-}
+};
 
 const applyFlatpickrStart = (flatpickrStart, context, editForm, flatpickrEnd) => {
   if (flatpickrStart) {
@@ -36,17 +36,16 @@ const applyFlatpickrStart = (flatpickrStart, context, editForm, flatpickrEnd) =>
     allowInput: false,
     altFormat: `d.m.y H:i`,
     maxDate: currentTo,
-    time_24hr: true,
     disableMobile: true,
-    onClose: function() {
-      editForm['dateFrom'] = getTime(dateBegin);
+    onClose() {
+      editForm[`dateFrom`] = getTime(dateBegin);
       applyFlatpickrEnd(flatpickrEnd, context, editForm);
     },
     dateFormat: `Z`,
     enableTime: true,
-    defaultDate: editForm['dateFrom'] || `today`,
+    defaultDate: editForm[`dateFrom`] || `today`,
   });
-}
+};
 
 const applyFlatpickrEnd = (flatpickrEnd, context, editForm, flatpickrStart) => {
   if (flatpickrEnd) {
@@ -64,17 +63,16 @@ const applyFlatpickrEnd = (flatpickrEnd, context, editForm, flatpickrStart) => {
     allowInput: false,
     altFormat: `d.m.y H:i`,
     minDate: currentFrom,
-    time_24hr: true,
     disableMobile: true,
-    onClose: function() {
-      editForm['dateTo'] = getTime(dateEnd);
+    onClose() {
+      editForm[`dateTo`] = getTime(dateEnd);
       applyFlatpickrStart(flatpickrStart, context, editForm);
     },
     dateFormat: `Z`,
     enableTime: true,
-    defaultDate: editForm['dateTo'] || `today`,
+    defaultDate: editForm[`dateTo`] || `today`,
   });
-}
+};
 
 const DefaultData = {
   deleteButtonText: `Delete`,
@@ -114,7 +112,6 @@ export default class FormForEdit extends AbstractSmartComponent {
 
     applyFlatpickrStart(this._flatpickrStart, this.getElement(), this._editForm, this._flatpickrEnd);
     applyFlatpickrEnd(this._flatpickrEnd, this.getElement(), this._editForm, this._flatpickrStart);
-    //this._applyFlatpickrEnd();
     this._subscribeOnEvents();
   }
 
@@ -148,7 +145,6 @@ export default class FormForEdit extends AbstractSmartComponent {
     super.rerender();
     applyFlatpickrStart(this._flatpickrStart, this.getElement(), this._editForm, this._flatpickrEnd);
     applyFlatpickrEnd(this._flatpickrEnd, this.getElement(), this._editForm, this._flatpickrStart);
-    //this._applyFlatpickrEnd();
   }
 
   reset() {
@@ -223,16 +219,6 @@ export default class FormForEdit extends AbstractSmartComponent {
       this._editForm.basePrice = Math.abs(parseInt(evt.target.value, 10));
       this.rerender();
     });
-
-
-
-
-    // element.querySelector(`input[name = event-end-time]`).addEventListener(`blur`, (evt) => {
-    //   console.log('het');
-    //   this._applyFlatpickrStart();
-    // });
-
-
 
     const offersContainer = element.querySelector(`.event__available-offers`);
     if (offersContainer) {

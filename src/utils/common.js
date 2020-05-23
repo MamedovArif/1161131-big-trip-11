@@ -1,5 +1,9 @@
 import moment from "moment";
 
+const MILLISECONDS_IN_SECOND = 1000;
+const MINUTES_IN_HOUR = 60;
+const HOURS_IN_DAY = 24;
+
 export const upperFirstElement = (string) => {
   let str = string[0].toUpperCase() + string.slice(1);
   return str;
@@ -24,18 +28,18 @@ export const formatTimeDate = (date) => {
 };
 
 export const diffTime = (begin, end) => {
-  let minutes = (end - begin) / (1000 * 60);
+  let minutes = (end - begin) / (MILLISECONDS_IN_SECOND * MINUTES_IN_HOUR);
   let days;
   let hours;
   let result = ``;
-  if (minutes >= 24 * 60) {
-    days = castTimeFormat(Math.floor(minutes / (60 * 24)));
-    minutes = minutes % (60 * 24);
+  if (minutes >= HOURS_IN_DAY * MINUTES_IN_HOUR) {
+    days = castTimeFormat(Math.floor(minutes / (MINUTES_IN_HOUR * HOURS_IN_DAY)));
+    minutes = minutes % (MINUTES_IN_HOUR * HOURS_IN_DAY);
     result += `${days}D `;
   }
-  if (minutes >= 60) {
-    hours = castTimeFormat(Math.floor(minutes / 60));
-    minutes = minutes % 60;
+  if (minutes >= MINUTES_IN_HOUR) {
+    hours = castTimeFormat(Math.floor(minutes / MINUTES_IN_HOUR));
+    minutes = minutes % MINUTES_IN_HOUR;
     result += `${hours}H `;
   }
   minutes = parseInt(castTimeFormat(minutes), 10);

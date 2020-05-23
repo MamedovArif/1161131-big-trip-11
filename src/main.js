@@ -34,7 +34,7 @@ let totalCosts = [];
 let routeOfCities = [];
 
 const api = new API(END_POINT, AUTHORIZATION);
-const storePoints = new Store(STORE_POINTS,  window.localStorage);
+const storePoints = new Store(STORE_POINTS, window.localStorage);
 const storeDestinations = new Store(STORE_DESTINATIONS, window.localStorage);
 const storeOffers = new Store(STORE_OFFERS, window.localStorage);
 const apiWithProvider = new Provider(api, storePoints, storeDestinations, storeOffers);
@@ -132,12 +132,12 @@ apiWithProvider.getAddOffers()
 
 window.addEventListener(`load`, () => {
   navigator.serviceWorker.register(`/sw.js`)
-    .then((reg) => {
-      console.log(`Registration succeeded. Scope is ${reg.scope}`);
-    }).catch((error) => {
-      console.log(`Registration failed with ${error}`)
-  });
-})
+    .then(() => {
+      // console.log(`Registration succeeded. Scope is ${reg.scope}`);
+    }).catch(() => {
+      // console.log(`Registration failed with ${error}`)
+    });
+});
 
 window.addEventListener(`online`, () => {
   document.title = document.title.replace(` [offline]`, ``);
@@ -148,5 +148,3 @@ window.addEventListener(`online`, () => {
 window.addEventListener(`offline`, () => {
   document.title += ` [offline]`;
 });
-
-
