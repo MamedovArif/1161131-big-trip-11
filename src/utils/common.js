@@ -5,7 +5,7 @@ const MINUTES_IN_HOUR = 60;
 const HOURS_IN_DAY = 24;
 
 export const upperFirstElement = (string) => {
-  let str = string[0].toUpperCase() + string.slice(1);
+  const str = string[0].toUpperCase() + string.slice(1);
   return str;
 };
 

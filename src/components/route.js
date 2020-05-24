@@ -19,7 +19,7 @@ const createAboutRouteTemplate = (cities, fullDataPoints) => {
   let monthEnd;
   let dayEnd;
   if (fullDataPoints.length !== 0) {
-    let days = fullDataPoints.map((oneDayOfPoints) => {
+    const days = fullDataPoints.map((oneDayOfPoints) => {
       return oneDayOfPoints[0].dateFrom;
     });
 

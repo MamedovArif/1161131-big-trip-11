@@ -31,7 +31,7 @@ render(tripControls.children[0], menuComponent, RenderPosition.AFTEREND);
 
 
 let totalCosts = [];
-let routeOfCities = [];
+const routeOfCities = [];
 
 const api = new API(END_POINT, AUTHORIZATION);
 const storePoints = new Store(STORE_POINTS, window.localStorage);
@@ -78,7 +78,7 @@ menuComponent.setOnChange((menuItem) => {
 });
 
 const getTotalAmount = (costs) => {
-  let totalAmount = costs.reduce((acc, item) => {
+  const totalAmount = costs.reduce((acc, item) => {
     acc += item;
     return acc;
   }, 0);
@@ -100,14 +100,14 @@ const getFullPoints = function (allDataPoints) {
     routeOfCities.push(item.destination.name);
   });
 
-  let fullDataPoints = [[allDataPoints[0]]];
+  const fullDataPoints = [[allDataPoints[0]]];
 
   for (let i = 0; i < allDataPoints.length - 1; i++) {
     if (allDataPoints[i].dateFrom.getDate() === allDataPoints[i + 1].dateFrom.getDate() &&
         allDataPoints[i].dateFrom.getMonth() === allDataPoints[i + 1].dateFrom.getMonth()) {
       fullDataPoints[fullDataPoints.length - 1].push(allDataPoints[i + 1]);
     } else {
-      let oneDayOfPoints = [];
+      const oneDayOfPoints = [];
       oneDayOfPoints.push(allDataPoints[i + 1]);
       fullDataPoints.push(oneDayOfPoints);
     }
@@ -119,7 +119,7 @@ apiWithProvider.getAddOffers()
   .then((offers) => {
     apiWithProvider.getCities()
     .then((serverDestinations) => {
-      let destinations = [].concat(serverDestinations);
+      const destinations = [].concat(serverDestinations);
       apiWithProvider.getPoints()
         .then((allDataPoints) => {
 

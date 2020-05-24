@@ -47,17 +47,17 @@ const createHeaderEditingForm = (dataForPoint, dataAboutDestinations, externalDa
   const dateFinish = formatTimeDate(dateTo);
   const isChecked = (isFavorite) ? `checked` : ``;
 
-  let transfer = [];
+  const transfer = [];
   for (let i = 0; i < typesTransfer.length; i++) {
     transfer.push(generateTransfer(typesTransfer[i]));
   }
 
-  let activity = [];
+  const activity = [];
   for (let j = 0; j < typesActivity.length; j++) {
     activity.push(generateActivity(typesActivity[j]));
   }
 
-  let cities = [];
+  const cities = [];
   for (let w = 0; w < dataAboutDestinations.length; w++) {
     cities.push(generateCities(dataAboutDestinations[w], city));
   }
