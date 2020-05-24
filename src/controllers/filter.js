@@ -18,15 +18,23 @@ export default class FilterController {
   }
 
   render(fullDataPoints) {
-    const filteredPointsForFuture = getFilteredPoints(fullDataPoints, FilterType.FUTURE);
-    const filteredPointsForPast = getFilteredPoints(fullDataPoints, FilterType.PAST);
+    let filteredPointsForFuture;
+    let filteredPointsForPast;
+    if (fullDataPoints.length !== 0) {
+      filteredPointsForFuture = getFilteredPoints(fullDataPoints, FilterType.FUTURE);
+      filteredPointsForPast = getFilteredPoints(fullDataPoints, FilterType.PAST);
+    } else {
+      filteredPointsForFuture = [];
+      filteredPointsForPast = [];
+    }
 
     const container = this._container;
     const filters = Object.values(FilterType).map((filterType) => {
       return {
         name: filterType,
         isChecked: filterType === this._activeFilterType,
-        disabled: (filterType === FilterType.FUTURE && filteredPointsForFuture.length === 0) ||
+        disabled: (fullDataPoints.length === 0) ||
+            (filterType === FilterType.FUTURE && filteredPointsForFuture.length === 0) ||
             (filterType === FilterType.PAST && filteredPointsForPast.length === 0),
       };
     });
