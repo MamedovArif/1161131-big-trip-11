@@ -12,9 +12,9 @@ const generateOptions = (offer, cost) => {
   );
 };
 
-const createRoutePointTemplate = (object) => {
-  const {type, dateFrom, dateTo, basePrice, offers} = object;
-  let destination = object.destination;
+const createRoutePointTemplate = (dataForPoint) => {
+  const {type, dateFrom, dateTo, basePrice, offers} = dataForPoint;
+  let destination = dataForPoint.destination;
 
   if (destination === null) {
     destination = {};

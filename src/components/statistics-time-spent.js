@@ -5,18 +5,18 @@ import {durationOfPoint} from "../utils/common.js";
 
 export const renderTimeSpentChart = (timeSpentCtx, points) => {
   const timeSpentForCanvas = [];
-  points.map((littleArray) => {
-    littleArray.map((point) => {
-      const actualObject = timeSpentForCanvas.find((obj) => {
-        return obj.type === point.type;
+  points.map((oneDayOfPoints) => {
+    oneDayOfPoints.map((point) => {
+      const matchingEvent = timeSpentForCanvas.find((event) => {
+        return event.type === point.type;
       });
-      if (actualObject) {
-        actualObject.duration += Math.round(durationOfPoint(point.dateTo, point.dateFrom) / 60);
+      if (matchingEvent) {
+        matchingEvent.duration += Math.round(durationOfPoint(point.dateTo, point.dateFrom) / 60);
       } else {
-        const object = {};
-        object.type = point.type;
-        object.duration = Math.round(durationOfPoint(point.dateTo, point.dateFrom) / 60);
-        timeSpentForCanvas.push(object);
+        const event = {};
+        event.type = point.type;
+        event.duration = Math.round(durationOfPoint(point.dateTo, point.dateFrom) / 60);
+        timeSpentForCanvas.push(event);
       }
     });
   });

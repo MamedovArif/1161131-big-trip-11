@@ -1,6 +1,7 @@
 import {FilterType} from "../const.js";
 import FilterComponent from "../components/filters.js";
 import {render, replace, RenderPosition} from "../utils/render.js";
+import {getFilteredPoints} from "../utils/filter.js";
 
 export default class FilterController {
   constructor(container, pointsModel) {
@@ -16,12 +17,17 @@ export default class FilterController {
     this._pointsModel.setDataChangeHandler(this._onDataChange);
   }
 
-  render() {
+  render(fullDataPoints) {
+    const filteredPointsForFuture = getFilteredPoints(fullDataPoints, FilterType.FUTURE);
+    const filteredPointsForPast = getFilteredPoints(fullDataPoints, FilterType.PAST);
+
     const container = this._container;
     const filters = Object.values(FilterType).map((filterType) => {
       return {
         name: filterType,
         isChecked: filterType === this._activeFilterType,
+        disabled: (filterType === FilterType.FUTURE && filteredPointsForFuture.length === 0) ||
+            (filterType === FilterType.PAST && filteredPointsForPast.length === 0),
       };
     });
 
@@ -43,7 +49,7 @@ export default class FilterController {
   }
 
   _onDataChange() {
-    this.render();
+    this.render(this._pointsModel.getPointsAll());
   }
 
   throwFilter() {

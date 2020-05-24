@@ -22,15 +22,15 @@ const generateActivity = (typePlace) => {
   );
 };
 
-const generateCities = (object, city) => {
-  const {name} = object;
+const generateCities = (destination, city) => {
+  const {name} = destination;
   return (
     `<option value="${name}" ${(city === name) ? `selected` : ``}>${name}</option>`
   );
 };
 
-const createHeaderEditingForm = (object, dataAboutDestinations, externalData) => {
-  const {type, destination, dateFrom, dateTo, basePrice, isFavorite} = object;
+const createHeaderEditingForm = (dataForPoint, dataAboutDestinations, externalData) => {
+  const {type, destination, dateFrom, dateTo, basePrice, isFavorite} = dataForPoint;
   let city;
   if (!destination || !destination.name) {
     city = ``;

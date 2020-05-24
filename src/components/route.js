@@ -2,13 +2,15 @@ import {MONTH_NAMES} from '../const.js';
 import AbstractComponent from './abstract-component.js';
 
 const createAboutRouteTemplate = (cities, fullDataPoints) => {
-  let citiesString = ``;
+  let stringVersionOfCities = ``;
   if (cities.length > 3) {
-    citiesString += `${cities[0]} — … — ${cities[cities.length - 1]}`;
+    stringVersionOfCities += `${cities[0]} — … — ${cities[cities.length - 1]}`;
+  } else if (cities.length === 0) {
+    stringVersionOfCities = ``;
   } else {
-    citiesString += `${cities[0]}`;
+    stringVersionOfCities += `${cities[0]}`;
     for (let i = 1; i < cities.length; i++) {
-      citiesString += ` — ${cities[i]}`;
+      stringVersionOfCities += ` — ${cities[i]}`;
     }
   }
 
@@ -17,8 +19,8 @@ const createAboutRouteTemplate = (cities, fullDataPoints) => {
   let monthEnd;
   let dayEnd;
   if (fullDataPoints.length !== 0) {
-    let days = fullDataPoints.map((littleArray) => {
-      return littleArray[0].dateFrom;
+    let days = fullDataPoints.map((oneDayOfPoints) => {
+      return oneDayOfPoints[0].dateFrom;
     });
 
     monthBegin = MONTH_NAMES[days[0].getMonth()];
@@ -36,7 +38,7 @@ const createAboutRouteTemplate = (cities, fullDataPoints) => {
 
   return (
     `<div class="trip-info__main">
-      <h1 class="trip-info__title">${citiesString}</h1>
+      <h1 class="trip-info__title">${stringVersionOfCities}</h1>
 
       <p class="trip-info__dates">${monthBegin} ${dayBegin} &nbsp;&mdash;&nbsp; ${monthEnd} ${dayEnd}</p>
     </div>`

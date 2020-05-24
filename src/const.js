@@ -38,3 +38,8 @@ export const pretext = {
   "sightseeing": `in`,
   "restaurant": `in`,
 };
+
+export const StatusCode = {
+  'OK': 200,
+  'MULTIPLE_CHOICE': 300,
+};

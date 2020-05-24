@@ -39,7 +39,7 @@ export default class TripController {
     this._pointsModel.setSortChangeHandler(this._onSortChange);
 
     this._sortController = null;
-    this._filterController = null;
+    this._filterController = filterController;
 
     this._listDays = null;
     this._creatingPoint = null;
@@ -75,14 +75,11 @@ export default class TripController {
     this._routeOfCities = routeOfCities;
     this._header = header;
 
-    if (!this._filterController) {
-      this._filterController = filterController;
-      this._filterController.render();
-    }
-
     const fullDataPoints = this._pointsModel.getPointsAll();
     this._dataAboutDestinations = this._pointsModel.getDataAboutDestinations();
     this._dataAboutOffers = this._pointsModel.getDataAboutOffers();
+
+    this._filterController.render(fullDataPoints);
 
     const oldRouteComponent = this._routeComponent;
     this._routeComponent = new RouteComponent(this._routeOfCities, fullDataPoints);
@@ -289,8 +286,8 @@ export default class TripController {
 
   updateRouteOfCities(routeOfCities, model) {
     routeOfCities = [];
-    model.getPointsAll().forEach((littleArray) => {
-      littleArray.forEach((point) => {
+    model.getPointsAll().forEach((oneDayOfPoints) => {
+      oneDayOfPoints.forEach((point) => {
         routeOfCities.push(point.destination.name);
       });
     });
