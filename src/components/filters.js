@@ -1,12 +1,12 @@
 import AbstractComponent from "./abstract-component.js";
 
-const generateOneFilter = (dataForPoint) => {
-  const {name, isChecked} = dataForPoint;
+const generateOneFilter = (dataForFilter) => {
+  const {name, isChecked, disabled} = dataForFilter;
   return (
     `<div class="trip-filters__filter">
       <input id="filter-${name}" class="trip-filters__filter-input
       visually-hidden" type="radio" name="trip-filter" value="${name}"
-      ${(isChecked) ? `checked` : ``}>
+      ${(isChecked) ? `checked` : ``} ${(disabled) ? `disabled` : ``}>
       <label class="trip-filters__filter-label" data-filter-type="${name}"
       for="filter-${name}">${name.toUpperCase()}</label>
     </div>`
