@@ -63,6 +63,11 @@ export default class TripController {
     this._pointsModel.activeFilterType = FilterType.EVERYTHING;
     this._handlerFilter();
 
+    if (this._creatingPoint) {
+      this._creatingPoint = null;
+      this.createPoint();
+    }
+
     this._container.hide();
   }
 
@@ -180,7 +185,6 @@ export default class TripController {
   _onSortChange() {
     this._updatePoints();
   }
-
 
   _updateTrip(totalAmount) {
     const tripMarkup = document.querySelector(`.trip-events`);

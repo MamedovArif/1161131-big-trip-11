@@ -67,9 +67,6 @@ menuComponent.setOnChange((menuItem) => {
     case MenuItem.TABLE:
       if (buttonEvent.hasAttribute(`disabled`)) {
         buttonEvent.removeAttribute(`disabled`);
-        buttonEvent.addEventListener(`click`, () => {
-          tripController.createPoint();
-        });
       }
       statisticsComponent.hide();
       tripController.show();
